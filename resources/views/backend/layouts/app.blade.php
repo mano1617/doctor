@@ -79,6 +79,8 @@
     {!! script(asset('js/manifest.js')) !!}
     {!! script(asset('js/vendor.js')) !!}
     {!! script(asset('js/backend.js')) !!}
+    {!! script(asset('backend/jquery-validation/js/jquery.validate.min.js')) !!}
+    {!! script(asset('backend/jquery-validation/js/additional-methods.min.js')) !!}
     @stack('after-scripts')
 </body>
 </html>

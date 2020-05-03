@@ -82,6 +82,31 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-title">
+                    Applications
+                </li>
+                
+                <li class="nav-item nav-dropdown {{
+                    active_class(Route::is('admin/log-viewer*'), 'open')
+                }}">
+                        <a class="nav-link nav-dropdown-toggle {{
+                            active_class(Route::is('admin/log-viewer*'))
+                        }}" href="#">
+                        <i class="nav-icon fas fa-users"></i>Users 
+                    </a>
+
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/log-viewer'))
+                        }}" href="{{ route('admin.physician.index') }}">
+                                Physicians
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             @endif
         </ul>
     </nav>
