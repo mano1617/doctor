@@ -16,4 +16,9 @@ class User extends BaseUser
         UserMethod,
         UserRelationship,
         UserScope;
+
+    public function gallery()
+    {
+        return $this->hasMany(ProfileGalleryModel::class,'user_id');
+    }
 }
