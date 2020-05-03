@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Auth\User;
+use Illuminate\Support\Facades\Hash;
 
 class PhysicianController extends Controller
 {
@@ -36,7 +37,22 @@ class PhysicianController extends Controller
      */
     public function store(Request $request)
     {
-        print_r($request->all());
+        //print_r($request->all());
+
+        $data = [
+            'first_name' => trim($request->firstname),
+            'last_name' => trim($request->lastname),
+            'email' => trim($request->email_address),
+            'password' => Hash::make(trim($request->confirm_password))
+        ];
+
+        $user = User::create($data);
+
+        $user->assignRole('physician');
+
+        return redirect()->route('admin.physician.index');
+
+        //print_r($data);
     }
 
     /**
