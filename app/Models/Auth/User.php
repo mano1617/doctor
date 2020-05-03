@@ -21,4 +21,9 @@ class User extends BaseUser
     {
         return $this->hasMany(ProfileGalleryModel::class,'user_id');
     }
+
+    public function scopeBothInActive($query)
+    {
+        $query->where('active','!=',2)->latest('first_name')->get();
+    }
 }

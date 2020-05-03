@@ -19,6 +19,9 @@
     <!-- Check if the language is set to RTL, so apply the RTL layouts -->
     <!-- Otherwise apply the normal LTR layouts -->
     {{ style(asset('css/backend.css')) }}
+    {{ style('https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css') }}
+    {{ style('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css') }}
+    
 
     @stack('after-styles')
 </head>
@@ -81,6 +84,8 @@
     {!! script(asset('js/backend.js')) !!}
     {!! script(asset('backend/jquery-validation/js/jquery.validate.min.js')) !!}
     {!! script(asset('backend/jquery-validation/js/additional-methods.min.js')) !!}
+    {!! script('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js') !!}
+
     @stack('after-scripts')
 </body>
 </html>

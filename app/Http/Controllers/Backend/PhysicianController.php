@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Auth\User;
 use Illuminate\Support\Facades\Hash;
+use DataTables;
+use DB;
 
 class PhysicianController extends Controller
 {
@@ -14,8 +16,53 @@ class PhysicianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if($request->ajax())
+        {
+            $users = User::role('physician')
+                ->select(['id','first_name','last_name','email', 'active'])
+                ->bothInActive();
+
+            return Datatables::of($users)
+                ->addIndexColumn()
+                ->addColumn('first_name', function($row)
+                {
+                    return $row->first_name.' '.$row->last_name;
+                })
+                ->addColumn('contact', function($row)
+                {
+                     $contact = '<i class="fa fa-envelope fa-fw"></i>'.$row->email;
+                     $contact .= '<br><i class="fa fa-phone fa-fw"></i>'.$row->email;
+                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->email;
+                     return $contact;
+                })
+                ->addColumn('photo', function()
+                {
+                    return '1';
+                })
+                ->addColumn('actions', function($row)
+                {
+
+                    if($row->active==1)
+                    {
+                        $actions = '<a class="btn btn-outline-dark"><i class="fa fa-fw fa-lock"></i></a> ';
+
+                    }else if($row->active==2){
+
+                        $actions = '<a class="btn btn-outline-success"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
+                    }
+
+                    $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
+                    $actions .= '<a class="btn btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
+                    return $actions;
+                })
+                ->rawColumns(['contact', 'actions'])
+                ->make(true);
+        }
+
+
         return view('backend.physician.list_physicians');
     }
 
@@ -49,6 +96,10 @@ class PhysicianController extends Controller
         $user = User::create($data);
 
         $user->assignRole('physician');
+
+        //edu
+
+        //clinic
 
         return redirect()->route('admin.physician.index');
 
