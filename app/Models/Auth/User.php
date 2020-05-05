@@ -7,6 +7,7 @@ use App\Models\Auth\Traits\Method\UserMethod;
 use App\Models\Auth\Traits\Relationship\UserRelationship;
 use App\Models\Auth\Traits\Scope\UserScope;
 
+
 /**
  * Class User.
  */
@@ -22,8 +23,13 @@ class User extends BaseUser
         return $this->hasMany(ProfileGalleryModel::class,'user_id');
     }
 
+    public function physicianProfile()
+    {
+        return $this->hasOne('App\Models\Physician\PhysicianProfileModel','user_id');
+    }
+
     public function scopeBothInActive($query)
     {
-        $query->where('active','!=',2)->latest('first_name')->get();
+        return $query->where('active','!=',2)->latest('first_name')->get();
     }
 }

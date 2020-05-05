@@ -11,6 +11,7 @@ Route::group(['prefix' => 'physicians'],function()
         'destroy' => 'physician.destroy'
     ]);
     Route::post('check-email-address','PhysicianController@checkAddress')->name('physician.checkEmail');
+    Route::get('update/status/{userId}/{statusCode}','PhysicianController@updateStatus')->name('physician.updateStatus');
 });
 
 ?>

@@ -8,9 +8,17 @@ use App\Models\Auth\User;
 use Illuminate\Support\Facades\Hash;
 use DataTables;
 use DB;
+use Storage;
+use \Carbon\Carbon;
+use App\Models\Physician\PhysicianProfileModel;
 
 class PhysicianController extends Controller
 {
+    protected $flashData = [
+        'status' => 0,
+        'message' => 'Something went wrong.Try again later.'
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +31,7 @@ class PhysicianController extends Controller
         {
             $users = User::role('physician')
                 ->select(['id','first_name','last_name','email', 'active'])
+                ->with('physicianProfile')
                 ->bothInActive();
 
             return Datatables::of($users)
@@ -38,27 +47,31 @@ class PhysicianController extends Controller
                      $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->email;
                      return $contact;
                 })
-                ->addColumn('photo', function()
+                ->addColumn('photo', function($row)
                 {
-                    return '1';
+                    if(!empty($row->physicianProfile->avatar))
+                    {
+                        return '<a href="'.url('storage/app/avatars/'.$row->physicianProfile->avatar).'" target="new"><img class="" src="'.url('storage/app/avatars/'.$row->physicianProfile->avatar).'" width="65" height="65">';
+                    }else{
+                        return '';
+                    }
                 })
                 ->addColumn('actions', function($row)
                 {
-
                     if($row->active==1)
                     {
-                        $actions = '<a class="btn btn-outline-dark"><i class="fa fa-fw fa-lock"></i></a> ';
+                        $actions = '<a href="javascript:void(0);" class="btn btn-outline-dark changeStatus" data-rowurl="'.route('admin.physician.updateStatus',[$row->id,0]).'" data-row="'.$row->id.'"><i class="fa fa-fw fa-lock"></i></a> ';
 
-                    }else if($row->active==2){
+                    }else if($row->active==0){
 
-                        $actions = '<a class="btn btn-outline-success"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
+                        $actions = '<a href="javascript:void(0);" class="btn btn-outline-success changeStatus" data-rowurl="'.route('admin.physician.updateStatus',[$row->id,1]).'" data-row="'.$row->id.'"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
                     }
 
                     $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    $actions .= '<a class="btn btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
+                    $actions .= '<a href="javascript:void(0);" data-rowurl="'.route('admin.physician.destroy',$row->id).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
                     return $actions;
                 })
-                ->rawColumns(['contact', 'actions'])
+                ->rawColumns(['contact', 'actions', 'photo'])
                 ->make(true);
         }
 
@@ -84,26 +97,66 @@ class PhysicianController extends Controller
      */
     public function store(Request $request)
     {
-        //print_r($request->all());
+        print_r($request->all());
 
-        $data = [
+        //User Creation
+        $user = User::create([
             'first_name' => trim($request->firstname),
             'last_name' => trim($request->lastname),
             'email' => trim($request->email_address),
             'password' => Hash::make(trim($request->confirm_password))
-        ];
+        ]);
 
-        $user = User::create($data);
-
+        //assign role
         $user->assignRole('physician');
+
+        //profile creation
+        $avatarName = '';
+
+        if($request->has('image'))
+        {
+            $avatarName = $user->id.'_'.time().'.'.$request->file('image')->extension();
+            Storage::putFileAs(
+                'avatars', $request->file('image'), $avatarName
+            );
+        }
+
+        $data = $avatarName;
+        
+        PhysicianProfileModel::create([
+            'user_id' => $user->id,
+            'avatar' => $avatarName,
+            'gender' => trim($request->gender),
+            'dob' => \Carbon\Carbon::parse(trim($request->dob))->format('Y-m-d'),
+            'age' => \Carbon\Carbon::parse(trim($request->dob))->age,
+            'district' => trim($request->district),
+            'state' => trim($request->state),
+            'country' => trim($request->country),
+            'pincode' => trim($request->pincode),
+            'landmark' => trim($request->landmark),
+            'mobile_no' => trim($request->mobile_no),
+            'landline' => trim($request->landno),
+            'address' => trim($request->address),
+            'about_me' => trim($request->about_me),
+            'has_branches' => 0,//trim($request->about_me),
+            //'map_image' => '',//trim($request->about_me),
+            //'qr_code' => ''//trim($request->about_me),
+        ]);
 
         //edu
 
         //clinic
 
-        return redirect()->route('admin.physician.index');
+        $this->flashData = [
+            'status' => 1,
+            'message' => 'Successfully user has been registered'
+        ];
 
-        //print_r($data);
+        $request->session()->flash('flashData', $this->flashData);
+
+        //return redirect()->route('admin.physician.index');
+
+        print_r($data);
     }
 
     /**
@@ -161,5 +214,27 @@ class PhysicianController extends Controller
             $exists = false;
         }
         return response()->json($exists);
+    }
+
+    public function updateStatus(Request $request, $userId, $statusCode)
+    {
+        $result = User::where('id', trim($userId))
+            ->update([
+                'active' => trim($statusCode)
+            ]);
+
+        if($result)
+        {
+            $this->flashData = [
+                'status' => 1,
+                'message' => 'Successfully status has been changed'
+            ];
+
+            $request->session()->flash('flashData', $this->flashData);
+        }
+
+        return response()->json([
+            'status' => 1
+        ]);
     }
 }
