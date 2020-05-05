@@ -30,7 +30,7 @@
                 </div><!--card-header-->
                 <div class="card-body">
                 <br>
-                    <form id="createPhysician" method="post" action="{{ route('admin.physician.store') }}">
+                    <form id="createPhysician" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.store') }}">
                     {{csrf_field()}}
                         <div>
                             <h3>Account</h3>
@@ -59,7 +59,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="password">Password<sup class="text-danger">*</sup></label>
-                                        <input type="password" id="password" required name="password" class="form-control">
+                                        <input type="password" autocomplete="off" id="password" required name="password" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -89,7 +89,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="dob">Date Of Birth<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="dob" class="form-control">
+                                        <input type="text" required name="dob" autocomplete="off" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -185,6 +185,15 @@
 @push('after-scripts')
     <script src="{{ asset('backend/jquery.steps/jquery.steps.min.js') }}"></script>
 <script>
+$(function()
+{
+    $("input[name='dob']").datepicker({
+        format : 'dd-mm-yyyy',
+        autoclose : true,
+        endDate: '-18y'
+    });
+
+});
 
     var form = $("#createPhysician");
 form.validate({

@@ -21,6 +21,7 @@
     {{ style(asset('css/backend.css')) }}
     {{ style('https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css') }}
     {{ style('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css') }}
+    {{ style('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css') }}
     
 
     @stack('after-styles')
@@ -85,6 +86,95 @@
     {!! script(asset('backend/jquery-validation/js/jquery.validate.min.js')) !!}
     {!! script(asset('backend/jquery-validation/js/additional-methods.min.js')) !!}
     {!! script('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js') !!}
+    {!! script('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js') !!}
+    {!! script('https://cdn.jsdelivr.net/npm/sweetalert2@9') !!}
+
+    <script>
+        $(document).ready(function(e)
+        {
+            $("body").on("click", ".changeStatus", function(e)
+            {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to change the this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2eb85c',
+                    cancelButtonColor: '#e55353',
+                    confirmButtonText: 'Yes, change it!'
+                    }).then((result) => {
+                    if (result.value) {
+
+                        $.get($(this).data("rowurl"), function(result)
+                                    {
+                                        Swal.fire(
+                        'Success!',
+                        '',
+                        'success'
+                        ).then(()=>{
+                                        window.location.reload();
+                        })
+                                    },'JSON');
+
+                        
+                    }
+            });
+
+        });
+
+        $("body").on("click", ".removeRow", function(e)
+            {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2eb85c',
+                    cancelButtonColor: '#e55353',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.value) {
+
+                        $.ajax(
+
+    {
+
+        url: $(this).data("rowurl"),
+
+        type: 'DELETE',
+
+        data: {
+
+
+            "_token": '{{ csrf_token() }}'
+
+        },
+
+        success: function (){
+
+            console.log("it Works");
+
+        }
+
+    });
+
+                    //     $.post($(this).data("rowurl"),{_token:'{{ csrf_token() }}',_method:'DELETE'}, function(result)
+                    //                 {
+                    //                     Swal.fire(
+                    //      'Success!',
+                    //      '',
+                    //      'success'
+                    //      ).then(()=>{
+                    //                      //window.location.reload();
+                    //      })
+                    // },'JSON');                        
+                    }
+            });
+                
+        });
+
+    });
+</script>
 
     @stack('after-scripts')
 </body>
