@@ -25,7 +25,7 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Lists</strong>
-                    <a href="{{ route('admin.physician.index') }}" class="btn btn-outline-danger float-right">
+                    <a href="{{ route('admin.physician.index') }}" class="btn btn-danger float-right">
                     <i class="fa fa-fw fa-arrow-left"></i>GO BACK</a>
                 </div><!--card-header-->
                 <div class="card-body">
@@ -173,6 +173,76 @@
                             <section>
                                 Edu
                             </section>
+                            <h3>Profession</h3>
+                            <section>
+                            <br>
+                            <input type="text" name="prof_rows" value="1">
+                            <div id="profDiv">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="sector">Sector<sup class="text-danger">*</sup></label>                                    
+                                    <div class="col-form-label">
+                                            <div class="form-check form-check-inline mr-1">
+                                            <input class="form-check-input" checked name="sector_1" id="inline-radio1" type="radio" value="1">
+                                            <label class="form-check-label" for="inline-radio1">Private</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mr-1">
+                                            <input class="form-check-input" name="sector_1" id="inline-radio2" type="radio" value="2">
+                                            <label class="form-check-label" for="inline-radio2">Government</label>
+                                            </div>
+                                            </div>
+                                </div></div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="sector">Details of Clinic<sup class="text-danger">*</sup></label>                                    
+                                    <div class="col-form-label">
+                                            <div class="form-check form-check-inline mr-1">
+                                            <input class="form-check-input" checked name="clinic_detail_1" id="inline-radio1" type="radio" value="1">
+                                            <label class="form-check-label" for="inline-radio11">Own Clinic</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mr-1">
+                                            <input class="form-check-input" name="clinic_detail_1" id="inline-radio2" type="radio" value="2" >
+                                            <label class="form-check-label" for="inline-radio22">Others</label>
+                                            </div>
+                                            </div>
+                                </div></div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Designation<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="prof_desig_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_org">Organisation<sup class="text-danger">*</sup></label>
+                                        <input type="text"  required name="prof_org_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_palce">Place<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="prof_palce_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_since">Since<sup class="text-danger">*</sup></label>
+                                        <input type="text"  required name="prof_since_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a style="margin-top:30px;" id="addProfession" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                </div>
+                            </div>
+                            <hr>
+</div>
+
+                            </section>
                         </div>
                     </form>
                      
@@ -191,6 +261,33 @@ $(function()
         format : 'dd-mm-yyyy',
         autoclose : true,
         endDate: '-18y'
+    });
+
+    $("#addProfession").on("click", function(e)
+    {
+        var row = parseInt($("input[name='prof_rows']").val());
+        row++;
+        var content = '<div id="prof_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="sector">Sector<sup class="text-danger">*</sup></label>';
+            content+= '<div class="col-form-label"><div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="sector_'+row+'" id="inline-radio1" type="radio" value="1">';
+            content+= '<label class="form-check-label" for="inline-radio1">Private</label></div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="sector_'+row+'" id="inline-radio2" type="radio" value="2">';
+            content+= '<label class="form-check-label" for="inline-radio2">Government</label></div></div></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="sector">Details of Clinic<sup class="text-danger">*</sup></label><div class="col-form-label">';
+            content+= '<div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="clinic_detail_'+row+'" id="inline-radio1" type="radio" value="1"><label class="form-check-label" for="inline-radio11">Own Clinic</label>';
+            content+= '</div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="clinic_detail_'+row+'" id="inline-radio2" type="radio" value="2" ><label class="form-check-label" for="inline-radio22">Others</label>';
+            content+= '</div></div></div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label><input type="text" required name="prof_desig_'+row+'" class="form-control">';
+            content+= '</div></div></div><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_org">Organisation<sup class="text-danger">*</sup></label><input type="text"  required name="prof_org_'+row+'" class="form-control">';
+            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label><input type="text" required name="prof_palce_'+row+'" class="form-control">';
+            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">Since<sup class="text-danger">*</sup></label><input type="text"  required name="prof_since_'+row+'" class="form-control">';
+            content+= '</div></div><div class="col-sm-3"><a style="margin-top:30px;" data-row="'+row+'" class="btn removeProfession btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+$("input[name='prof_rows']").val(row);
+        $("#profDiv").append(content);
+
+    });
+
+    $("body").on("click", ".removeProfession", function(e)
+    {
+        console.log($(this).data('row'))
+        $("body #prof_row_"+$(this).data('row')).remove();
     });
 
 });
@@ -236,14 +333,15 @@ form.validate({
     },
 });
 form.children("div").steps({
+    startIndex: 2,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
-    enableAllSteps : true,
+    showFinishButtonAlways : true,
     onStepChanging: function (event, currentIndex, newIndex)
     {
         form.validate().settings.ignore = ":disabled,:hidden";
-        return form.valid();
+        return true;//form.valid();
     },
     onFinishing: function (event, currentIndex)
     {

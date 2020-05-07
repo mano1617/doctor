@@ -11,6 +11,7 @@ use DB;
 use Storage;
 use \Carbon\Carbon;
 use App\Models\Physician\PhysicianProfileModel;
+use App\Models\Physician\PhysicianProfessionModel;
 
 class PhysicianController extends Controller
 {
@@ -104,7 +105,8 @@ class PhysicianController extends Controller
             'first_name' => trim($request->firstname),
             'last_name' => trim($request->lastname),
             'email' => trim($request->email_address),
-            'password' => Hash::make(trim($request->confirm_password))
+            'password' => Hash::make(trim($request->confirm_password)),
+            'confirmed' => 1
         ]);
 
         //assign role
@@ -145,6 +147,25 @@ class PhysicianController extends Controller
 
         //edu
 
+        //Profession
+        for($i=1; $i<=trim($request->prof_rows); $i++)
+        {
+            if($request->has('prof_desig_'.$i))
+            {
+                PhysicianProfessionModel::create([
+                    'user_id' => $user->id,
+                    'sector' => $request->input('sector_'.$i),
+                    'clinic_type' => $request->input('clinic_detail_'.$i),
+                    'description' => serialize([
+                        'designation' => $request->input('prof_desig_'.$i),
+                        'organization' => $request->input('prof_org_'.$i),
+                        'place' => $request->input('prof_palce_'.$i),
+                        'since' => $request->input('prof_since_'.$i),
+                    ])
+                ]);
+            }
+        }
+        
         //clinic
 
         $this->flashData = [
@@ -154,9 +175,9 @@ class PhysicianController extends Controller
 
         $request->session()->flash('flashData', $this->flashData);
 
-        //return redirect()->route('admin.physician.index');
+        return redirect()->route('admin.physician.index');
 
-        print_r($data);
+        // print_r($data);
     }
 
     /**
