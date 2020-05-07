@@ -42,7 +42,6 @@
                 </li>
             @endguest
 
-            <li class="nav-item"><a href="{{route('frontend.contact')}}" class="nav-link {{ active_class(Route::is('frontend.contact')) }}">@lang('navs.frontend.contact')</a></li>
         </ul>
     </div>
 </nav>
