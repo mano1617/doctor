@@ -12,6 +12,7 @@ use Storage;
 use \Carbon\Carbon;
 use App\Models\Physician\PhysicianProfileModel;
 use App\Models\Physician\PhysicianProfessionModel;
+use App\Models\Physician\PhysicianExperienceModel;
 
 class PhysicianController extends Controller
 {
@@ -98,7 +99,9 @@ class PhysicianController extends Controller
      */
     public function store(Request $request)
     {
-        print_r($request->all());
+        //print_r($request->all());
+        
+        //die();
 
         //User Creation
         $user = User::create([
@@ -162,6 +165,22 @@ class PhysicianController extends Controller
                         'place' => $request->input('prof_palce_'.$i),
                         'since' => $request->input('prof_since_'.$i),
                     ])
+                ]);
+            }
+        }
+
+        //Experience
+        for($i=1; $i<=trim($request->exp_rows); $i++)
+        {
+            if($request->has('exp_desig_'.$i))
+            {
+                PhysicianExperienceModel::create([
+                    'user_id' => $user->id,
+                    'designation' => $request->input('exp_desig_'.$i),
+                    'institution' => $request->input('exp_wrkat_'.$i),
+                    'place' => $request->input('exp_place_'.$i),
+                    'working_years' => $request->input('exp_fryr_'.$i).'*'.$request->input('exp_toyr_'.$i),
+                    'homoeo_experience_years' => $request->input('exp_homoeo_'.$i),
                 ]);
             }
         }
