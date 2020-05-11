@@ -176,7 +176,7 @@
                             <h3>Profession</h3>
                             <section>
                             <br>
-                            <input type="text" name="prof_rows" value="1">
+                            <input type="hidden" name="prof_rows" value="1">
                             <div id="profDiv">
                             <div class="row">
                                 <div class="col-sm-3">
@@ -243,6 +243,65 @@
 </div>
 
                             </section>
+
+                        <h3>Experience</h3>
+                            <section>
+                            <br>
+                            <input type="hidden" name="exp_rows" value="1">
+                            <div id="expDiv">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="sector">Designation<sup class="text-danger">*</sup></label>                                    
+                                        <input type="text" required name="exp_desig_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Worked At<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="exp_wrkat_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                
+                             <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="prof_palce">Place<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="exp_place_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
+                                        <input type="text"  required name="exp_fryr_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
+                                        <input type="text"  required name="exp_toyr_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>                                    
+                                        <input type="text" required name="exp_homoeo_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a style="margin-top:30px;" id="addExperience" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                </div>
+                            </div>
+
+                            <hr>
+</div>
+                            </section>
+
                         </div>
                     </form>
                      
@@ -284,10 +343,35 @@ $("input[name='prof_rows']").val(row);
 
     });
 
+    $("#addExperience").on("click", function(e)
+    {
+        var row = parseInt($("input[name='exp_rows']").val());
+        row++;
+        var content = '<div id="exp_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Designation<sup class="text-danger">*</sup></label>';
+            content +='<input type="text" required name="exp_desig_'+row+'" class="form-control"></div></div><div class="col-sm-6"><div class="form-group">';
+            content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" required name="exp_wrkat_'+row+'" class="form-control">';
+            content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
+            content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-2"><div class="form-group">';
+            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text"  required name="exp_fryr_'+row+'" class="form-control">';
+            content +='</div></div><div class="col-sm-2"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
+            content +='<input type="text"  required name="exp_toyr_'+row+'" class="form-control"></div></div></div>';
+            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';                                    
+            content +='<input type="text" required name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
+            content +='<a style="margin-top:30px;" data-row="'+row+'" class="btn removeProfession btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
+
+        $("input[name='exp_rows']").val(row);
+        $("#expDiv").append(content);
+
+    });
+
     $("body").on("click", ".removeProfession", function(e)
     {
-        console.log($(this).data('row'))
-        $("body #prof_row_"+$(this).data('row')).remove();
+        if($(this).data('action')=="experience")
+        {
+            $("body #exp_row_"+$(this).data('row')).remove();
+        }else{
+            $("body #prof_row_"+$(this).data('row')).remove();
+        }
     });
 
 });
@@ -333,7 +417,7 @@ form.validate({
     },
 });
 form.children("div").steps({
-    startIndex: 2,
+    startIndex: 3,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
