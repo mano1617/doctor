@@ -18,7 +18,7 @@
 
     <!-- Check if the language is set to RTL, so apply the RTL layouts -->
     <!-- Otherwise apply the normal LTR layouts -->
-    {{ style(asset('css/backend.css')) }}
+    {{ style(asset('assets/css/backend.css')) }}
     {{ style('https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css') }}
     {{ style('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css') }}
     {{ style('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css') }}
@@ -80,11 +80,11 @@
 
     <!-- Scripts -->
     @stack('before-scripts')
-    {!! script(asset('js/manifest.js')) !!}
-    {!! script(asset('js/vendor.js')) !!}
-    {!! script(asset('js/backend.js')) !!}
-    {!! script(asset('backend/jquery-validation/js/jquery.validate.min.js')) !!}
-    {!! script(asset('backend/jquery-validation/js/additional-methods.min.js')) !!}
+    {!! script(asset('assets/js/manifest.js')) !!}
+    {!! script(asset('assets/js/vendor.js')) !!}
+    {!! script(asset('assets/js/backend.js')) !!}
+    {!! script(asset('assets/backend/jquery-validation/js/jquery.validate.min.js')) !!}
+    {!! script(asset('assets/backend/jquery-validation/js/additional-methods.min.js')) !!}
     {!! script('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js') !!}
     {!! script('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js') !!}
     {!! script('https://cdn.jsdelivr.net/npm/sweetalert2@9') !!}

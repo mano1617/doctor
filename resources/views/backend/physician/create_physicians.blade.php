@@ -3,7 +3,7 @@
 @section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
 
 @push('after-styles')
-<link rel="stylesheet" href="{{ asset('backend/jquery.steps/jquery.steps.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/backend/jquery.steps/jquery.steps.css') }}">
 <style>
 /* .wizard>.content{display:block;min-height:35em;overflow-y: auto;position:relative} */
 
@@ -35,6 +35,7 @@
                         <div>
                             <h3>Account</h3>
                             <section>
+                            <br>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -302,6 +303,49 @@
 </div>
                             </section>
 
+                            <h3>Memberships</h3>
+                            <section>
+                            <br>
+                            <input type="hidden" name="mem_rows" value="1">
+                            <div id="memDiv">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="sector">Membership Title</label>
+                                            <select name="mem_1" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($memberships as $member)
+                                            <option value="{{$member->id}}">{{$member->name}}</option>
+                                            @endforeach
+                                            </select>                                   
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <a style="margin-top:30px;" id="addMembership" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                </div>
+                                </div>
+                            </div>
+                            </section>
+
+                            <h3>Achievements</h3>
+                            <section>
+                            <br>
+                            <input type="hidden" name="ach_rows" value="1">
+                            <div id="achDiv">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="sector">About Achievment</label>
+                                            <textarea name="ach_1" cols="30" rows="5" class="form-control"></textarea>                                 
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <a style="margin-top:30px;" id="addAchiev" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                </div>
+                                </div>
+                            </div>
+                            </section>
+
                         </div>
                     </form>
                      
@@ -312,7 +356,7 @@
     </div><!--row-->
 @endsection
 @push('after-scripts')
-    <script src="{{ asset('backend/jquery.steps/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/jquery.steps/jquery.steps.min.js') }}"></script>
 <script>
 $(function()
 {
@@ -320,6 +364,37 @@ $(function()
         format : 'dd-mm-yyyy',
         autoclose : true,
         endDate: '-18y'
+    });
+
+    $("#addAchiev").on("click", function(e)
+    {
+        var row = parseInt($("input[name='ach_rows']").val());
+        row++;
+        var content = '<div id="ach_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">About Achievment</label>';
+            content+= '<textarea name="ach_'+row+'" cols="30" rows="5" class="form-control"></textarea></div></div>';
+            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#ach_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+        $("input[name='ach_rows']").val(row);
+        $("#achDiv").append(content);
+
+    });
+
+    $("#addMembership").on("click", function(e)
+    {
+        var membs = '';
+        @foreach($memberships as $member)
+            membs+='<option value="{{$member->id}}">{{$member->name}}</option>';
+        @endforeach
+                                            
+        var row = parseInt($("input[name='mem_rows']").val());
+        row++;
+        var content = '<div id="mem_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Membership Title</label>';
+            content+= '<select name="mem_'+row+'" class="form-control"><option value="">--select--</option>';
+            content+= membs;
+            content+='</select></div></div>';
+            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#mem_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+        $("input[name='mem_rows']").val(row);
+        $("#memDiv").append(content);
+
     });
 
     $("#addProfession").on("click", function(e)
@@ -337,7 +412,7 @@ $(function()
             content+= '</div></div></div><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_org">Organisation<sup class="text-danger">*</sup></label><input type="text"  required name="prof_org_'+row+'" class="form-control">';
             content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label><input type="text" required name="prof_palce_'+row+'" class="form-control">';
             content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">Since<sup class="text-danger">*</sup></label><input type="text"  required name="prof_since_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><a style="margin-top:30px;" data-row="'+row+'" class="btn removeProfession btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+            content+= '</div></div><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
 $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);
 
@@ -357,21 +432,16 @@ $("input[name='prof_rows']").val(row);
             content +='<input type="text"  required name="exp_toyr_'+row+'" class="form-control"></div></div></div>';
             content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';                                    
             content +='<input type="text" required name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
-            content +='<a style="margin-top:30px;" data-row="'+row+'" class="btn removeProfession btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
+            content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
 
         $("input[name='exp_rows']").val(row);
         $("#expDiv").append(content);
 
     });
 
-    $("body").on("click", ".removeProfession", function(e)
+    $("body").on("click", ".removeContainer", function(e)
     {
-        if($(this).data('action')=="experience")
-        {
-            $("body #exp_row_"+$(this).data('row')).remove();
-        }else{
-            $("body #prof_row_"+$(this).data('row')).remove();
-        }
+        $("body "+$(this).data('container')).remove();
     });
 
 });
@@ -417,7 +487,7 @@ form.validate({
     },
 });
 form.children("div").steps({
-    startIndex: 3,
+    startIndex: 5,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
