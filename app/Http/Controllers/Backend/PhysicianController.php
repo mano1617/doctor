@@ -91,6 +91,15 @@ class PhysicianController extends Controller
     public function create()
     {
         $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
+        $pageData['days'] = [
+            'monday' => 'Monday',
+            'tuesday' => 'Tuesday',
+            'webnesday' => 'Wednesday',
+            'thursday' => 'Thursday',
+            'friday' => 'Friday',
+            'saturday' => 'Saturday',
+            'sunday' => 'Sunday'
+        ];
         return view('backend.physician.create_physicians',$pageData);
     }
 
