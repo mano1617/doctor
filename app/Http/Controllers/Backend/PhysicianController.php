@@ -13,6 +13,8 @@ use \Carbon\Carbon;
 use App\Models\Physician\PhysicianProfileModel;
 use App\Models\Physician\PhysicianProfessionModel;
 use App\Models\Physician\PhysicianExperienceModel;
+use App\Models\PhysicianMembershipMasterModel;
+use App\Models\Physician\PhysicianMembershipModel;
 
 class PhysicianController extends Controller
 {
@@ -88,7 +90,8 @@ class PhysicianController extends Controller
      */
     public function create()
     {
-        return view('backend.physician.create_physicians');
+        $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
+        return view('backend.physician.create_physicians',$pageData);
     }
 
     /**
@@ -184,6 +187,34 @@ class PhysicianController extends Controller
                 ]);
             }
         }
+
+        //Memberships
+        for($i=1; $i<=trim($request->mem_rows); $i++)
+        {
+            if($request->has('mem_'.$i) && !empty($request->input('mem_'.$i)))
+            {
+                PhysicianMembershipModel::create([
+                    'user_id' => $user->id,
+                    'record_type' => 'membership',
+                    'description' => $request->input('mem_'.$i)
+                ]);
+            }
+        }
+
+        //Achievements
+        for($i=1; $i<=trim($request->ach_rows); $i++)
+        {
+            if($request->has('ach_'.$i) && !empty($request->input('ach_'.$i)))
+            {
+                PhysicianMembershipModel::create([
+                    'user_id' => $user->id,
+                    'record_type' => 'achievement',
+                    'description' => $request->input('ach_'.$i)
+                ]);
+            }
+        }
+
+        
         
         //clinic
 
