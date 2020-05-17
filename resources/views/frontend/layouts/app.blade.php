@@ -18,7 +18,7 @@
 
         <!-- Check if the language is set to RTL, so apply the RTL layouts -->
         <!-- Otherwise apply the normal LTR layouts -->
-        {{ style(asset('assets/css/frontend.css')) }}
+        {{ style(url('assets/css/frontend.css')) }}
 
         @stack('after-styles')
     </head>
@@ -37,9 +37,9 @@
 
         <!-- Scripts -->
         @stack('before-scripts')
-        {!! script(asset('assets/js/manifest.js')) !!}
-        {!! script(asset('assets/js/vendor.js')) !!}
-        {!! script(asset('assets/js/frontend.js')) !!}
+        {!! script(url('assets/js/manifest.js')) !!}
+        {!! script(url('assets/js/vendor.js')) !!}
+        {!! script(url('assets/js/frontend.js')) !!}
         @stack('after-scripts')
 
         @include('includes.partials.ga')

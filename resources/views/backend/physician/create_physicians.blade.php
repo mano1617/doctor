@@ -346,6 +346,304 @@
                             </div>
                             </section>
 
+                            <h3>Clinics</h3>
+                            <section>
+                            <br>
+                            <input type="hidden" name="cli_rows" value="1">
+                            <div id="cliDiv">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="">Name</label>
+                                            <input type="text" name="cli_name_1" required class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="address">Address<sup class="text-danger">*</sup></label>
+                                        <label> <input type="checkbox" class=""> Same as above</label>
+                                        <textarea name="cli_address_1" required class="form-control" ></textarea>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="district">District<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_district_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="state">State<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_state_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="country">Country<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_country_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_pincode_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="mobile_no">Email Address<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_email_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="landno">Website</label>
+                                        <input type="text"  name="cli_website_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_mobile_no_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="landno">Landline Number<sup class="text-danger">*</sup></label>
+                                        <input type="text"  name="cli_landno_1" class="form-control">
+                                    </div>
+                                </div>                                                    
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="landmark">Landmark</label>
+                                        <textarea name="cli_landmark_1" class="form-control" ></textarea>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="about_me">About Me<sup class="text-danger">*</sup></label>
+                                        <textarea name="about_me" required class="form-control" ></textarea>
+                                    </div>
+                                </div>  
+                            </div>
+                            <hr />
+                            <h6>Working Days and Time schedule:</h6>
+                            <h6 class="text-danger">Note:</h6>
+                            <p>If no day selection, leave as blank all inputs.</p>
+                            @foreach($days as $kday => $day)
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label> <input type="checkbox" class=""> {{$day}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <input type="text" placeholder="00:00" required name="cli_{{ $kday }}_mst_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_mst_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="landno"></label>
+                                        <input type="text" placeholder="00:00" name="cli_{{ $kday }}_med_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-1" style="border-right: 1px solid #000;">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_med_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <input type="text" placeholder="00:00" required name="cli_{{ $kday }}_nst_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_nst_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="landno"></label>
+                                        <input type="text" placeholder="00:00"  name="cli_{{ $kday }}_ned_1" class="form-control">
+                                    </div>
+                                </div> 
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_ned_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div> 
+                            </div>
+                            @endforeach
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label> <input type="checkbox" class=""> Others</label>
+                                        <textarea class="form-control" name="cli_wrk_others_1" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <h6>Consulting Physicians:</h6>
+                            <h6 class="text-danger">Note:</h6>
+                            <p>If no day selection, leave as blank all inputs.</p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" name="cli_cons_doc_name_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Speciality</label>
+                                        <input type="text" name="cli_cons_doc_spec_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Mobile</label>
+                                        <input type="text" name="cli_cons_doc_mobile_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Email ID</label>
+                                        <input type="text" name="cli_cons_doc_email_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <p>Consulting On:</p>
+                            @foreach($days as $kday => $day)
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label> <input type="checkbox" class=""> {{$day}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <input type="text" placeholder="00:00" required name="cli_{{ $kday }}_mst_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_mst_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="landno"></label>
+                                        <input type="text" placeholder="00:00" name="cli_{{ $kday }}_med_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-1" style="border-right: 1px solid #000;">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_med_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <input type="text" placeholder="00:00" required name="cli_{{ $kday }}_nst_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_nst_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="landno"></label>
+                                        <input type="text" placeholder="00:00"  name="cli_{{ $kday }}_ned_1" class="form-control">
+                                    </div>
+                                </div> 
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="mobile_no"></label>
+                                        <select name="cli_{{ $kday }}_ned_ap_1" class="form-control">
+                                            <option value="am">AM</option>
+                                            <option value="pm">PM</option>
+                                        </select>
+                                    </div>
+                                </div> 
+                            </div>
+                            @endforeach
+                            <div class="row">
+                             <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Monthy Visit</label>
+                                        <textarea class="form-control" name="cli_wrk_others_1" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Others</label>
+                                        <textarea class="form-control" name="cli_wrk_others_1" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="">About Us</label>
+                                                <textarea class="form-control" name="cli_aboutus_1" cols="30" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </section>
+
                         </div>
                     </form>
                      
@@ -487,7 +785,7 @@ form.validate({
     },
 });
 form.children("div").steps({
-    startIndex: 5,
+    startIndex: 6,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
