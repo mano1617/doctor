@@ -135,33 +135,18 @@
                     }).then((result) => {
                     if (result.value) {
 
-                            //$("body #removeRecord_"+$(this).data("row")).trigger("submit");
                             
-
-                        $.ajax({
-                            url: $(this).data("rowurl")+$(this).data("row"),
-                            type: 'delete',
-                            dataType: 'json',
-                            data: {
-                                "id" : $(this).data("row"),
-                                "_token": '{{ csrf_token() }}',
-                                "_method" : "DELETE"
-                            },
-                            success: function (){
-                                console.log("it Works");
-                            }
-                        });
-
-                    //     $.post($(this).data("rowurl"),{_token:'{{ csrf_token() }}',_method:'DELETE'}, function(result)
-                    //                 {
-                    //                     Swal.fire(
-                    //      'Success!',
-                    //      '',
-                    //      'success'
-                    //      ).then(()=>{
-                    //                      //window.location.reload();
-                    //      })
-                    // },'JSON');                        
+                        $.get($(this).data("rowurl"), function(result)
+                                    {
+                                        Swal.fire(
+                        'Success!',
+                        '',
+                        'success'
+                        ).then(()=>{
+                                        window.location.reload();
+                        })
+                                    },'JSON');
+                                            
                     }
             });
                 

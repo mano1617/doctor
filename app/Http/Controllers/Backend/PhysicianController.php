@@ -72,7 +72,10 @@ class PhysicianController extends Controller
                     }
 
                     $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    $actions .= '<a href="javascript:void(0);" data-rowurl="'.route('admin.physician.destroy',$row->id).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
+                    $actions .= '<a href="'.route('admin.physician.clinics.index',['physician' => $row->id]).'" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
+                    $actions .= ' <a title="View Branches" href="'.route('admin.physician.clinics.index',[$row->id]).'" class="btn btn-outline-dark"><i class="fa fa-fw fa-plus-square"></i></a>';
+                    $actions .= ' <a href="javascript:void(0);" data-rowurl="'.route('admin.physician.updateStatus',[$row->id,2]).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
+                    
                     return $actions;
                 })
                 ->rawColumns(['contact', 'actions', 'photo'])
@@ -111,10 +114,6 @@ class PhysicianController extends Controller
      */
     public function store(Request $request)
     {
-        //print_r($request->all());
-        
-        //die();
-
         //User Creation
         $user = User::create([
             'first_name' => trim($request->firstname),
@@ -223,10 +222,6 @@ class PhysicianController extends Controller
             }
         }
 
-        
-        
-        //clinic
-
         $this->flashData = [
             'status' => 1,
             'message' => 'Successfully user has been registered'
@@ -236,7 +231,6 @@ class PhysicianController extends Controller
 
         return redirect()->route('admin.physician.index');
 
-        // print_r($data);
     }
 
     /**
@@ -307,7 +301,7 @@ class PhysicianController extends Controller
         {
             $this->flashData = [
                 'status' => 1,
-                'message' => 'Successfully status has been changed'
+                'message' => $statusCode == 2 ? 'Successfully user has been removed' : 'Successfully status has been changed'
             ];
 
             $request->session()->flash('flashData', $this->flashData);
