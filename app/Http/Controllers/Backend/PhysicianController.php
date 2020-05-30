@@ -73,7 +73,7 @@ class PhysicianController extends Controller
 
                     $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     $actions .= '<a href="'.route('admin.physician.clinics.index',['physician' => $row->id]).'" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
-                    $actions .= ' <a title="View Branches" href="'.route('admin.physician.clinics.index',[$row->id]).'" class="btn btn-outline-dark"><i class="fa fa-fw fa-plus-square"></i></a>';
+                    $actions .= ' <a title="View Branches" href="'.route('admin.physician.branches.index',['physician' => $row->id]).'" class="btn btn-outline-dark"><i class="fa fa-fw fa-plus-square"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="'.route('admin.physician.updateStatus',[$row->id,2]).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
                     
                     return $actions;
