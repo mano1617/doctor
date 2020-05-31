@@ -173,6 +173,7 @@
                             <h3>Education</h3>
                             <section>
                                 <br>
+                                
                             <input type="hidden" name="edu_rows" value="1">
                             <div id="eduDiv">
                             <div class="row">                               
