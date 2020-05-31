@@ -25,7 +25,7 @@
                                     <tr>
                                         <th width="5%">#</th>
                                         <th>NAME</th>
-                                        <th>PHOTO</th>
+                                        <th>ADDRESS</th>
                                         <th>CONTACT</th>
                                         <th>ACTIONS</th>
                                     </tr>
@@ -42,18 +42,18 @@
 @push('after-scripts')
 <script>
 $(function() {
-    // $('#userTable').DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     ajax: "{{ route('admin.physician.index') }}",
-    //     columns: [
-    //             { data: 'id', name: 'id' },
-    //             { data: 'first_name', name: 'first_name' },
-    //             { data: 'photo', name: 'photo' },
-    //             { data: 'contact', name: 'contact' },
-    //             { data: 'actions', name: 'actions' }
-    //         ]
-    // });
+    $('#userTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('admin.physician.clinics.index',['physician' => request()->physician]) }}",
+        columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'address', name: 'address' },
+                { data: 'contact', name: 'contact' },
+                { data: 'actions', name: 'actions' }
+            ]
+    });
 });
 </script>
 @endpush
