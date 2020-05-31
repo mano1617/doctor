@@ -14,7 +14,7 @@ use App\Models\Physician\PhysicianClinicTimesModel;
 use App\Models\Physician\PhysicianClinicConsultsModel;
 use App\Models\Physician\PhysicianClinicConsultsTimesModel;
 
-class PhyClinicsController extends Controller
+class PhyBranchesController extends Controller
 {
     protected $flashData = [
         'status' => 0,
@@ -38,16 +38,15 @@ class PhyClinicsController extends Controller
      */
     public function index(Request $request)
     {
-
         if($request->ajax())
         {
             $clinics = PhysicianClinicModel::select([
-                'id', 'name', 'address', 'mobile_no', 'email_address', 'district', 'state', 'country', 'pincode', 'landmark', 'website', 'status'
+                'id', 'name', 'address', 'mobile_no', 'email_address', 'landline','district', 'state', 'country', 'pincode', 'landmark', 'website', 'status'
                 ])
                 ->where([
                     ['user_id', '=', $request->physician],
                     ['status', '!=', '2'],
-                    ['clinic_type', '=', 1]
+                    ['clinic_type', '=', 2]
                 ])->latest()->get();
 
             return Datatables::of($clinics)
@@ -55,7 +54,10 @@ class PhyClinicsController extends Controller
                 ->addColumn('contact', function($row)
                 {
                      $contact = '<i class="fa fa-envelope fa-fw"></i>'.$row->email_address;
-                     $contact .= '<br><i class="fa fa-phone fa-fw"></i>'.$row->landline;
+                     if(trim($row->landline)!='')
+                     {
+                        $contact .= '<br><i class="fa fa-phone fa-fw"></i>'.$row->landline;
+                     }
                      $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->mobile_no;
                      return $contact;
                 })
@@ -91,7 +93,7 @@ class PhyClinicsController extends Controller
         }
 
 
-        return view('backend.physician.list_physicians_clinics');
+        return view('backend.physician.list_physicians_branches');
     }
 
     /**
@@ -102,7 +104,7 @@ class PhyClinicsController extends Controller
     public function create()
     {
         $pageData['days'] = $this->weekDays;
-        return view('backend.physician.create_physician_clinics',$pageData);
+        return view('backend.physician.create_physician_branches',$pageData);
     }
 
     /**
@@ -116,7 +118,8 @@ class PhyClinicsController extends Controller
 
         //Clinic creation
         $createClinic = PhysicianClinicModel::create([
-            'user_id' => 1,
+            'clinic_type' => 2,
+            'user_id' => $request->user,
             'name' => trim($request->cli_name),
             'address' => trim($request->cli_address),
             'district' => trim($request->cli_district),
@@ -139,7 +142,7 @@ class PhyClinicsController extends Controller
                 'day_name' => $dayKey,
                 'morning_session_time' => '',
                 'evening_session_time' => '',
-                'description' => $request->cli_wrk_others
+                'description' => trim($request->cli_wrk_others)!='' ? trim($request->cli_wrk_others) : ''
             ];
             if(trim($request->input('wrk_day_'.$dayKey))!='')
             {
@@ -153,7 +156,10 @@ class PhyClinicsController extends Controller
                     $cliWorkDay['evening_session_time'] = trim($request->input('cli_'.$dayKey.'_nst')).'-'.trim($request->input('cli_'.$dayKey.'_ned'));
                 }
 
-                PhysicianClinicTimesModel::create($cliWorkDay);
+                if(trim($cliWorkDay['morning_session_time'])!='' || trim($cliWorkDay['evening_session_time'])!='')
+                {
+                    PhysicianClinicTimesModel::create($cliWorkDay);
+                }
             }
         }
 
@@ -195,7 +201,10 @@ class PhyClinicsController extends Controller
                     $cliConsWorkDay['evening_session_time'].= '-'.date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_ned').' '.$request->input('cli_cons_'.$dayKey.'_ned_ap'))));
                 }
 
-                PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+                if(trim($cliConsWorkDay['morning_session_time'])!='' || trim($cliConsWorkDay['evening_session_time'])!='')
+                {
+                    PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+                }
             }
         }
 
@@ -206,8 +215,7 @@ class PhyClinicsController extends Controller
 
         $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->route('admin.physician.clinics.index',['physician' => $request->user]);
-            
+        return redirect()->route('admin.physician.branches.index',['physician' => $request->user]);
     }
 
     /**
@@ -218,7 +226,7 @@ class PhyClinicsController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**
@@ -253,27 +261,5 @@ class PhyClinicsController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function updateStatus(Request $request, $userId, $statusCode)
-    {
-        $result = PhysicianClinicModel::where('id', trim($userId))
-            ->update([
-                'status' => trim($statusCode)
-            ]);
-
-        if($result)
-        {
-            $this->flashData = [
-                'status' => 1,
-                'message' => $statusCode == 2 ? 'Successfully user has been removed' : 'Successfully status has been changed'
-            ];
-
-            $request->session()->flash('flashData', $this->flashData);
-        }
-
-        return response()->json([
-            'status' => 1
-        ]);
     }
 }

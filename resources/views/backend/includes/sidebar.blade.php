@@ -2,7 +2,8 @@
     <nav class="sidebar-nav">
         <ul class="nav">
             <li class="nav-title">
-                @lang('menus.backend.sidebar.general')
+                <!-- @lang('menus.backend.sidebar.general') -->
+                Menus
             </li>
             <li class="nav-item">
                 <a class="nav-link {{
@@ -14,11 +15,11 @@
             </li>
 
             @if ($logged_in_user->isAdmin())
-                <li class="nav-title">
+                <!-- <li class="nav-title">
                     @lang('menus.backend.sidebar.system')
-                </li>
+                </li> -->
 
-                <li class="nav-item nav-dropdown {{
+                <!-- <li class="nav-item nav-dropdown {{
                     active_class(Route::is('admin/auth*'), 'open')
                 }}">
                     <a class="nav-link nav-dropdown-toggle {{
@@ -85,7 +86,7 @@
 
                 <li class="nav-title">
                     Applications
-                </li>
+                </li> -->
                 
                 <li class="nav-item nav-dropdown {{
                     active_class(Route::is('admin/log-viewer*'), 'open')

@@ -10,8 +10,12 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Physician Lists</strong>
-                    <a href="{{ route('admin.physician.create') }}" class="btn btn-outline-success float-right"><i class="fa fa-fw fa-plus"></i>CREATE</a>
+                    <strong>Lists</strong>
+                    <div class="float-right">
+                    <a href="{{ route('admin.physician.branches.create',['physician' => request()->physician]) }}" class="btn btn-outline-success"><i class="fa fa-fw fa-plus"></i>CREATE</a>
+                    <a href="{{ route('admin.physician.index') }}" class="btn btn-danger">
+                    <i class="fa fa-fw fa-arrow-left"></i>GO BACK</a>
+                    </div>
                 </div><!--card-header-->
                 <div class="card-body">
                     <div class="row row-cols-12">
@@ -41,11 +45,11 @@ $(function() {
     $('#userTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('admin.physician.index') }}",
+        ajax: "{{ route('admin.physician.branches.index',['physician' => request()->physician]) }}",
         columns: [
                 { data: 'id', name: 'id' },
-                { data: 'first_name', name: 'first_name' },
-                { data: 'photo', name: 'photo' },
+                { data: 'name', name: 'name' },
+                { data: 'address', name: 'address' },
                 { data: 'contact', name: 'contact' },
                 { data: 'actions', name: 'actions' }
             ]

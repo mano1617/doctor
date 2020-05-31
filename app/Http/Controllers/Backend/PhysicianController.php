@@ -47,8 +47,8 @@ class PhysicianController extends Controller
                 ->addColumn('contact', function($row)
                 {
                      $contact = '<i class="fa fa-envelope fa-fw"></i>'.$row->email;
-                     $contact .= '<br><i class="fa fa-phone fa-fw"></i>'.$row->email;
-                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->email;
+                     $contact .= '<br><i class="fa fa-phone fa-fw"></i>'.$row->physicianProfile->landline;
+                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->physicianProfile->mobile_no;
                      return $contact;
                 })
                 ->addColumn('photo', function($row)
