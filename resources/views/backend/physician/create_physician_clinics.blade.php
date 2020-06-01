@@ -309,8 +309,8 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">About Us</label>
-                                                <textarea class="form-control" name="cli_cons_aboutus" cols="30" rows="5"></textarea>
+                                            <label for="">About Us<sup class="text-danger">*</sup></label>
+                                            <textarea class="form-control" required name="cli_cons_aboutus" cols="30" rows="5"></textarea>
                                         </div>
                                     </div>
                                 </div>
