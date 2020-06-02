@@ -172,7 +172,49 @@
 
                             <h3>Education</h3>
                             <section>
-                                Edu
+                                <br>
+                                
+                            <input type="hidden" name="edu_rows" value="1">
+                            <div id="eduDiv">
+                            <div class="row">                               
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="branch_of_medicine_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Registration Number<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="registration_no_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="medical_council_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="professional_qualification_1" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="education">Additional Qualification</label>
+                                        <textarea name="additional_qualification_1" class="form-control" ></textarea>
+                                    </div>
+                                </div>                               
+                                <div class="col-sm-3">
+                                    <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                </div>
+                            </div>
+                            <hr>
+							</div>
                             </section>
                             <h3>Profession</h3>
                             <section>
@@ -440,6 +482,25 @@ $("input[name='prof_rows']").val(row);
         $("#expDiv").append(content);
 
     });
+
+
+     $("#addEducation").on("click", function(e)
+    {
+        var row = parseInt($("input[name='edu_rows']").val());
+        row++;
+        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><input type="text" required name="branch_of_medicine_'+row+'" class="form-control"></div></div>';
+            
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control"></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label><input type="text" required name="medical_council_'+row+'" class="form-control"></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label><input type="text" required name="professional_qualification_'+row+'" class="form-control"></div></div>';
+            content+='</div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="education">Additional Qualification</label><textarea name="additional_qualification_'+row+'" class="form-control" ></textarea></div></div>';
+            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#edu_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+$("input[name='edu_rows']").val(row);
+        $("#eduDiv").append(content);
+
+    });
+
+
 
     $("body").on("click", ".removeContainer", function(e)
     {

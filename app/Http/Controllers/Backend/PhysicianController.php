@@ -158,8 +158,23 @@ class PhysicianController extends Controller
             //'map_image' => '',//trim($request->about_me),
             //'qr_code' => ''//trim($request->about_me),
         ]);
+        
 
         //edu
+        for($i=1; $i<=trim($request->edu_rows); $i++)
+        {
+            //if($request->has('edu_desig_'.$i))
+            //{
+            PhysicianEduModel::create([
+            'user_id' => $user->id,
+            'branch_of_medicine' => trim($request->input('branch_of_medicine_'.$i)),
+            'registration_no' => trim($request->input('registration_no_'.$i)),
+            'medical_council' => trim($request->input('medical_council_'.$i)),
+            'professional_qualification' => trim($request->input('professional_qualification_'.$i)),
+            'additional_qualification' => trim($request->input('additional_qualification_'.$i))
+        ]);
+            // }
+        }
 
         //Profession
         for($i=1; $i<=trim($request->prof_rows); $i++)
