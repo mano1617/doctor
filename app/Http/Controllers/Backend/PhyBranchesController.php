@@ -54,11 +54,11 @@ class PhyBranchesController extends Controller
                 ->addColumn('contact', function($row)
                 {
                      $contact = '<i class="fa fa-envelope fa-fw"></i>'.$row->email_address;
+                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->mobile_no;
                      if(trim($row->landline)!='')
                      {
                         $contact .= '<br><i class="fa fa-phone fa-fw"></i>'.$row->landline;
                      }
-                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>'.$row->mobile_no;
                      return $contact;
                 })
                 ->addColumn('photo', function($row)
@@ -134,83 +134,93 @@ class PhyBranchesController extends Controller
         ]);
     
         //Clinic times
-        foreach($this->weekDays as $dayKey => $day)
+        if(empty($request->cli_wrk_others))
         {
-            $cliWorkDay = [
-                'user_id' => $request->user,
-                'clinic_id' => $createClinic->id,
-                'day_name' => $dayKey,
-                'morning_session_time' => '',
-                'evening_session_time' => '',
-                'description' => trim($request->cli_wrk_others)!='' ? trim($request->cli_wrk_others) : ''
-            ];
-            if(trim($request->input('wrk_day_'.$dayKey))!='')
+            foreach($this->weekDays as $dayKey => $day)
             {
-                if(trim($request->input('cli_'.$dayKey.'_mst'))!='' && trim($request->input('cli_'.$dayKey.'_med'))!='')
+                $cliWorkDay = [
+                    'user_id' => $request->user,
+                    'clinic_id' => $createClinic->id,
+                    'day_name' => $dayKey,
+                    'morning_session_time' => '',
+                    'evening_session_time' => '',
+                ];
+                if(trim($request->input('wrk_day_'.$dayKey))!='')
                 {
-                    $cliWorkDay['morning_session_time'] = trim($request->input('cli_'.$dayKey.'_mst')).'-'.trim($request->input('cli_'.$dayKey.'_med'));
-                }
+                    if(trim($request->input('cli_'.$dayKey.'_mst'))!='' && trim($request->input('cli_'.$dayKey.'_med'))!='')
+                    {
+                        $cliWorkDay['morning_session_time'] = trim($request->input('cli_'.$dayKey.'_mst')).'-'.trim($request->input('cli_'.$dayKey.'_med'));
+                    }
 
-                if(trim($request->input('cli_'.$dayKey.'_nst'))!='' && trim($request->input('cli_'.$dayKey.'_ned'))!='')
-                {
-                    $cliWorkDay['evening_session_time'] = trim($request->input('cli_'.$dayKey.'_nst')).'-'.trim($request->input('cli_'.$dayKey.'_ned'));
-                }
+                    if(trim($request->input('cli_'.$dayKey.'_nst'))!='' && trim($request->input('cli_'.$dayKey.'_ned'))!='')
+                    {
+                        $cliWorkDay['evening_session_time'] = trim($request->input('cli_'.$dayKey.'_nst')).'-'.trim($request->input('cli_'.$dayKey.'_ned'));
+                    }
 
-                if(trim($cliWorkDay['morning_session_time'])!='' || trim($cliWorkDay['evening_session_time'])!='')
-                {
                     PhysicianClinicTimesModel::create($cliWorkDay);
                 }
             }
+            
+        }else{
+
+            PhysicianClinicTimesModel::create([
+                'user_id' => $request->user,
+                'clinic_id' => $createClinic->id,
+                'day_name' => 'others',
+                'morning_session_time' => '',
+                'evening_session_time' => '',
+                'description' => empty($request->cli_wrk_others) ? '' : trim($request->cli_wrk_others)
+            ]);
         }
 
         //Consultant Creation
-        $consultant = PhysicianClinicConsultsModel::create([
-                'user_id' => $request->user,
-                'clinic_id' => $createClinic->id,
-                'name' => trim($request->cli_cons_doc_name),
-                'speciality' => trim($request->cli_cons_doc_spec),
-                'email_address' => trim($request->cli_cons_doc_email),
-                'mobile_no' => trim($request->cli_cons_doc_mobile),
-                'monthly_visit' => trim($request->cli_cons_month_visit),
-                'others' => trim($request->cli_cons_wrk_others),
-                'description' => trim($request->cli_cons_aboutus)
-            ]);
+        // $consultant = PhysicianClinicConsultsModel::create([
+        //         'user_id' => $request->user,
+        //         'clinic_id' => $createClinic->id,
+        //         'name' => trim($request->cli_cons_doc_name),
+        //         'speciality' => trim($request->cli_cons_doc_spec),
+        //         'email_address' => trim($request->cli_cons_doc_email),
+        //         'mobile_no' => trim($request->cli_cons_doc_mobile),
+        //         'monthly_visit' => trim($request->cli_cons_month_visit),
+        //         'others' => trim($request->cli_cons_wrk_others),
+        //         'description' => trim($request->cli_cons_aboutus)
+        //     ]);
 
         //Clinic consult times
-        foreach($this->weekDays as $dayKey => $day)
-        {
-            $cliConsWorkDay = [
-                'user_id' => $request->user,
-                'clinic_id' => $createClinic->id,
-                'consulting_id' => $consultant->id,
-                'day_name' => $dayKey,
-                'morning_session_time' => '',
-                'evening_session_time' => ''
-            ];
-            if(trim($request->input('cons_day_'.$dayKey))!='')
-            {
-                if(trim($request->input('cli_cons_'.$dayKey.'_mst'))!='' && trim($request->input('cli_cons_'.$dayKey.'_med'))!='')
-                {
-                    $cliConsWorkDay['morning_session_time'] = date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_mst').' '.$request->input('cli_cons_'.$dayKey.'_mst_ap'))));
-                    $cliConsWorkDay['morning_session_time'].= '-'.date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_med').' '.$request->input('cli_cons_'.$dayKey.'_med_ap'))));
-                }
+        // foreach($this->weekDays as $dayKey => $day)
+        // {
+        //     $cliConsWorkDay = [
+        //         'user_id' => $request->user,
+        //         'clinic_id' => $createClinic->id,
+        //         'consulting_id' => $consultant->id,
+        //         'day_name' => $dayKey,
+        //         'morning_session_time' => '',
+        //         'evening_session_time' => ''
+        //     ];
+        //     if(trim($request->input('cons_day_'.$dayKey))!='')
+        //     {
+        //         if(trim($request->input('cli_cons_'.$dayKey.'_mst'))!='' && trim($request->input('cli_cons_'.$dayKey.'_med'))!='')
+        //         {
+        //             $cliConsWorkDay['morning_session_time'] = date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_mst').' '.$request->input('cli_cons_'.$dayKey.'_mst_ap'))));
+        //             $cliConsWorkDay['morning_session_time'].= '-'.date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_med').' '.$request->input('cli_cons_'.$dayKey.'_med_ap'))));
+        //         }
 
-                if(trim($request->input('cli_cons_'.$dayKey.'_nst'))!='' && trim($request->input('cli_cons_'.$dayKey.'_ned'))!='')
-                {
-                    $cliConsWorkDay['evening_session_time'] = date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_nst').' '.$request->input('cli_cons_'.$dayKey.'_nst_ap'))));
-                    $cliConsWorkDay['evening_session_time'].= '-'.date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_ned').' '.$request->input('cli_cons_'.$dayKey.'_ned_ap'))));
-                }
+        //         if(trim($request->input('cli_cons_'.$dayKey.'_nst'))!='' && trim($request->input('cli_cons_'.$dayKey.'_ned'))!='')
+        //         {
+        //             $cliConsWorkDay['evening_session_time'] = date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_nst').' '.$request->input('cli_cons_'.$dayKey.'_nst_ap'))));
+        //             $cliConsWorkDay['evening_session_time'].= '-'.date('H:i:s',strtotime(trim($request->input('cli_cons_'.$dayKey.'_ned').' '.$request->input('cli_cons_'.$dayKey.'_ned_ap'))));
+        //         }
 
-                if(trim($cliConsWorkDay['morning_session_time'])!='' || trim($cliConsWorkDay['evening_session_time'])!='')
-                {
-                    PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
-                }
-            }
-        }
+        //         if(trim($cliConsWorkDay['morning_session_time'])!='' || trim($cliConsWorkDay['evening_session_time'])!='')
+        //         {
+        //             PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+        //         }
+        //     }
+        // }
 
          $this->flashData = [
             'status' => 1,
-            'message' => 'Successfully user has been registered'
+            'message' => 'Successfully branch has been created'
         ];
 
         $request->session()->flash('flashData', $this->flashData);

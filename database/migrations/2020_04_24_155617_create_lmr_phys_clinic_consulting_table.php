@@ -28,8 +28,8 @@ class CreateLmrPhysClinicConsultingTable extends Migration
             $table->timestamps();
 
             $table->engine = 'InnoDB';
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('clinic_id')->references('id')->on('lmr_physician_clinic');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('clinic_id')->references('id')->on('lmr_physician_clinic')->onDelete('cascade');
         });
     }
 

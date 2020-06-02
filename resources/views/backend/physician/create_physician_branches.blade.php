@@ -3,20 +3,6 @@
 @section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
 
 @push('after-styles')
-<link rel="stylesheet" href="{{ asset('assets/backend/jquery.steps/jquery.steps.css') }}">
-<style>
-/* .wizard>.content{display:block;min-height:35em;overflow-y: auto;position:relative} */
-
-.wizard .content {
-    min-height: 100px;
-}
-.wizard .content > .body {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-    position: relative;
-}
-</style>
 @endpush
 
 @section('content')
@@ -69,7 +55,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_pincode" class="form-control">
+                                        <input type="text" required data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" name="cli_pincode" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -83,19 +69,19 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landno">Website</label>
-                                        <input type="text"  name="cli_website" class="form-control">
+                                        <input type="text" data-rule-url="true" name="cli_website" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_mobile_no" class="form-control">
+                                        <input type="text" required data-rule-digits="true" data-rule-minlength="10" data-rule-maxlength="11" name="cli_mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landno">Landline Number<sup class="text-danger">*</sup></label>
-                                        <input type="text"  name="cli_landno" class="form-control">
+                                        <input type="text" data-rule-minlength="5" data-rule-maxlength="15" name="cli_landno" class="form-control">
                                     </div>
                                 </div>                                                    
                             </div>
@@ -115,13 +101,13 @@
                             <div class="row">
                                 <div class="col-sm-2">
                                     <div class="form-group">
-                                        <label> <input type="checkbox" value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}</label>
+                                        <label style="margin-top:17px;"> <input type="checkbox" value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_mst"></label>
-                                        <input type="text" placeholder="00:00"  name="cli_{{ $kday }}_mst" class="form-control">
+                                        <input type="text" placeholder="00:00"  name="cli_{{ $kday }}_mst" class="timeFormats form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
@@ -136,7 +122,7 @@
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_med"></label>
-                                        <input type="text" placeholder="00:00" name="cli_{{ $kday }}_med" class="form-control">
+                                        <input type="text" placeholder="00:00" name="cli_{{ $kday }}_med" class="timeFormats form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="border-right: 1px solid #000;">
@@ -151,7 +137,7 @@
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_nst"></label>
-                                        <input type="text" placeholder="00:00" name="cli_{{ $kday }}_nst" class="form-control">
+                                        <input type="text" placeholder="00:00" name="cli_{{ $kday }}_nst" class="timeFormats form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
@@ -166,7 +152,7 @@
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_ned"></label>
-                                        <input type="text" placeholder="00:00"  name="cli_{{ $kday }}_ned" class="form-control">
+                                        <input type="text" placeholder="00:00"  name="cli_{{ $kday }}_ned" class="timeFormats form-control">
                                     </div>
                                 </div> 
                                 <div class="col-sm-1">
@@ -183,13 +169,13 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label> <input type="checkbox" class=""> Others</label>
+                                        <label> <input type="checkbox" name="wrk_times_others" value="1"> Others</label>
                                         <textarea class="form-control" name="cli_wrk_others" cols="30" rows="5"></textarea>
                                     </div>
                                 </div>
                             </div>
 
-                            <hr />
+                            <!-- <hr />
                             <h6>Consulting Physicians:</h6>
                             <h6 class="text-danger">Note:</h6>
                             <p>If no day selection, leave as blank all inputs.</p>
@@ -220,19 +206,19 @@
                                         <input type="email" required name="cli_cons_doc_email" class="form-control">
                                     </div>
                                 </div>
-                            </div>
-                            <p>Consulting On:</p>
+                            </div> -->
+                            <!-- <p>Consulting On:</p>
                             @foreach($days as $kday => $day)
                             <div class="row">
                                 <div class="col-sm-2">
                                     <div class="form-group">
-                                        <label> <input type="checkbox"  value="{{ $kday }}" name="cons_day_{{ $kday }}" class="cons_day"> {{$day}}</label>
+                                        <label style="margin-top:17px;"> <input type="checkbox"  value="{{ $kday }}" name="cons_day_{{ $kday }}" class="cons_day"> {{$day}}</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_mst"></label>
-                                        <input type="text" placeholder="00:00"  name="cli_cons_{{ $kday }}_mst" class="form-control">
+                                        <input type="text" placeholder="00:00"  name="cli_cons_{{ $kday }}_mst" class="timeFormats form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
@@ -247,7 +233,7 @@
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_med"></label>
-                                        <input type="text" placeholder="00:00" name="cli_cons_{{ $kday }}_med" class="form-control">
+                                        <input type="text" placeholder="00:00" name="cli_cons_{{ $kday }}_med" class="timeFormats form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="border-right: 1px solid #000;">
@@ -262,7 +248,7 @@
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_nst"></label>
-                                        <input type="text" placeholder="00:00"  name="cli_cons_{{ $kday }}_nst" class="form-control">
+                                        <input type="text" placeholder="00:00"  name="cli_cons_{{ $kday }}_nst" class="timeFormats form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1">
@@ -277,7 +263,7 @@
                                 <div class="col-sm-1">
                                     <div class="form-group">
                                         <label for="landno"></label>
-                                        <input type="text" placeholder="00:00"  name="cli_cons_{{ $kday }}_ned" class="form-control">
+                                        <input type="text" placeholder="00:00"  name="cli_cons_{{ $kday }}_ned" class="timeFormats form-control">
                                     </div>
                                 </div> 
                                 <div class="col-sm-1">
@@ -313,7 +299,7 @@
                                                 <textarea class="form-control" name="cli_cons_aboutus" cols="30" rows="5"></textarea>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <hr />
                 </div><!--card-body-->
@@ -327,12 +313,13 @@
     </div><!--row-->
 @endsection
 @push('after-scripts')
-    <script src="{{ asset('assets/backend/jquery.steps/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/jquery.maskedinput/jquery.maskedinput.js') }}"></script>
+
 <script>
 $(function()
 {
+    $('.timeFormats').mask('99:99');
     
-
     $(".wrk_day").on("change", function(e)
     {
         if($(this).is(':checked'))
@@ -349,26 +336,19 @@ $(function()
 
     var form = $("#createPhysician").validate({
     errorPlacement: function errorPlacement(error, element) { element.before(error); },
-    rules: {
-        password: {
-            minlength:6
-        },     
-        confirm_password: {
-            equalTo: "#password"
-        },        
-        email_address : {
-            email : true,
-            remote: {
-                        url: "{{ route('admin.physician.checkEmail') }}",
-                        type: "post",
-                        data : {
-                            '_token' : function() { return '{{ csrf_token() }}' }
-                            }
-                    }
+    rules: {  
+        cli_name : {
+            // remote: {
+            //             url: "{{ route('admin.physician.checkEmail') }}",
+            //             type: "post",
+            //             data : {
+            //                 '_token' : function() { return '{{ csrf_token() }}' }
+            //                 }
+            //         }
         }
     },
     messages : {
-        email_address : {
+        cli_name : {
             remote : 'The email address is already exists'
         }
     },
