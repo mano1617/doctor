@@ -10,11 +10,13 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Lists</strong>
+                    <strong>Clinic Lists</strong>
                     <div class="float-right">
                     <a href="{{ route('admin.physician.clinics.create',['physician' => request()->physician]) }}" class="btn btn-outline-success"><i class="fa fa-fw fa-plus"></i>CREATE</a>
+                    @if(request()->physician)
                     <a href="{{ route('admin.physician.index') }}" class="btn btn-danger">
                     <i class="fa fa-fw fa-arrow-left"></i>GO BACK</a>
+                    @endif
                     </div>
                 </div><!--card-header-->
                 <div class="card-body">

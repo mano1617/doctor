@@ -87,12 +87,21 @@
                 <li class="nav-title">
                     Applications
                 </li> -->
+
+                <li class="nav-item">
+                    <a class="nav-link {{
+                        active_class(Route::is('admin/physician/clinics'))
+                    }}" href="{{ route('admin.physician.clinics.index') }}">
+                        <i class="nav-icon fas fa-hospital-o"></i>
+                            Clinics
+                    </a>
+                </li>
                 
                 <li class="nav-item nav-dropdown {{
-                    active_class(Route::is('admin/log-viewer*'), 'open')
+                    active_class(Route::is('admin/physicians*'), 'open')
                 }}">
                         <a class="nav-link nav-dropdown-toggle {{
-                            active_class(Route::is('admin/log-viewer*'))
+                            active_class(Route::is('admin/physicians*'))
                         }}" href="#">
                         <i class="nav-icon fas fa-users"></i>Users 
                     </a>
@@ -100,7 +109,7 @@
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link {{
-                            active_class(Route::is('admin/log-viewer'))
+                            active_class(Route::is('admin/physicians'))
                         }}" href="{{ route('admin.physician.index') }}">
                                 Physicians
                             </a>

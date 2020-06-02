@@ -10,7 +10,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Lists</strong>
+                    <strong>Branch Lists</strong>
                     <div class="float-right">
                     <a href="{{ route('admin.physician.branches.create',['physician' => request()->physician]) }}" class="btn btn-outline-success"><i class="fa fa-fw fa-plus"></i>CREATE</a>
                     <a href="{{ route('admin.physician.index') }}" class="btn btn-danger">

@@ -15,6 +15,7 @@ use App\Models\Physician\PhysicianProfessionModel;
 use App\Models\Physician\PhysicianExperienceModel;
 use App\Models\PhysicianMembershipMasterModel;
 use App\Models\Physician\PhysicianMembershipModel;
+use App\Models\Physician\PhysicianEduModel;
 
 class PhysicianController extends Controller
 {
@@ -163,8 +164,8 @@ class PhysicianController extends Controller
         //edu
         for($i=1; $i<=trim($request->edu_rows); $i++)
         {
-            //if($request->has('edu_desig_'.$i))
-            //{
+            if($request->has('branch_of_medicine_'.$i))
+            {
             PhysicianEduModel::create([
             'user_id' => $user->id,
             'branch_of_medicine' => trim($request->input('branch_of_medicine_'.$i)),
@@ -173,7 +174,7 @@ class PhysicianController extends Controller
             'professional_qualification' => trim($request->input('professional_qualification_'.$i)),
             'additional_qualification' => trim($request->input('additional_qualification_'.$i))
         ]);
-            // }
+            }
         }
 
         //Profession

@@ -29,6 +29,13 @@ Route::group(['prefix' => 'physicians'],function()
     ]);
     Route::get('branches/update/status/{userId}/{statusCode}','PhyBranchesController@updateStatus')->name('physician.branches.updateStatus');
 
+    Route::resource('consultants', 'PhysicianController')->names([
+        'index' => 'physician.consultants.index',
+        'create' => 'physician.consultants.create',
+        'store' => 'physician.consultants.store',
+        'update' => 'physician.consultants.update',
+    ]);
+    Route::get('consultants/update/status/{userId}/{statusCode}','PhysicianController@updateStatus')->name('physician.consultants.updateStatus');
 });
 
 ?>
