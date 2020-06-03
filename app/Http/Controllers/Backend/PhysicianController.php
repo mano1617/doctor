@@ -72,7 +72,7 @@ class PhysicianController extends Controller
                         $actions = '<a href="javascript:void(0);" class="btn btn-outline-success changeStatus" data-rowurl="'.route('admin.physician.updateStatus',[$row->id,1]).'" data-row="'.$row->id.'"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
                     }
 
-                    $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
+                    $actions .= '<a href="'.route('admin.physician.edit',$row->id).'" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     $actions .= '<a href="'.route('admin.physician.clinics.index',['physician' => $row->id]).'" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
                     $actions .= ' <a title="View Branches" href="'.route('admin.physician.branches.index',['physician' => $row->id]).'" class="btn btn-outline-dark"><i class="fa fa-fw fa-plus-square"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="'.route('admin.physician.updateStatus',[$row->id,2]).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
@@ -268,7 +268,19 @@ class PhysicianController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
+        $pageData['days'] = [
+            'monday' => 'Monday',
+            'tuesday' => 'Tuesday',
+            'webnesday' => 'Wednesday',
+            'thursday' => 'Thursday',
+            'friday' => 'Friday',
+            'saturday' => 'Saturday',
+            'sunday' => 'Sunday'
+        ];
+        $pageData['userData'] = User::find($id);
+
+        return view('backend.physician.edit_physicians',$pageData);
     }
 
     /**
@@ -280,7 +292,7 @@ class PhysicianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        print_r($request->all());
     }
 
     /**

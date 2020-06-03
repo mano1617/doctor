@@ -1,14 +1,14 @@
 <?php
 
-Route::group(['prefix' => 'physicians'],function()
+Route::group(['prefix' => 'users'],function()
 {
 
-    Route::resource('/', 'PhysicianController')->names([
+    Route::resource('physicians', 'PhysicianController')->names([
         'index' => 'physician.index',
         'create' => 'physician.create',
         'store' => 'physician.store',
+        'edit' => 'physician.edit',
         'update' => 'physician.update',
-        'destroy' => 'physician.destroy'
     ]);
     Route::post('check-email-address','PhysicianController@checkAddress')->name('physician.checkEmail');
     Route::get('update/status/{userId}/{statusCode}','PhysicianController@updateStatus')->name('physician.updateStatus');
@@ -29,13 +29,13 @@ Route::group(['prefix' => 'physicians'],function()
     ]);
     Route::get('branches/update/status/{userId}/{statusCode}','PhyBranchesController@updateStatus')->name('physician.branches.updateStatus');
 
-    Route::resource('consultants', 'PhysicianController')->names([
+    Route::resource('consultants', 'PhyConsultantsController')->names([
         'index' => 'physician.consultants.index',
         'create' => 'physician.consultants.create',
         'store' => 'physician.consultants.store',
         'update' => 'physician.consultants.update',
     ]);
-    Route::get('consultants/update/status/{userId}/{statusCode}','PhysicianController@updateStatus')->name('physician.consultants.updateStatus');
+    Route::get('consultants/update/status/{userId}/{statusCode}','PhyConsultantsController@updateStatus')->name('physician.consultants.updateStatus');
 });
 
 ?>
