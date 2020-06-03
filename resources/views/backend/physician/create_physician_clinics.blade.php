@@ -97,7 +97,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landno">Landline Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
+                                        <input type="text" required data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
                                     </div>
                                 </div>                                                    
                             </div>

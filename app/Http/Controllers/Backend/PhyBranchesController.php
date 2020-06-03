@@ -40,6 +40,7 @@ class PhyBranchesController extends Controller
     {
         if($request->ajax())
         {
+            $physicianId = $request->physician;
             $clinics = PhysicianClinicModel::select([
                 'id', 'name', 'address', 'mobile_no', 'email_address', 'landline','district', 'state', 'country', 'pincode', 'landmark', 'website', 'status'
                 ])
@@ -70,7 +71,7 @@ class PhyBranchesController extends Controller
                         return '';
                     // }
                 })
-                ->addColumn('actions', function($row)
+                ->addColumn('actions', function($row) use($physicianId)
                 {
                     if($row->status=='1')
                     {
@@ -82,7 +83,7 @@ class PhyBranchesController extends Controller
                     }
 
                     $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    $actions .= '<a href="" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-users"></i></a>';
+                    $actions .= '<a href="'.route('admin.physician.consultants.index',['page_option' => 'branches', 'clinic' => $row->id,'physician' => $physicianId]).'" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-users"></i></a>';
                     $actions .= ' <a title="View Gallery" href="" class="btn btn-outline-dark"><i class="fa fa-fw fa-photo"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="'.route('admin.physician.clinics.updateStatus',[$row->id,2]).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
                     
