@@ -17,5 +17,10 @@ class PhysicianClinicModel extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function workingDays()
+    {
+        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id');
+    }
     
 }

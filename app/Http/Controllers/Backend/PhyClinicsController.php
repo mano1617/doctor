@@ -88,7 +88,7 @@ class PhyClinicsController extends Controller
                         $actions = '<a href="javascript:void(0);" class="btn btn-outline-success changeStatus" data-rowurl="'.route('admin.physician.clinics.updateStatus',[$row->id,1]).'" data-row="'.$row->id.'"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
                     }
 
-                    $actions .= '<a class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
+                    $actions .= '<a href="'.route('admin.physician.clinics.edit',$row->id).'"  class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     $actions .= '<a href="'.route('admin.physician.consultants.index',['page_option' => 'clinics', 'clinic' => $row->id,'physician' => $physicianId]).'" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-users"></i></a>';
                     $actions .= ' <a title="View Gallery" href="" class="btn btn-outline-dark"><i class="fa fa-fw fa-photo"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="'.route('admin.physician.clinics.updateStatus',[$row->id,2]).'" data-row="'.$row->id.'" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
@@ -215,7 +215,11 @@ class PhyClinicsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pageData['days'] = $this->weekDays;
+        $pageData['physicians'] = User::select(['id','first_name','last_name'])->role('physician')->orderBy('first_name')->get();
+        $pageData['data'] = PhysicianClinicModel::find($id);
+
+        return view('backend.physician.edit_physician_clinics',$pageData);
     }
 
     /**

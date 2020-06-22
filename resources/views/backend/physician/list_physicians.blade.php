@@ -21,6 +21,7 @@
                                     <tr>
                                         <th width="5%">#</th>
                                         <th>NAME</th>
+                                        <th>GENDER</th>
                                         <th>PHOTO</th>
                                         <th>CONTACT</th>
                                         <th>ACTIONS</th>
@@ -45,6 +46,7 @@ $(function() {
         columns: [
                 { data: 'id', name: 'id' },
                 { data: 'first_name', name: 'first_name' },
+                { data: 'gender', name: 'gender' },
                 { data: 'photo', name: 'photo' },
                 { data: 'contact', name: 'contact' },
                 { data: 'actions', name: 'actions' }

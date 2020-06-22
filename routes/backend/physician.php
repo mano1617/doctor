@@ -17,6 +17,7 @@ Route::group(['prefix' => 'users'],function()
         'index' => 'physician.clinics.index',
         'create' => 'physician.clinics.create',
         'store' => 'physician.clinics.store',
+        'edit' => 'physician.clinics.edit',
         'update' => 'physician.clinics.update',
     ]);
     Route::get('clinics/update/status/{userId}/{statusCode}','PhyClinicsController@updateStatus')->name('physician.clinics.updateStatus');

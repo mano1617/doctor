@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AuthTableSeeder::class);
         $this->call(MembershipsTable::class);
-        
+        $this->call(CountrySeeder::class);
+
         Model::reguard();
     }
 }

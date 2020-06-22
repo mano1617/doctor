@@ -98,13 +98,13 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="mobile_no" class="form-control">
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="landno">Landline Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="landno" class="form-control">
+                                        <label for="landno">Landline Number</label>
+                                        <input type="text" data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="15" name="landno" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -130,13 +130,18 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="country">Country<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="country" class="form-control">
+                                        <select required name="country" id="country" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($countries as $ck => $country)
+                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="pincode" class="form-control">
+                                        <input type="text" data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" required name="pincode" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -153,12 +158,12 @@
                                         <input type="file" name="loc_image">
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <!-- <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="qr_code_image">QR Code Image</label><br>
                                         <input type="file" name="qr_code_image">
                                     </div>
-                                </div>                        
+                                </div>                         -->
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -166,17 +171,17 @@
                                         <label for="about_me">About Me<sup class="text-danger">*</sup></label>
                                         <textarea name="about_me" required class="form-control" ></textarea>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             </section>
 
                             <h3>Education</h3>
                             <section>
                                 <br>
-                                
+
                             <input type="hidden" name="edu_rows" value="1">
                             <div id="eduDiv">
-                            <div class="row">                               
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
@@ -208,7 +213,7 @@
                                         <label for="education">Additional Qualification</label>
                                         <textarea name="additional_qualification_1" class="form-control" ></textarea>
                                     </div>
-                                </div>                               
+                                </div>
                                 <div class="col-sm-3">
                                     <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
                                 </div>
@@ -224,7 +229,7 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="sector">Sector<sup class="text-danger">*</sup></label>                                    
+                                        <label for="sector">Sector<sup class="text-danger">*</sup></label>
                                     <div class="col-form-label">
                                             <div class="form-check form-check-inline mr-1">
                                             <input class="form-check-input" checked name="sector_1" id="inline-radio1" type="radio" value="1">
@@ -238,7 +243,7 @@
                                 </div></div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="sector">Details of Clinic<sup class="text-danger">*</sup></label>                                    
+                                        <label for="sector">Details of Clinic<sup class="text-danger">*</sup></label>
                                     <div class="col-form-label">
                                             <div class="form-check form-check-inline mr-1">
                                             <input class="form-check-input" checked name="clinic_detail_1" id="inline-radio1" type="radio" value="1">
@@ -259,7 +264,7 @@
                             </div>
 
                             <div class="row">
-                                
+
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_org">Organisation<sup class="text-danger">*</sup></label>
@@ -275,7 +280,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">Since<sup class="text-danger">*</sup></label>
-                                        <input type="text"  required name="prof_since_1" class="form-control">
+                                        <input type="text" style="background-color:white" readOnly required name="prof_since_1" class="form-control since">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -295,7 +300,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Designation<sup class="text-danger">*</sup></label>                                    
+                                        <label for="sector">Designation<sup class="text-danger">*</sup></label>
                                         <input type="text" required name="exp_desig_1" class="form-control">
                                     </div>
                                 </div>
@@ -308,7 +313,7 @@
                             </div>
 
                             <div class="row">
-                                
+
                              <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="prof_palce">Place<sup class="text-danger">*</sup></label>
@@ -318,13 +323,13 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <input type="text"  required name="exp_fryr_1" class="form-control">
+                                        <input type="text" readOnly required style="background-color:white" name="exp_fryr_1" class="form-control monthYear">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <input type="text"  required name="exp_toyr_1" class="form-control">
+                                        <input type="text" readOnly required style="background-color:white" name="exp_toyr_1" class="form-control monthYear">
                                     </div>
                                 </div>
                             </div>
@@ -332,7 +337,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>                                    
+                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
                                         <input type="text" required name="exp_homoeo_1" class="form-control">
                                     </div>
                                 </div>
@@ -359,7 +364,7 @@
                                             @foreach($memberships as $member)
                                             <option value="{{$member->id}}">{{$member->name}}</option>
                                             @endforeach
-                                            </select>                                   
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -378,7 +383,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="sector">About Achievment</label>
-                                            <textarea name="ach_1" cols="30" rows="5" class="form-control"></textarea>                                 
+                                            <textarea name="ach_1" cols="30" rows="5" class="form-control"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -388,12 +393,12 @@
                             </div>
                             </section>
 
-                            
+
 
                         </div>
                     </form>
-                     
-                    
+
+
                 </div><!--card-body-->
             </div><!--card-->
         </div><!--col-->
@@ -402,12 +407,34 @@
 @push('after-scripts')
     <script src="{{ asset('assets/backend/jquery.steps/jquery.steps.min.js') }}"></script>
 <script>
+function Validate(event) {
+        var regex = new RegExp("^[0-9+]");
+        var key = String.fromCharCode(event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    }
 $(function()
 {
     $("input[name='dob']").datepicker({
         format : 'dd-mm-yyyy',
         autoclose : true,
         endDate: '-18y'
+    });
+
+    $(".since").datepicker({
+        format : 'dd-mm-yyyy',
+        autoclose : true,
+        endDate: '+0d',
+    });
+
+    $(".monthYear").datepicker( {
+        format: "mm-yyyy",
+        viewMode: "months",
+        minViewMode: "months",
+        autoclose : true,
+        endDate: '+0d',
     });
 
     $("#addAchiev").on("click", function(e)
@@ -428,7 +455,7 @@ $(function()
         @foreach($memberships as $member)
             membs+='<option value="{{$member->id}}">{{$member->name}}</option>';
         @endforeach
-                                            
+
         var row = parseInt($("input[name='mem_rows']").val());
         row++;
         var content = '<div id="mem_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Membership Title</label>';
@@ -455,10 +482,16 @@ $(function()
             content+= '</div></div></div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label><input type="text" required name="prof_desig_'+row+'" class="form-control">';
             content+= '</div></div></div><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_org">Organisation<sup class="text-danger">*</sup></label><input type="text"  required name="prof_org_'+row+'" class="form-control">';
             content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label><input type="text" required name="prof_palce_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">Since<sup class="text-danger">*</sup></label><input type="text"  required name="prof_since_'+row+'" class="form-control">';
+            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">Since<sup class="text-danger">*</sup></label><input style="background-color:white" readOnly type="text" required name="prof_since_'+row+'" class="form-control">';
             content+= '</div></div><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
-$("input[name='prof_rows']").val(row);
+        $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);
+
+        $("input[name='prof_since_"+row+"']").datepicker({
+            format : 'dd-mm-yyyy',
+            autoclose : true,
+            endDate: '+0d',
+        });
 
     });
 
@@ -470,16 +503,24 @@ $("input[name='prof_rows']").val(row);
             content +='<input type="text" required name="exp_desig_'+row+'" class="form-control"></div></div><div class="col-sm-6"><div class="form-group">';
             content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" required name="exp_wrkat_'+row+'" class="form-control">';
             content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
-            content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-2"><div class="form-group">';
-            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text"  required name="exp_fryr_'+row+'" class="form-control">';
-            content +='</div></div><div class="col-sm-2"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
-            content +='<input type="text"  required name="exp_toyr_'+row+'" class="form-control"></div></div></div>';
-            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';                                    
+            content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-3"><div class="form-group">';
+            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text" readOnly required style="background-color:white" name="exp_fryr_'+row+'" class="form-control">';
+            content +='</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
+            content +='<input type="text" readOnly required style="background-color:white" name="exp_toyr_'+row+'" class="form-control monthYear"></div></div></div>';
+            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
 
         $("input[name='exp_rows']").val(row);
         $("#expDiv").append(content);
+
+        $("input[name='exp_fryr_"+row+"'], input[name='exp_toyr_"+row+"']").datepicker( {
+            format: "mm-yyyy",
+            viewMode: "months",
+            minViewMode: "months",
+            autoclose : true,
+            endDate: '+0d',
+        });
 
     });
 
@@ -489,7 +530,7 @@ $("input[name='prof_rows']").val(row);
         var row = parseInt($("input[name='edu_rows']").val());
         row++;
         var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><input type="text" required name="branch_of_medicine_'+row+'" class="form-control"></div></div>';
-            
+
             content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label><input type="text" required name="medical_council_'+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label><input type="text" required name="professional_qualification_'+row+'" class="form-control"></div></div>';
@@ -515,10 +556,10 @@ form.validate({
     rules: {
         password: {
             minlength:6
-        },     
+        },
         confirm_password: {
             equalTo: "#password"
-        },        
+        },
         email_address : {
             email : true,
             remote: {
