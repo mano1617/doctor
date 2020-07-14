@@ -296,7 +296,8 @@ class PhysicianController extends Controller
         ];
         $pageData['userData'] = User::find($id);
         $pageData['countries'] = CountryModel::activeOnly();
-
+        $pageData['states'] = CountryModel::find($pageData['userData']->physicianProfile->country);
+        $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
         return view('backend.physician.edit_physicians',$pageData);
     }
 
@@ -314,7 +315,6 @@ class PhysicianController extends Controller
         User::where('id',$id)->update([
             'first_name' => trim($request->firstname),
             'last_name' => trim($request->lastname),
-            // 'password' => Hash::make(trim($request->confirm_password)),
         ]);
 
         //profile updation
@@ -453,7 +453,7 @@ class PhysicianController extends Controller
 
         $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->route('admin.physician.index');
+        return redirect()->back();
     }
 
     /**
