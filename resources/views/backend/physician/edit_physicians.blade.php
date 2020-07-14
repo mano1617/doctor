@@ -20,6 +20,9 @@
 @endpush
 
 @section('content')
+
+@include('backend.includes.alert')
+
     <div class="row">
         <div class="col">
             <div class="card">
@@ -118,18 +121,6 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="district" value="{{ $userData->physicianProfile->district }}" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="state">State<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="state" value="{{ $userData->physicianProfile->state }}" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
                                         <label for="country">Country<sup class="text-danger">*</sup></label>
                                         <select required name="country" id="country" class="form-control">
                                             <option value="">--select--</option>
@@ -137,6 +128,23 @@
                                             <option @if($country->id == $userData->physicianProfile->country) selected @endif value="{{ $country->id }}">{{ $country->name }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="state">State<sup class="text-danger">*</sup></label>
+                                        <select required name="state" id="state" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($states as $stk => $state)
+                                            <option @if($state->id == $userData->physicianProfile->state) selected @endif value="{{ $state->id }}">{{ $state->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="district">District<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="district" value="{{ $userData->physicianProfile->district }}" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -677,6 +685,32 @@ function Validate(event) {
     }
 $(function()
 {
+
+    $("#country").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>'; 
+
+        if($.trim($(this).val())=='')
+        {
+            $("#state").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/states') }}",{countryId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                    });
+                }
+
+                $("#state").html(content);
+                            
+            },'JSON');
+        }
+    });
+
     $("input[name='dob']").datepicker({
         format : 'dd-mm-yyyy',
         autoclose : true,

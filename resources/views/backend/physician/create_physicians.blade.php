@@ -98,7 +98,8 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="mobile_no" class="form-control">
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="1
+                                        4" name="mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -117,18 +118,6 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="district" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="state">State<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="state" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
                                         <label for="country">Country<sup class="text-danger">*</sup></label>
                                         <select required name="country" id="country" class="form-control">
                                             <option value="">--select--</option>
@@ -136,6 +125,20 @@
                                             <option value="{{ $country->id }}">{{ $country->name }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>                                
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="state">State<sup class="text-danger">*</sup></label>
+                                        <select required name="state" id="state" class="form-control">
+                                            <option value="">--select--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="district">District<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="district" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -417,6 +420,32 @@ function Validate(event) {
     }
 $(function()
 {
+
+    $("#country").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>'; 
+
+        if($.trim($(this).val())=='')
+        {
+            $("#state").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/states') }}",{countryId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                    });
+                }
+
+                $("#state").html(content);
+                            
+            },'JSON');
+        }
+    });
+
     $("input[name='dob']").datepicker({
         format : 'dd-mm-yyyy',
         autoclose : true,

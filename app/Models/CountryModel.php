@@ -10,6 +10,11 @@ class CountryModel extends Model
 
     public function scopeActiveOnly($query)
     {
-        return $query->where('status','1')->orderBy('name')->get();
+        return $query->where('status', '1')->orderBy('name')->get();
+    }
+
+    public function states()
+    {
+        return $this->hasMany(StateModel::class, 'country_id')->select(['id','name'])->where('status','1')->orderBy('name');
     }
 }
