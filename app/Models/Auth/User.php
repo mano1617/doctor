@@ -33,6 +33,11 @@ class User extends BaseUser
         return $this->hasOne('App\Models\Physician\PhysicianEduModel','user_id');
     }
 
+    public function physicianAdditionalEducation()
+    {
+        return $this->hasOne('App\Models\Physician\PhysicianAdditionalEduModel','user_id');
+    }
+
     public function physicianProfession()
     {
         return $this->hasOne('App\Models\Physician\PhysicianProfessionModel','user_id');

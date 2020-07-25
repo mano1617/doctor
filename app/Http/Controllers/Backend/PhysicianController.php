@@ -15,6 +15,7 @@ use App\Models\Physician\PhysicianProfessionModel;
 use App\Models\Physician\PhysicianExperienceModel;
 use App\Models\PhysicianMembershipMasterModel;
 use App\Models\Physician\PhysicianMembershipModel;
+use App\Models\Physician\PhysicianAdditionalEduModel;
 use App\Models\Physician\PhysicianEduModel;
 use App\Models\CountryModel;
 
@@ -48,7 +49,7 @@ class PhysicianController extends Controller
                 })
                 ->addColumn('gender', function($row)
                 {
-                    return ucwords($row->physicianProfile->gender);
+                    return ucwords($row->physicianEducation->registration_no);
                 })
                 ->addColumn('contact', function($row)
                 {
@@ -359,18 +360,40 @@ class PhysicianController extends Controller
         ]);
 
         //Edu Update
-        PhysicianEduModel::where('user_id',$id)->delete();
+        $edus = PhysicianEduModel::where('user_id',$id)->get();
+        if(count($edus)>0)
+        {
+            PhysicianEduModel::where([
+                ['user_id', '=', $id ],
+                ['id', '=', $edus[0]->id]
+            ])->update([
+                'branch_of_medicine' => trim($request->input('branch_of_medicine_1')),
+                'registration_no' => trim($request->input('registration_no_1')),
+                'medical_council' => trim($request->input('medical_council_1')),
+                'professional_qualification' => trim($request->input('professional_qualification_1')),
+                'additional_qualification' => trim($request->input('additional_qualification_1')),
+            ]);
+
+        }else{
+            PhysicianEduModel::create([
+                'user_id' => $id,
+                'branch_of_medicine' => trim($request->input('branch_of_medicine_1')),
+                'registration_no' => trim($request->input('registration_no_1')),
+                'medical_council' => trim($request->input('medical_council_1')),
+                'professional_qualification' => trim($request->input('professional_qualification_1')),
+                'additional_qualification' => trim($request->input('additional_qualification_1')),
+            ]);
+        }
+        
+        //Delete additional edu
+        PhysicianAdditionalEduModel::where('user_id',$id)->delete();
         for($i=1; $i<=trim($request->edu_rows); $i++)
         {
-            if($request->has('branch_of_medicine_'.$i))
+            if($request->has('additional_qualification_'.$i))
             {
-                PhysicianEduModel::create([
+                PhysicianAdditionalEduModel::create([
                     'user_id' => $id,
-                    'branch_of_medicine' => trim($request->input('branch_of_medicine_'.$i)),
-                    'registration_no' => trim($request->input('registration_no_'.$i)),
-                    'medical_council' => trim($request->input('medical_council_'.$i)),
-                    'professional_qualification' => trim($request->input('professional_qualification_'.$i)),
-                    'additional_qualification' => trim($request->input('additional_qualification_'.$i))
+                    'description' => trim($request->input('additional_qualification_' . $i)),
                 ]);
             }
         }

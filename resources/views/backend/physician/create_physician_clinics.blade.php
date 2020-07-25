@@ -65,7 +65,12 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="country">Country<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_country" class="form-control">
+                                        <select required name="cli_country" id="cli_country" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($countries as $ck => $country)
+                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -91,7 +96,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required data-rule-digits="true" data-rule-minlength="10" data-rule-maxlength="11" name="cli_mobile_no" class="form-control">
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cli_mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">

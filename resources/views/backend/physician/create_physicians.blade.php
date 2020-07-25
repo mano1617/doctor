@@ -30,7 +30,7 @@
                 </div><!--card-header-->
                 <div class="card-body">
                 <br>
-                    <form id="createPhysician" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.store') }}">
+                    <form id="createPhysician" class="form-horizontal" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.store') }}">
                     {{csrf_field()}}
                         <div>
                             <h3>Account</h3>
@@ -126,7 +126,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="state">State<sup class="text-danger">*</sup></label>
@@ -257,35 +257,55 @@
                                             <label class="form-check-label" for="inline-radio22">Others</label>
                                             </div>
                                             </div>
-                                </div></div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="prof_desig">Designation<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="prof_desig_1" class="form-control">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row">
+<div class="form-group row">
+<label class="col-md-3 col-form-label" for="hf-email">Email</label>
+<div class="col-md-9">
+<input class="form-control" id="hf-email" type="email" name="hf-email" placeholder="Enter Email.." autocomplete="email"><span class="help-block">Please enter your email</span>
+</div>
+</div>
 
+<div class="form-inline">
+<div class="form-group">
+<label class="mr-1" for="exampleInputName2">Name</label>&nbsp;&nbsp;&nbsp;
+<input class="form-control" required id="exampleInputName2" type="text" placeholder="Jane Doe" autocomplete="name">
+</div>
+
+<div class="form-group">&nbsp;&nbsp;&nbsp;
+<label class="mr-1" for="exampleInputName2">Name</label>&nbsp;&nbsp;&nbsp;
+<input class="form-control" required id="exampleInputName2" type="text" placeholder="Jane Doe" autocomplete="name">
+</div>
+</div>
+                            <div class="row">
+                                <div class="form-group row">
+                                    <label class="col-md-5 col-form-label" for="prof_desig">Designation<sup class="text-danger">*</sup></label>
+                                    <div class="col-md-6">
+                                        <input type="text" required name="prof_desig_1" class="form-control">
+                                    </div>
+                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_org">Organisation<sup class="text-danger">*</sup></label>
                                         <input type="text"  required name="prof_org_1" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <!-- <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="prof_palce">Place<sup class="text-danger">*</sup></label>
                                         <input type="text" required name="prof_palce_1" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="prof_since">Since<sup class="text-danger">*</sup></label>
                                         <input type="text" style="background-color:white" readOnly required name="prof_since_1" class="form-control since">
                                     </div>
-                                </div>
+                                </div> -->
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <a style="margin-top:30px;" id="addProfession" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
                                 </div>
@@ -423,7 +443,7 @@ $(function()
 
     $("#country").on("change", function(e)
     {
-        var content = '<option value="">--select--</option>'; 
+        var content = '<option value="">--select--</option>';
 
         if($.trim($(this).val())=='')
         {
@@ -441,7 +461,7 @@ $(function()
                 }
 
                 $("#state").html(content);
-                            
+
             },'JSON');
         }
     });
