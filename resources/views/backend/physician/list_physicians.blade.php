@@ -21,7 +21,7 @@
                                     <tr>
                                         <th width="5%">#</th>
                                         <th>NAME</th>
-                                        <th>GENDER</th>
+                                        <th>REGISTRATION NO</th>
                                         <th>PHOTO</th>
                                         <th>CONTACT</th>
                                         <th>ACTIONS</th>

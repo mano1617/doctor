@@ -189,56 +189,38 @@
                                 <br>
                             @php
                                 $educations = $userData->physicianEducation()->get();
+                                $addEducations = $userData->physicianAdditionalEducation()->activeOnly();
                             @endphp
-                            <input type="hidden" name="edu_rows" value="{{count($educations)}}">
+                            <input type="hidden" name="edu_rows" value="1">
                             <div id="eduDiv">
                             @if(count($educations))
-                            @foreach($educations as $pek => $pEdu)
-                            <div id="edu_row_{{ $pek+1 }}">
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
-                                        <input type="text" required value="{{ $pEdu['branch_of_medicine'] }}" name="branch_of_medicine_{{ $pek+1 }}" class="form-control">
+                                        <input type="text" required value="{{ $educations[0]['branch_of_medicine'] }}" name="branch_of_medicine_1" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">Registration Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required value="{{ $pEdu['registration_no'] }}" name="registration_no_{{ $pek+1 }}" class="form-control">
+                                        <input type="text" required value="{{ $educations[0]['registration_no'] }}" name="registration_no_1" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label>
-                                        <input type="text" required value="{{ $pEdu['medical_council'] }}" name="medical_council_{{ $pek+1 }}" class="form-control">
+                                        <input type="text" required value="{{ $educations[0]['medical_council'] }}" name="medical_council_1" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
-                                        <input type="text" required value="{{ $pEdu['professional_qualification'] }}" name="professional_qualification_{{ $pek+1 }}" class="form-control">
+                                        <input type="text" required value="{{ $educations[0]['professional_qualification'] }}" name="professional_qualification_1" class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                              <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="education">Additional Qualification</label>
-                                        <textarea name="additional_qualification_{{ $pek+1 }}" class="form-control">{{ $pEdu['additional_qualification'] }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    @if($pek==0)
-                                    <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
-                                    @else
-                                    <a style="margin-top:30px;" data-container="#edu_row_{{ $pek+1 }}" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a>
-                                    @endif
-                                </div>
-                            </div>
-                            <hr>
-                            </div>
-                            @endforeach
+                            
                             @else
                             <div class="row">
                                 <div class="col-sm-3">
@@ -266,6 +248,31 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            @endif
+
+                            @if(count($addEducations))
+                                @foreach($addEducations as $adk => $addEdu)
+                                <div id="edu_row_{{ $adk+1 }}">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="education">Additional Qualification</label>
+                                                    <textarea name="additional_qualification_{{ $adk+1 }}" class="form-control">{{ $addEdu['description'] }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if($adk==0)
+                                                <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                                @else
+                                                <a style="margin-top:30px;" data-container="#edu_row_{{ $adk+1 }}" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    <hr>
+                                </div>
+                                @endforeach
+                            @else
                             <div class="row">
                               <div class="col-sm-6">
                                     <div class="form-group">
@@ -823,14 +830,9 @@ $(function()
     {
         var row = parseInt($("input[name='edu_rows']").val());
         row++;
-        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><input type="text" required name="branch_of_medicine_'+row+'" class="form-control"></div></div>';
-
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control"></div></div>';
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label><input type="text" required name="medical_council_'+row+'" class="form-control"></div></div>';
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label><input type="text" required name="professional_qualification_'+row+'" class="form-control"></div></div>';
-            content+='</div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="education">Additional Qualification</label><textarea name="additional_qualification_'+row+'" class="form-control" ></textarea></div></div>';
+        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="education">Additional Qualification</label><textarea name="additional_qualification_'+row+'" class="form-control" ></textarea></div></div>';
             content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#edu_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
-$("input[name='edu_rows']").val(row);
+        $("input[name='edu_rows']").val(row);
         $("#eduDiv").append(content);
 
     });

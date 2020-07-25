@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\CountryModel;
 use DataTables;
 use DB;
 use Storage;
@@ -111,6 +112,7 @@ class PhyClinicsController extends Controller
     public function create()
     {
         $pageData['days'] = $this->weekDays;
+        $pageData['countries'] = CountryModel::activeOnly();
         $pageData['physicians'] = User::select(['id','first_name','last_name'])->role('physician')->orderBy('first_name')->get();
 
         return view('backend.physician.create_physician_clinics',$pageData);
@@ -216,6 +218,7 @@ class PhyClinicsController extends Controller
     public function edit($id)
     {
         $pageData['days'] = $this->weekDays;
+        $pageData['countries'] = CountryModel::activeOnly();
         $pageData['physicians'] = User::select(['id','first_name','last_name'])->role('physician')->orderBy('first_name')->get();
         $pageData['data'] = PhysicianClinicModel::find($id);
 
