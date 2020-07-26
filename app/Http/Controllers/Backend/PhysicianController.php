@@ -175,22 +175,29 @@ class PhysicianController extends Controller
             'has_branches' => 0,//trim($request->about_me),
             'map_image' => $locationMap,//trim($request->about_me),
             //'qr_code' => ''//trim($request->about_me),
+            'latitude_longitude' => trim($request->latitude).'*'.trim($request->longitude)
         ]);
         
 
-        //edu
+        //Add Education
+        PhysicianEduModel::create([
+            'user_id' => $user->id,
+            'branch_of_medicine' => trim($request->input('branch_of_medicine_1')),
+            'registration_no' => trim($request->input('registration_no_1')),
+            'medical_council' => trim($request->input('medical_council_1')),
+            'professional_qualification' => trim($request->input('professional_qualification_1')),
+            'additional_qualification' => trim($request->input('additional_qualification_1'))
+        ]);
+
+        //Add Additional Education
         for($i=1; $i<=trim($request->edu_rows); $i++)
         {
-            if($request->has('branch_of_medicine_'.$i))
+            if($request->has('additional_qualification_'.$i))
             {
-            PhysicianEduModel::create([
-            'user_id' => $user->id,
-            'branch_of_medicine' => trim($request->input('branch_of_medicine_'.$i)),
-            'registration_no' => trim($request->input('registration_no_'.$i)),
-            'medical_council' => trim($request->input('medical_council_'.$i)),
-            'professional_qualification' => trim($request->input('professional_qualification_'.$i)),
-            'additional_qualification' => trim($request->input('additional_qualification_'.$i))
-        ]);
+                PhysicianAdditionalEduModel::create([
+                    'user_id' => $user->id,
+                    'description' => trim($request->input('additional_qualification_' . $i)),
+                ]);
             }
         }
 
@@ -257,7 +264,7 @@ class PhysicianController extends Controller
 
         $this->flashData = [
             'status' => 1,
-            'message' => 'Successfully user has been registered'
+            'message' => 'Successfully new physician has been created'
         ];
 
         $request->session()->flash('flashData', $this->flashData);
@@ -357,6 +364,7 @@ class PhysicianController extends Controller
             'has_branches' => 0,//trim($request->about_me),
             'map_image' => $locationMap,
             //'qr_code' => ''//trim($request->about_me),
+            'latitude_longitude' => trim($request->latitude).'*'.trim($request->longitude)
         ]);
 
         //Edu Update
@@ -471,7 +479,7 @@ class PhysicianController extends Controller
 
         $this->flashData = [
             'status' => 1,
-            'message' => 'Successfully detail has been updated'
+            'message' => 'Successfully physician details has been updated'
         ];
 
         $request->session()->flash('flashData', $this->flashData);

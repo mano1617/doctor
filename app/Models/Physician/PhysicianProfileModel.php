@@ -10,7 +10,7 @@ class PhysicianProfileModel extends Model
 
     protected $fillable = [
         'user_id', 'gender', 'avatar', 'address', 'dob', 'age', 'district', 'state', 'country', 'pincode', 'landmark', 'mobile_no',
-        'landline', 'about_me', 'map_image', 'qr_code', 'has_branches', 'status'
+        'landline', 'about_me', 'map_image', 'qr_code', 'has_branches', 'status', 'latitude_longitude'
     ];
 
     public function user()
