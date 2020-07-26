@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landmark">Landmark</label>
                                         <textarea name="landmark" class="form-control" >{{ $userData->physicianProfile->landmark }}</textarea>
@@ -165,6 +165,27 @@
                                     <div class="form-group">
                                         <label for="loc_image">Location Image</label><br>
                                         <input type="file" name="loc_image">
+                                    </div>
+                                </div>
+                                @php
+                                    $latitude = $longitude = '';
+                                    if(trim($userData->physicianProfile->latitude_longitude)!='')
+                                    {
+                                        $latlong = explode('*', trim($userData->physicianProfile->latitude_longitude));
+                                        $latitude = $latlong[0];
+                                        $longitude = $latlong[1];
+                                    }
+                                @endphp
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="latitude">Latitude</label><br>
+                                        <input type="text" value="{{ $latitude }}" class="form-control" name="latitude">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="longitude">Longitude</label><br>
+                                        <input type="text" value="{{ $longitude }}" class="form-control" name="longitude">
                                     </div>
                                 </div>
                                 <!-- <div class="col-sm-3">

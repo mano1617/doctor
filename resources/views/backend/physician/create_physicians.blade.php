@@ -24,7 +24,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Lists</strong>
+                    <strong>Create New Physician</strong>
                     <a href="{{ route('admin.physician.index') }}" class="btn btn-danger float-right">
                     <i class="fa fa-fw fa-arrow-left"></i>GO BACK</a>
                 </div><!--card-header-->
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landmark">Landmark</label>
                                         <textarea name="landmark" class="form-control" ></textarea>
@@ -159,6 +159,18 @@
                                     <div class="form-group">
                                         <label for="loc_image">Location Image</label><br>
                                         <input type="file" name="loc_image">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="latitude">Latitude</label><br>
+                                        <input type="text" class="form-control" name="latitude">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="longitude">Longitude</label><br>
+                                        <input type="text" class="form-control" name="longitude">
                                     </div>
                                 </div>
                                 <!-- <div class="col-sm-3">
@@ -183,7 +195,6 @@
                                 <br>
 
                             <input type="hidden" name="edu_rows" value="1">
-                            <div id="eduDiv">
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
@@ -210,17 +221,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                              <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="education">Additional Qualification</label>
-                                        <textarea name="additional_qualification_1" class="form-control" ></textarea>
+                            <div id="eduDiv">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="education">Additional Qualification</label>
+                                            <textarea name="additional_qualification_1" class="form-control" ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
-                                </div>
-                            </div>
                             <hr>
 							</div>
                             </section>
@@ -260,50 +272,26 @@
                                     </div>
                                 </div>
                             </div>
-
-<div class="form-group row">
-<label class="col-md-3 col-form-label" for="hf-email">Email</label>
-<div class="col-md-9">
-<input class="form-control" id="hf-email" type="email" name="hf-email" placeholder="Enter Email.." autocomplete="email"><span class="help-block">Please enter your email</span>
-</div>
-</div>
-
-<div class="form-inline">
-<div class="form-group">
-<label class="mr-1" for="exampleInputName2">Name</label>&nbsp;&nbsp;&nbsp;
-<input class="form-control" required id="exampleInputName2" type="text" placeholder="Jane Doe" autocomplete="name">
-</div>
-
-<div class="form-group">&nbsp;&nbsp;&nbsp;
-<label class="mr-1" for="exampleInputName2">Name</label>&nbsp;&nbsp;&nbsp;
-<input class="form-control" required id="exampleInputName2" type="text" placeholder="Jane Doe" autocomplete="name">
-</div>
-</div>
-                            <div class="row">
-                                <div class="form-group row">
-                                    <label class="col-md-5 col-form-label" for="prof_desig">Designation<sup class="text-danger">*</sup></label>
-                                    <div class="col-md-6">
-                                        <input type="text" required name="prof_desig_1" class="form-control">
-                                    </div>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
+                                    <input type="text" required name="prof_desig_1" class="form-control">
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="prof_org">Organisation<sup class="text-danger">*</sup></label>
-                                        <input type="text"  required name="prof_org_1" class="form-control">
-                                    </div>
+
+                                 <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                    <label class="mr-1" for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
+                                    <input type="text"  required name="prof_org_1" placeholder="Name of Institution/ Clinic/ Hospital/ Etc." class="form-control">
                                 </div>
-                                <!-- <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label for="prof_palce">Place<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="prof_palce_1" class="form-control">
-                                    </div>
+
+                                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                    <label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
+                                    <input type="text" required name="prof_palce_1" class="form-control">
                                 </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label for="prof_since">Since<sup class="text-danger">*</sup></label>
-                                        <input type="text" style="background-color:white" readOnly required name="prof_since_1" class="form-control since">
-                                    </div>
-                                </div> -->
+
+                                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                    <label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
+                                    <input type="text" style="background-color:white" readOnly required name="prof_since_1" class="form-control monthYear">
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -528,16 +516,18 @@ $(function()
             content+= '<div class="col-sm-3"><div class="form-group"><label for="sector">Details of Clinic<sup class="text-danger">*</sup></label><div class="col-form-label">';
             content+= '<div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="clinic_detail_'+row+'" id="inline-radio1" type="radio" value="1"><label class="form-check-label" for="inline-radio11">Own Clinic</label>';
             content+= '</div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="clinic_detail_'+row+'" id="inline-radio2" type="radio" value="2" ><label class="form-check-label" for="inline-radio22">Others</label>';
-            content+= '</div></div></div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label><input type="text" required name="prof_desig_'+row+'" class="form-control">';
-            content+= '</div></div></div><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_org">Organisation<sup class="text-danger">*</sup></label><input type="text"  required name="prof_org_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label><input type="text" required name="prof_palce_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">Since<sup class="text-danger">*</sup></label><input style="background-color:white" readOnly type="text" required name="prof_since_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+            content+= '</div></div></div></div></div>';
+            content+= '<div class="form-inline"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text" required name="prof_desig_'+row+'" class="form-control"></div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control"></div>';
+            content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text" required name="prof_palce_'+row+'" class="form-control"></div>';
+            content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input style="background-color:white" readOnly type="text" required name="prof_since_'+row+'" class="form-control"></div>';
+            content+= '</div><div class="row"><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div></div>';
         $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);
 
         $("input[name='prof_since_"+row+"']").datepicker({
-            format : 'dd-mm-yyyy',
+            format: "mm-yyyy",
+            viewMode: "months",
+            minViewMode: "months",
             autoclose : true,
             endDate: '+0d',
         });
@@ -578,12 +568,7 @@ $(function()
     {
         var row = parseInt($("input[name='edu_rows']").val());
         row++;
-        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><input type="text" required name="branch_of_medicine_'+row+'" class="form-control"></div></div>';
-
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control"></div></div>';
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label><input type="text" required name="medical_council_'+row+'" class="form-control"></div></div>';
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label><input type="text" required name="professional_qualification_'+row+'" class="form-control"></div></div>';
-            content+='</div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="education">Additional Qualification</label><textarea name="additional_qualification_'+row+'" class="form-control" ></textarea></div></div>';
+        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="education">Additional Qualification</label><textarea name="additional_qualification_'+row+'" class="form-control" ></textarea></div></div>';
             content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#edu_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
 $("input[name='edu_rows']").val(row);
         $("#eduDiv").append(content);
