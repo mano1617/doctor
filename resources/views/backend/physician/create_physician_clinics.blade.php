@@ -52,18 +52,6 @@
                                 <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_district" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="state">State<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_state" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
                                         <label for="country">Country<sup class="text-danger">*</sup></label>
                                         <select required name="cli_country" id="cli_country" class="form-control">
                                             <option value="">--select--</option>
@@ -71,6 +59,20 @@
                                             <option value="{{ $country->id }}">{{ $country->name }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="state">State<sup class="text-danger">*</sup></label>
+                                        <select required name="cli_state" id="cli_state" class="form-control">
+                                            <option value="">--select--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="district">District<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_district" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -102,7 +104,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landno">Landline Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
+                                        <input type="text" required data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="15" name="cli_landno" class="form-control">
                                     </div>
                                 </div>                                                    
                             </div>
@@ -121,6 +123,14 @@
                                         <textarea name="cli_landmark" class="form-control" ></textarea>
                                     </div>
                                 </div> 
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="about_us">About Us</label>
+                                        <textarea name="cli_about_us" class="form-control" ></textarea>
+                                    </div>
+                                </div>
                             </div>
                             <hr />
                             <h6>Working Days and Time schedule:</h6>
@@ -360,6 +370,31 @@ $(function()
         form.resetForm();
         //$("span.error").hide();
         //$(".error").removeClass("error");
+    });
+
+    $("#cli_country").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>';
+
+        if($.trim($(this).val())=='')
+        {
+            $("#cli_state").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/states') }}",{countryId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                    });
+                }
+
+                $("#cli_state").html(content);
+
+            },'JSON');
+        }
     });
 
     var form = $("#createPhysician").validate({

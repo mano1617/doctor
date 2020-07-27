@@ -324,63 +324,59 @@
                                 $description = unserialize($pProf['description']);
                                 @endphp
                                     <div id="prof_row_{{$ppk+1}}">
-                                    <div class="row">
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="sector">Sector<sup class="text-danger">*</sup></label>
-                                    <div class="col-form-label">
+                                        <div class="col-form-label">
                                             <div class="form-check form-check-inline mr-1">
-                                            <input class="form-check-input" @if($pProf['sector']==1) checked @endif name="sector_{{$ppk+1}}" id="inline-radio1{{$ppk+1}}" type="radio" value="1">
-                                            <label class="form-check-label" for="inline-radio{{$ppk+1}}">Private</label>
+                                                <input class="form-check-input" @if($pProf['sector']==1) checked @endif name="sector_{{$ppk+1}}" id="inline-radio1{{$ppk+1}}" type="radio" value="1">
+                                                <label class="form-check-label" for="inline-radio{{$ppk+1}}">Private</label>
                                             </div>
                                             <div class="form-check form-check-inline mr-1">
-                                            <input class="form-check-input" @if($pProf['sector']==2) checked @endif name="sector_{{$ppk+1}}" id="inline-radio2{{$ppk+1}}" type="radio" value="2">
-                                            <label class="form-check-label" for="inline-radio2{{$ppk+1}}">Government</label>
+                                                <input class="form-check-input" @if($pProf['sector']==2) checked @endif name="sector_{{$ppk+1}}" id="inline-radio2{{$ppk+1}}" type="radio" value="2">
+                                                <label class="form-check-label" for="inline-radio2{{$ppk+1}}">Government</label>
                                             </div>
-                                            </div>
-                                </div></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="sector">Details of Clinic<sup class="text-danger">*</sup></label>
-                                    <div class="col-form-label">
+                                        <div class="col-form-label">
                                             <div class="form-check form-check-inline mr-1">
-                                            <input class="form-check-input" @if($pProf['clinic_type']==1) checked @endif name="clinic_detail_{{$ppk+1}}" id="inline-radio11{{$ppk+1}}" type="radio" value="1">
-                                            <label class="form-check-label" for="inline-radio11{{$ppk+1}}">Own Clinic</label>
+                                                <input class="form-check-input" @if($pProf['clinic_type']==1) checked @endif name="clinic_detail_{{$ppk+1}}" id="inline-radio11{{$ppk+1}}" type="radio" value="1">
+                                                <label class="form-check-label" for="inline-radio11{{$ppk+1}}">Own Clinic</label>
                                             </div>
                                             <div class="form-check form-check-inline mr-1">
-                                            <input class="form-check-input" @if($pProf['clinic_type']==2) checked @endif name="clinic_detail_{{$ppk+1}}" id="inline-radio22{{$ppk+1}}" type="radio" value="2" >
-                                            <label class="form-check-label" for="inline-radio22{{$ppk+1}}">Others</label>
+                                                <input class="form-check-input" @if($pProf['clinic_type']==2) checked @endif name="clinic_detail_{{$ppk+1}}" id="inline-radio22{{$ppk+1}}" type="radio" value="2" >
+                                                <label class="form-check-label" for="inline-radio22{{$ppk+1}}">Others</label>
                                             </div>
-                                            </div>
-                                </div></div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="prof_desig">Designation<sup class="text-danger">*</sup></label>
-                                        <input type="text" value="{{ $description['designation'] }}" required name="prof_desig_{{$ppk+1}}" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
+                                    <input type="text" value="{{ $description['designation'] }}" required name="prof_desig_{{$ppk+1}}" class="form-control">
+                                </div>
+                                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                    <label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;
+                                    <input type="text" value="{{ $description['organization'] }}" required name="prof_org_{{$ppk+1}}" class="form-control">
+                                </div>
+                                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                    <label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;
+                                    <input type="text" value="{{ $description['place'] }}" required name="prof_palce_{{$ppk+1}}" class="form-control">
+                                </div>
+                                <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                    <label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;
+                                    <input type="text"value="{{ $description['since'] }}" required name="prof_since_{{$ppk+1}}" class="form-control monthYear">
+                                </div>
+                            </div>
 
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="prof_org">Organisation<sup class="text-danger">*</sup></label>
-                                        <input type="text" value="{{ $description['organization'] }}" required name="prof_org_{{$ppk+1}}" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="prof_palce">Place<sup class="text-danger">*</sup></label>
-                                        <input type="text" value="{{ $description['place'] }}" required name="prof_palce_{{$ppk+1}}" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="prof_since">Since<sup class="text-danger">*</sup></label>
-                                        <input type="text"value="{{ $description['since'] }}" required name="prof_since_{{$ppk+1}}" class="form-control since">
-                                    </div>
-                                </div>
+                            <div class="row">
                                 <div class="col-sm-3">
                                  @if($ppk==0)
                                     <a style="margin-top:30px;" id="addProfession" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
@@ -801,11 +797,12 @@ $(function()
             content+= '<div class="col-sm-3"><div class="form-group"><label for="sector">Details of Clinic<sup class="text-danger">*</sup></label><div class="col-form-label">';
             content+= '<div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="clinic_detail_'+row+'" id="inline-radio1" type="radio" value="1"><label class="form-check-label" for="inline-radio11">Own Clinic</label>';
             content+= '</div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="clinic_detail_'+row+'" id="inline-radio2" type="radio" value="2" ><label class="form-check-label" for="inline-radio22">Others</label>';
-            content+= '</div></div></div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label><input type="text" required name="prof_desig_'+row+'" class="form-control">';
-            content+= '</div></div></div><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_org">Organisation<sup class="text-danger">*</sup></label><input type="text"  required name="prof_org_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label><input type="text" required name="prof_palce_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">Since<sup class="text-danger">*</sup></label><input type="text" data-rule-digits="true" required name="prof_since_'+row+'" class="form-control">';
-            content+= '</div></div><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+            content+= '</div></div></div></div></div>';
+            content+= '<div class="form-inline"><div class="form-group">&nbsp;&nbsp;<label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" required name="prof_desig_'+row+'" class="form-control">';
+            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control">';
+            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" required name="prof_palce_'+row+'" class="form-control">';
+            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" data-rule-digits="true" required name="prof_since_'+row+'" class="form-control">';
+            content+= '</div></div><div class="row"><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
 
         $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);

@@ -32,6 +32,39 @@ Breadcrumbs::for('admin.physician.clinics.edit', function ($trail) {
     $trail->push('Update Clinic');
 });
 
+Breadcrumbs::for('admin.physician.consultants.index', function ($trail) {
+    if(request()->has('clinic'))
+    {
+        $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));
+    }else{
+        $trail->push('Clinics', route('admin.physician.clinics.index', ['clinic' => request()->clinic]));
+    }
+    $trail->push('Consultants', route('admin.physician.consultants.index'));
+});
+
+Breadcrumbs::for('admin.physician.consultants.create', function ($trail) {
+    if(request()->has('clinic'))
+    {
+        $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));
+    }else{
+        $trail->push('Clinics', route('admin.physician.clinics.index', ['clinic' => request()->clinic]));
+    }
+    $trail->push('Consultants', route('admin.physician.consultants.index'));
+    $trail->push('Create New Consultant');
+});
+
+Breadcrumbs::for('admin.physician.consultants.edit', function ($trail) {
+    if(request()->has('clinic'))
+    {
+        $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));
+    }else{
+        $trail->push('Clinics', route('admin.physician.clinics.index', ['clinic' => request()->clinic]));
+    }
+    $trail->push('Consultants', route('admin.physician.consultants.index'));
+    $trail->push('Update Consultant');
+});
+
+
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/log-viewer.php';

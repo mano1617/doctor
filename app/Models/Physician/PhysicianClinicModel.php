@@ -10,17 +10,17 @@ class PhysicianClinicModel extends Model
 
     protected $fillable = [
         'clinic_type','user_id', 'name', 'address', 'district', 'state', 'country', 'pincode', 'landmark', 'mobile_no', 'landline',
-        'email_address', 'website', 'map_image', 'status'
+        'email_address', 'website', 'map_image', 'status', 'description'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(\App\Models\Auth\User::class,'user_id');
     }
 
     public function workingDays()
     {
-        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id');
+        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where('status','1');
     }
     
 }
