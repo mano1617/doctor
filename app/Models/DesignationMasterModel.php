@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PhysicianMembershipMasterModel extends Model
+class DesignationMasterModel extends Model
 {
-    protected $table = "lmr_physician_memberships";
-
-    protected $fillable = [
-        'name', 'description'
-    ];
+    protected $table = "lmr_mstr_designations";
+    protected $fillable = ['name', 'status'];
 
     public function scopeActiveOnly($query)
     {

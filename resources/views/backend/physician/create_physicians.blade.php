@@ -274,7 +274,12 @@
                             <div class="form-inline">
                                 <div class="form-group">
                                     <label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
-                                    <input type="text" required name="prof_desig_1" class="form-control">
+                                    <select name="prof_desig_1" required class="form-control">
+                                        <option value="">--select--</option>
+                                        @foreach($designations as $desig)
+                                        <option value="{{$desig->id}}">{{$desig->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                  <div class="form-group">&nbsp;&nbsp;&nbsp;
@@ -506,6 +511,12 @@ $(function()
 
     $("#addProfession").on("click", function(e)
     {
+        
+        var desigOptions = '<option value="">--select--</option>';
+        @foreach($designations as $desig)
+            desigOptions +='<option value="{{$desig->id}}">{{$desig->name}}</option>';
+        @endforeach
+
         var row = parseInt($("input[name='prof_rows']").val());
         row++;
         var content = '<div id="prof_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="sector">Sector<sup class="text-danger">*</sup></label>';
@@ -516,7 +527,7 @@ $(function()
             content+= '<div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="clinic_detail_'+row+'" id="inline-radio1" type="radio" value="1"><label class="form-check-label" for="inline-radio11">Own Clinic</label>';
             content+= '</div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="clinic_detail_'+row+'" id="inline-radio2" type="radio" value="2" ><label class="form-check-label" for="inline-radio22">Others</label>';
             content+= '</div></div></div></div></div>';
-            content+= '<div class="form-inline"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text" required name="prof_desig_'+row+'" class="form-control"></div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control"></div>';
+            content+= '<div class="form-inline"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<select name="prof_desig_'+row+'" required class="form-control">'+desigOptions+'</select></div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control"></div>';
             content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text" required name="prof_palce_'+row+'" class="form-control"></div>';
             content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input style="background-color:white" readOnly type="text" required name="prof_since_'+row+'" class="form-control"></div>';
             content+= '</div><div class="row"><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div></div>';
@@ -628,13 +639,14 @@ form.children("div").steps({
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
-    showFinishButtonAlways : true,
-    enableAllSteps: true,
+    // showFinishButtonAlways : true,
+    // enableAllSteps: true,
     enablePagination: true,
     onStepChanging: function (event, currentIndex, newIndex)
     {
         form.validate().settings.ignore = ":disabled,:hidden";
-        return true;//form.valid();
+        return form.valid();
+        // return true;//form.valid();
     },
     onFinishing: function (event, currentIndex)
     {

@@ -117,6 +117,33 @@
                     </ul>
                 </li>
 
+                <li class="nav-item nav-dropdown {{
+                    active_class(Route::is('admin/master*'), 'open')
+                }}">
+                        <a class="nav-link nav-dropdown-toggle {{
+                            active_class(Route::is('admin/master*'))
+                        }}" href="#">
+                        <i class="nav-icon fas fa-cogs"></i>Masters Page 
+                    </a>
+
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/master/designations'))
+                        }}" href="{{ route('admin.mstr.designation.index') }}">
+                                Designations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/master/memberships'))
+                        }}" href="{{ route('admin.mstr.membership.index') }}">
+                                Memberships
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             @endif
         </ul>
     </nav>

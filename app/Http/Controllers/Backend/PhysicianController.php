@@ -18,6 +18,7 @@ use App\Models\Physician\PhysicianMembershipModel;
 use App\Models\Physician\PhysicianAdditionalEduModel;
 use App\Models\Physician\PhysicianEduModel;
 use App\Models\CountryModel;
+use App\Models\DesignationMasterModel;
 
 class PhysicianController extends Controller
 {
@@ -113,6 +114,7 @@ class PhysicianController extends Controller
             'sunday' => 'Sunday'
         ];
         $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['designations'] = DesignationMasterModel::activeOnly();
 
         return view('backend.physician.create_physicians',$pageData);
     }
@@ -306,6 +308,8 @@ class PhysicianController extends Controller
         $pageData['countries'] = CountryModel::activeOnly();
         $pageData['states'] = CountryModel::find($pageData['userData']->physicianProfile->country);
         $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
+        $pageData['designations'] = DesignationMasterModel::activeOnly();
+
         return view('backend.physician.edit_physicians',$pageData);
     }
 
