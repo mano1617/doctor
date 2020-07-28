@@ -85,7 +85,7 @@
                                 <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="mobile_no">Email Address<sup class="text-danger">*</sup></label>
+                                        <label for="cli_email">Email Address<sup class="text-danger">*</sup></label>
                                         <input type="email" required name="cli_email" class="form-control">
                                     </div>
                                 </div>
