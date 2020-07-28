@@ -64,6 +64,10 @@ Breadcrumbs::for('admin.physician.consultants.edit', function ($trail) {
     $trail->push('Update Consultant');
 });
 
+Breadcrumbs::for('admin.designation.index', function ($trail) {
+    $trail->push('Masters Page', '');
+    $trail->push('Designations', '');
+});
 
 
 require __DIR__ . '/auth.php';
