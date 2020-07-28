@@ -21,4 +21,9 @@ class PhysicianClinicConsultsModel extends Model
     {
         return $this->belongsTo(PhysicianClinicModel::class,'clinic_id');
     }
+
+    public function workingDays()
+    {
+        return $this->hasMany(PhysicianClinicConsultsTimesModel::class,'consulting_id')->where('status','1');
+    }
 }

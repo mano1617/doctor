@@ -10,7 +10,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Consultants Lists</strong>
+                    <strong>CONSULTANTS LIST</strong>
                     <div class="float-right">
                     <a href="{{ route('admin.physician.consultants.create',['clinic' => request()->clinic]) }}" class="btn btn-outline-success"><i class="fa fa-fw fa-plus"></i>CREATE</a>
                     @if(request()->page_option=='branches')

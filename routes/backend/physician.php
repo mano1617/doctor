@@ -33,6 +33,7 @@ Route::group(['prefix' => 'users'],function()
     Route::resource('consultants', 'PhyConsultantsController')->names([
         'index' => 'physician.consultants.index',
         'create' => 'physician.consultants.create',
+        'edit' => 'physician.consultants.edit',
         'store' => 'physician.consultants.store',
         'update' => 'physician.consultants.update',
     ]);
