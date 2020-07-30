@@ -30,5 +30,13 @@ Route::group(['prefix' => 'master'],function()
     Route::get('memberships/update/status/{userId}/{statusCode}', 'MembershipMasterController@updateStatus')->name('mstr.membership.updateStatus');
     Route::post('memberships/check-duplicate', 'MembershipMasterController@checkDuplicate')->name('mstr.membership.checkDuplicate');
 
+    Route::resource('branch_medicines', 'BrMedicineMasterController')->names([
+        'index' => 'mstr.branch_medicine.index',
+        'store' => 'mstr.branch_medicine.store',
+        'edit' => 'mstr.branch_medicine.edit',
+        'update' => 'mstr.branch_medicine.update',
+    ]);
+    Route::get('branch_medicines/update/status/{userId}/{statusCode}', 'BrMedicineMasterController@updateStatus')->name('mstr.branch_medicine.updateStatus');
+    Route::post('branch_medicines/check-duplicate', 'BrMedicineMasterController@checkDuplicate')->name('mstr.branch_medicine.checkDuplicate');
 });
 
