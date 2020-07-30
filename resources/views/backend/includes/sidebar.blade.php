@@ -123,10 +123,17 @@
                         <a class="nav-link nav-dropdown-toggle {{
                             active_class(Route::is('admin/master*'))
                         }}" href="#">
-                        <i class="nav-icon fas fa-cogs"></i>Masters Page 
+                        <i class="nav-icon fas fa-cogs"></i>Master Pages 
                     </a>
 
                     <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/master/branch_medicines'))
+                        }}" href="{{ route('admin.mstr.branch_medicine.index') }}">
+                                Professional Qualification
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{
                             active_class(Route::is('admin/master/designations'))

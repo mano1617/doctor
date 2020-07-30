@@ -33,20 +33,18 @@ Breadcrumbs::for('admin.physician.clinics.edit', function ($trail) {
 });
 
 Breadcrumbs::for('admin.physician.consultants.index', function ($trail) {
-    if(request()->has('clinic'))
-    {
+    if (request()->has('clinic')) {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));
-    }else{
+    } else {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['clinic' => request()->clinic]));
     }
     $trail->push('Consultants', route('admin.physician.consultants.index'));
 });
 
 Breadcrumbs::for('admin.physician.consultants.create', function ($trail) {
-    if(request()->has('clinic'))
-    {
+    if (request()->has('clinic')) {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));
-    }else{
+    } else {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['clinic' => request()->clinic]));
     }
     $trail->push('Consultants', route('admin.physician.consultants.index'));
@@ -54,21 +52,29 @@ Breadcrumbs::for('admin.physician.consultants.create', function ($trail) {
 });
 
 Breadcrumbs::for('admin.physician.consultants.edit', function ($trail) {
-    if(request()->has('clinic'))
-    {
+    if (request()->has('clinic')) {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));
-    }else{
+    } else {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['clinic' => request()->clinic]));
     }
     $trail->push('Consultants', route('admin.physician.consultants.index'));
     $trail->push('Update Consultant');
 });
 
-Breadcrumbs::for('admin.designation.index', function ($trail) {
-    $trail->push('Masters Page', '');
+Breadcrumbs::for('admin.mstr.designation.index', function ($trail) {
+    $trail->push('Master Pages', '');
     $trail->push('Designations', '');
 });
 
+Breadcrumbs::for('admin.mstr.membership.index', function ($trail) {
+    $trail->push('Master Pages', '');
+    $trail->push('Memberships', '');
+});
+
+Breadcrumbs::for('admin.mstr.branch_medicine.index', function ($trail) {
+    $trail->push('Master Pages', '');
+    $trail->push('Professional Qualification', '');
+});
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/log-viewer.php';

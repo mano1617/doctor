@@ -79,6 +79,11 @@
                                     <div class="form-group">
                                         <label for="image">Image</label><br>
                                         <input type="file" name="image">
+                                        @if(trim($userData->physicianProfile->avatar)!='')
+                                        <a href="{{ url('storage/app/avatars/'.$userData->physicianProfile->avatar) }}" target="new">
+                                            <img src="{{ url('storage/app/avatars/'.$userData->physicianProfile->avatar) }}" width="65" height="65">
+                                        </a>
+                                        @endif                                        
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -166,6 +171,11 @@
                                         <label for="loc_image">Location Image</label><br>
                                         <input type="file" name="loc_image">
                                     </div>
+                                    @if(trim($userData->physicianProfile->map_image)!='')
+                                    <a href="{{ url('storage/app/location_images/'.$userData->physicianProfile->map_image) }}" target="new">
+                                        <img src="{{ url('storage/app/location_images/'.$userData->physicianProfile->map_image) }}" width="65" height="65">
+                                    </a>
+                                    @endif
                                 </div>
                                 @php
                                     $latitude = $longitude = '';
@@ -218,6 +228,17 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
+                                        <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
+                                        <select name="professional_qualification_1" required class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($brMedicines as $brMedicine)
+                                            <option @if($educations[0]['professional_qualification']==$brMedicine->id) selected @endif value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
                                         <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
                                         <input type="text" required value="{{ $educations[0]['branch_of_medicine'] }}" name="branch_of_medicine_1" class="form-control">
                                     </div>
@@ -234,16 +255,46 @@
                                         <input type="text" required value="{{ $educations[0]['medical_council'] }}" name="medical_council_1" class="form-control">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
-                                        <input type="text" required value="{{ $educations[0]['professional_qualification'] }}" name="professional_qualification_1" class="form-control">
+                                        <label for="prof_desig">College<sup class="text-danger">*</sup></label>
+                                        <input type="text" value="{{ $educations[0]['college_name'] }}" required name="prof_college_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Place<sup class="text-danger">*</sup></label>
+                                        <input type="text" value="{{ $educations[0]['place'] }}" required name="prof_place_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Joining Year
+                                        <sup class="text-danger">*</sup></label>
+                                        <select name="prof_joinyear_1" required class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
+                                            <option @if($educations[0]['join_year']==$year) selected @endif value="{{$year}}">{{$year}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            
                             @else
                             <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
+                                        <select name="professional_qualification_1" required class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($brMedicines as $brMedicine)
+                                            <option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
@@ -262,43 +313,131 @@
                                         <input type="text" required name="medical_council_1" class="form-control">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="professional_qualification_1" class="form-control">
+                                        <label for="prof_desig">College<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="prof_college_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Place<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="prof_place_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_desig">Joining Year
+                                        <sup class="text-danger">*</sup></label>
+                                        <select name="prof_joinyear_1" required class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
+                                            <option value="{{$year}}">{{$year}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            
                             @endif
-
+                                    
                             @if(count($addEducations))
                                 @foreach($addEducations as $adk => $addEdu)
+                                <hr>
                                 <div id="edu_row_{{ $adk+1 }}">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                                <div class="form-group">
-                                                    <label for="education">Additional Qualification</label>
-                                                    <textarea name="additional_qualification_{{ $adk+1 }}" class="form-control">{{ $addEdu['description'] }}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                @if($adk==0)
-                                                <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
-                                                @else
-                                                <a style="margin-top:30px;" data-container="#edu_row_{{ $adk+1 }}" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a>
-                                                @endif
+                                    <div class="row" >                                
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="additional_qualification_{{ $adk+1 }}">Additional Qualification</label>
+                                                <select name="additional_qualification_{{ $adk+1 }}" class="form-control">
+                                                    <option value="">--select--</option>
+                                                    @foreach($brMedicines as $brMedicine)
+                                                    <option @if($addEdu['professional_qualification']==$brMedicine->id) selected @endif value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="add_prof_branch_{{ $adk+1 }}">Branch of Medicine</label>
+                                                <input type="text" value="{{$addEdu['branch']}}" name="add_prof_branch_{{ $adk+1 }}" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="add_prof_college_{{ $adk+1 }}">College</label>
+                                                <input type="text" value="{{$addEdu['college']}}" name="add_prof_college_{{ $adk+1 }}" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="add_prof_joinyear_{{ $adk+1 }}">Joining Year</label>
+                                                <select name="add_prof_joinyear_{{ $adk+1 }}" class="form-control">
+                                                    <option value="">--select--</option>
+                                                    @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
+                                                    <option @if($addEdu['join_year']==$year) selected @endif value="{{$year}}">{{$year}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="add_prof_place_{{ $adk+1 }}">Place</label>
+                                                <input type="text" value="{{$addEdu['place']}}" name="add_prof_place_{{ $adk+1 }}" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            @if($adk==0)
+                                            <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                            @else
+                                            <a style="margin-top:30px;" data-container="#edu_row_{{ $adk+1 }}" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a>
+                                            @endif
+                                        </div>
+                                    </div>
                                     <hr>
                                 </div>
                                 @endforeach
                             @else
-                            <div class="row">
-                              <div class="col-sm-6">
+                            <div class="row" >                                
+                                <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="education">Additional Qualification</label>
-                                        <textarea name="additional_qualification_1" class="form-control" ></textarea>
+                                        <label for="additional_qualification_1">Additional Qualification</label>
+                                        <select name="additional_qualification_1" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($brMedicines as $brMedicine)
+                                            <option  value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="add_prof_branch_1">Branch of Medicine</label>
+                                        <input type="text" name="add_prof_branch_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="add_prof_college_1">College</label>
+                                        <input type="text" name="add_prof_college_1" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="add_prof_joinyear_1">Joining Year</label>
+                                        <select name="add_prof_joinyear_1" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
+                                            <option value="{{$year}}">{{$year}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="add_prof_place_1">Place</label>
+                                        <input type="text" name="add_prof_place_1" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -858,8 +997,24 @@ $(function()
     {
         var row = parseInt($("input[name='edu_rows']").val());
         row++;
-        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="education">Additional Qualification</label><textarea name="additional_qualification_'+row+'" class="form-control" ></textarea></div></div>';
+
+        var desigOptions = '<option value="">--select--</option>';
+        @foreach($brMedicines as $brMedicine)
+            desigOptions +='<option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>';
+        @endforeach
+
+        var joinYearOptions ='<option value="">--select--</option>';
+        @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
+            joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
+        @endforeach
+                        
+        var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="education">Additional Qualification</label><select name="additional_qualification_'+row+'" class="form-control">'+desigOptions+'</select></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+row+'">Branch of Medicine</label><input type="text" name="add_prof_branch_'+row+'" class="form-control"></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_college_'+row+'">College</label><input type="text" name="add_prof_college_'+row+'" class="form-control"></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_joinyear_'+row+'">Joining Year</label><select name="add_prof_joinyear_'+row+'" class="form-control">'+joinYearOptions+'</select></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_place_'+row+'">Place</label><input type="text" name="add_prof_place_'+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#edu_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+
         $("input[name='edu_rows']").val(row);
         $("#eduDiv").append(content);
 
@@ -921,7 +1076,7 @@ form.children("div").steps({
     bodyTag: "section",
     transitionEffect: "slideLeft",
     // showFinishButtonAlways : true,
-    // enableAllSteps: true,
+    enableAllSteps: true,
     enablePagination: true,
     onStepChanging: function (event, currentIndex, newIndex)
     {
