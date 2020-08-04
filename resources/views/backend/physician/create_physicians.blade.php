@@ -251,6 +251,12 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!-- <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_certif_1">Upload Certificate</label>
+                                        <input type="file" name="prof_certif_1">
+                                    </div>
+                                </div> -->
                             </div>
                             <div id="eduDiv">
                                 <hr>
@@ -295,6 +301,12 @@
                                             <input type="text" name="add_prof_place_1" class="form-control">
                                         </div>
                                     </div>
+                                    <!-- <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="add_prof_certif_1">Upload Certificate</label>
+                                            <input type="file" name="add_prof_certif_1">
+                                        </div>
+                                    </div> -->
                                     <div class="col-sm-3">
                                         <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
                                     </div>
