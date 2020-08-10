@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\CountryModel;
-use App\Models\StateModel;
 use App\Models\Physician\PhysicianClinicModel;
 use App\Models\Physician\PhysicianClinicTimesModel;
+use App\Models\StateModel;
 use DataTables;
 use Illuminate\Http\Request;
 use Storage;
@@ -80,7 +80,8 @@ class PhyClinicsController extends Controller
                     }
 
                     $actions .= '<a href="' . route('admin.physician.clinics.edit', $row->id) . '"  class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    $actions .= '<a href="' . route('admin.physician.consultants.index', ['page_option' => 'clinics', 'clinic' => $row->id, 'physician' => $physicianId]) . '" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-users"></i></a>';
+                    // $actions .= '<a href="' . route('admin.physician.consultants.index', ['page_option' => 'clinics', 'clinic' => $row->id, 'physician' => $physicianId]) . '" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-user"></i></a>';
+                    $actions .= '<a href="javascript:void(0);" data-rowId ="' . $row->id . '" title="View Consultants" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-users"></i></a>';
                     $actions .= ' <a title="View Gallery" href="" class="btn btn-outline-dark"><i class="fa fa-fw fa-photo"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="' . route('admin.physician.clinics.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
@@ -205,7 +206,7 @@ class PhyClinicsController extends Controller
         $pageData['countries'] = CountryModel::activeOnly();
         $pageData['physicians'] = User::select(['id', 'first_name', 'last_name'])->role('physician')->orderBy('first_name')->get();
         $pageData['data'] = PhysicianClinicModel::find($id);
-        $pageData['states'] = StateModel::where('country_id',$pageData['data']->country)->activeOnly();
+        $pageData['states'] = StateModel::where('country_id', $pageData['data']->country)->activeOnly();
 
         return view('backend.physician.edit_physician_clinics', $pageData);
     }
@@ -221,7 +222,7 @@ class PhyClinicsController extends Controller
     {
         $recordInfo = PhysicianClinicModel::find($id);
 
-        PhysicianClinicModel::where('id',$id)->update([
+        PhysicianClinicModel::where('id', $id)->update([
             'clinic_type' => 1,
             'name' => trim($request->cli_name),
             'address' => trim($request->cli_address),
@@ -316,6 +317,15 @@ class PhyClinicsController extends Controller
 
         return response()->json([
             'status' => 1,
+        ]);
+    }
+
+    public function listConsultants(Request $request)
+    {
+        return response()->json([
+            'html' => view('backend.physician.list_physician_consultants',[
+                'data' => PhysicianClinicModel::find($request->clinicId)
+            ])->render()
         ]);
     }
 }

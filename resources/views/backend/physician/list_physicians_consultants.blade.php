@@ -51,7 +51,7 @@ $(function() {
         serverSide: true,
         ajax: "{{ route('admin.physician.consultants.index',['clinic' => request()->clinic]) }}",
         columns: [
-                { data: 'id', name: 'id' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'name', name: 'name' },
                 { data: 'speciality', name: 'speciality' },
                 { data: 'contact', name: 'contact' },

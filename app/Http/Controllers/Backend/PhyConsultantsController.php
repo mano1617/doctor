@@ -175,7 +175,6 @@ class PhyConsultantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        print_r($request->all());
 
         $data = PhysicianClinicConsultsModel::find($id);
 
