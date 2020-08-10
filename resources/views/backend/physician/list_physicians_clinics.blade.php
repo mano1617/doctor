@@ -37,6 +37,9 @@
                     </div>
                 </div><!--card-body-->
             </div><!--card-->
+
+            <div id="consultantContainer"></div>
+
         </div><!--col-->
     </div><!--row-->
 @endsection
@@ -49,12 +52,30 @@ $(function() {
         serverSide: true,
         ajax: "{{ route('admin.physician.clinics.index',['physician' => request()->physician]) }}",
         columns: [
-                { data: 'id', name: 'id' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'name', name: 'name' },
                 { data: 'address', name: 'address' },
                 { data: 'contact', name: 'contact' },
                 { data: 'actions', name: 'actions' }
             ]
+    });
+
+    $("body").on('click', '.viewConsultant', function(e)
+    {
+        $.ajax({
+            method : 'post',
+            url : "{{ route('admin.physician.clinics.listConsultants') }}",
+            data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}'},
+            dataType:'json',
+            beforeSend : function()
+            {
+                $("#consultantContainer").html('<div style="background-color: white; text-align: center;"><img src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif"></div>');
+            },
+            success:function(result)
+            {
+                $("#consultantContainer").html(result.html);
+            },
+        });
     });
 });
 </script>

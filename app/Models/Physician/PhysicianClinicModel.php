@@ -22,5 +22,12 @@ class PhysicianClinicModel extends Model
     {
         return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where('status','1');
     }
+
+    public function consultants()
+    {
+        return $this->hasMany(PhysicianClinicConsultsModel::class,'clinic_id')->where([
+            ['status','!=','2']
+        ]);
+    }
     
 }

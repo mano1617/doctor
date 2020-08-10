@@ -739,8 +739,8 @@ form.children("div").steps({
     onStepChanging: function (event, currentIndex, newIndex)
     {
         form.validate().settings.ignore = ":disabled,:hidden";
-        // return form.valid();
-        return true;//form.valid();
+        return form.valid();
+        // return true;//form.valid();
     },
     onFinishing: function (event, currentIndex)
     {
