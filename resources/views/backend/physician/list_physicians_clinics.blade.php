@@ -40,6 +40,247 @@
 
             <div id="consultantContainer"></div>
 
+            <div class="modal fade" id="edit_consults" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Update Consultant</h4>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <form id="editPhysician" enctype="multipart/form-data" method="post" action="">
+                    {{csrf_field()}}
+                    <input type="hidden" name="_method" value="PUT">
+                        <div class="modal-body">
+                            <input type="hidden" name="clinic" id="clinic">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Name<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_cons_doc_name" id="cli_cons_doc_name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Speciality</label>
+                                        <input type="text" id="cli_cons_doc_spec" name="cli_cons_doc_spec" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Mobile<sup class="text-danger">*</sup></label>
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cli_cons_doc_mobile" id="cli_cons_doc_mobile" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Email ID<sup class="text-danger">*</sup></label>
+                                        <input type="email" required data-rule-email="true" id="cli_cons_doc_email" name="cli_cons_doc_email" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                             <p>Consulting On:</p>
+                             <h6 class="text-danger">Note:</h6>
+                            <p>If no day selection, leave as blank all inputs.</p>
+                            @foreach($days as $kday => $day)
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label style="margin-top:17px;">
+                                        <input type="checkbox"  value="{{ $kday }}" name="cons_day_{{ $kday }}" id="cons_day_{{ $kday }}" class="cons_day removeCheck"> {{$day}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="cli_cons_{{ $kday }}_mst"></label>
+                                        <select name="cli_cons_{{ $kday }}_mst" id="cli_cons_{{ $kday }}_mst" class="form-control removeSel">
+                                            <option value="">--select--</option>
+                                            @for($i=0;$i<=11;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" style="border-right: 1px solid #000;">
+                                    <div class="form-group">
+                                        <label for="cli_cons_{{ $kday }}_med"></label>
+                                        <select name="cli_cons_{{ $kday }}_med" id="cli_cons_{{ $kday }}_med" class="form-control removeSel">
+                                            <option value="">--select--</option>
+                                            @for($i=1;$i<=12;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="cli_cons_{{ $kday }}_nst"></label>
+                                        <select name="cli_cons_{{ $kday }}_nst" id="cli_cons_{{ $kday }}_nst" class="form-control removeSel">
+                                            <option value="">--select--</option>
+                                            @for($i=12;$i<=23;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="landno"></label>
+                                        <select name="cli_cons_{{ $kday }}_ned" id="cli_cons_{{ $kday }}_ned" class="form-control removeSel">
+                                            <option value="">--select--</option>
+                                            @for($i=13;$i<=24;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Monthy Visit</label>
+                                        <textarea class="form-control" name="cli_cons_month_visit" id="cli_cons_month_visit" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Others</label>
+                                        <textarea class="form-control" name="cli_cons_wrk_others" id="cli_cons_wrk_others" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success submit">Submit</button>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="add_consults" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Create new Consultant</h4>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <form id="createPhysician" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.consultants.store') }}">
+                    {{csrf_field()}}
+                        <div class="modal-body">
+                            <input type="hidden2" name="clinic">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Name<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="cli_cons_doc_name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Speciality</label>
+                                        <input type="text" name="cli_cons_doc_spec" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Mobile<sup class="text-danger">*</sup></label>
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cli_cons_doc_mobile" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Email ID<sup class="text-danger">*</sup></label>
+                                        <input type="email" required data-rule-email="true" name="cli_cons_doc_email" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                             <p>Consulting On:</p>
+                             <h6 class="text-danger">Note:</h6>
+                            <p>If no day selection, leave as blank all inputs.</p>
+                            @foreach($days as $kday => $day)
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label style="margin-top:17px;"> <input type="checkbox"  value="{{ $kday }}" name="cons_day_{{ $kday }}" class="cons_day"> {{$day}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="cli_cons_{{ $kday }}_mst"></label>
+                                        <select name="cli_cons_{{ $kday }}_mst" class="form-control">
+                                            <option value="">--select--</option>
+                                            @for($i=0;$i<=11;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" style="border-right: 1px solid #000;">
+                                    <div class="form-group">
+                                        <label for="cli_cons_{{ $kday }}_med"></label>
+                                        <select name="cli_cons_{{ $kday }}_med" class="form-control">
+                                            <option value="">--select--</option>
+                                            @for($i=1;$i<=12;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="cli_cons_{{ $kday }}_nst"></label>
+                                        <select name="cli_cons_{{ $kday }}_nst" class="form-control">
+                                            <option value="">--select--</option>
+                                            @for($i=12;$i<=23;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="landno"></label>
+                                        <select name="cli_cons_{{ $kday }}_ned" class="form-control">
+                                            <option value="">--select--</option>
+                                            @for($i=13;$i<=24;$i++)
+                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Monthy Visit</label>
+                                        <textarea class="form-control" name="cli_cons_month_visit" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Others</label>
+                                        <textarea class="form-control" name="cli_cons_wrk_others" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success submit">Submit</button>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
         </div><!--col-->
     </div><!--row-->
 @endsection
@@ -60,8 +301,63 @@ $(function() {
             ]
     });
 
+    $("body").on('click', '#addConsults', function(e)
+    {
+        $("#add_consults").modal("show");
+    });
+
+    $("body").on('click', '.editRow', function(e)
+    {
+        $("#clinic").val($(this).data('row'));
+        $(".removeSel").val('');
+        $(".removeCheck").prop('checked',false);
+        $("#editPhysician").attr('action',"{{ route('admin.physician.consultants.index') }}/"+$(this).data('row'));
+
+        $.ajax({
+            method : 'get',
+            url : "{{ route('admin.physician.consultants.index') }}/"+$(this).data('row'),
+            data : {id : $(this).data('row')},
+            dataType:'json',
+            success:function(result)
+            {
+                $("#cli_cons_doc_name").val($.trim(result['data']['name']));
+                $("#cli_cons_doc_spec").val($.trim(result['data']['speciality']));
+                $("#cli_cons_doc_mobile").val($.trim(result['data']['mobile_no']));
+                $("#cli_cons_doc_email").val($.trim(result['data']['email_address']));
+                $("#cli_cons_month_visit").val($.trim(result['data']['monthly_visit']));
+                $("#cli_cons_wrk_others").val($.trim(result['data']['others']));
+
+                if((result['times']).length>0)
+                {
+                    $(result['times']).each(function(ind,val)
+                    {
+                        $("#cons_day_"+val['day_name']).prop('checked',true);
+
+                        if($.trim(val['morning_session_time'])!='')
+                        {
+                            var mTime = (val['morning_session_time']).split('-');
+
+                            $("#cli_cons_"+val['day_name']+"_mst").val(mTime[0]);
+                            $("#cli_cons_"+val['day_name']+"_med").val(mTime[1]);
+                        }
+
+                        if($.trim(val['evening_session_time'])!='')
+                        {
+                            var eTime = (val['evening_session_time']).split('-');
+                            $("#cli_cons_"+val['day_name']+"_nst").val(eTime[0]);
+                            $("#cli_cons_"+val['day_name']+"_ned").val(eTime[1]);
+                        }
+
+                    });
+                }
+                $("#edit_consults").modal("show");
+            },
+        });
+    });
+
     $("body").on('click', '.viewConsultant', function(e)
     {
+        $("input[name='clinic']").val($(this).data('rowid'));
         $.ajax({
             method : 'post',
             url : "{{ route('admin.physician.clinics.listConsultants') }}",
@@ -76,6 +372,54 @@ $(function() {
                 $("#consultantContainer").html(result.html);
             },
         });
+    });
+
+    $("#editPhysician").validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            $(".submit").attr("disabled", false);
+            error.addClass("error invalid-feedback");
+            //error.parent("div.form-group").addClass("has-error");
+            element.parent("div.form-group").append(error);
+            element.addClass('is-invalid');
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+            $(".submit").attr("disabled", false);
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+            $(".submit").attr("disabled", false);
+        },
+        // submitHandler: function(form) { // <- pass 'form' argument in
+        //     $(".submit").attr("disabled", true);
+        //     form.submit(); // <- use 'form' argument here.
+        // }
+    });
+
+    $("#createPhysician").validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            $(".submit").attr("disabled", false);
+            error.addClass("error invalid-feedback");
+            //error.parent("div.form-group").addClass("has-error");
+            element.parent("div.form-group").append(error);
+            element.addClass('is-invalid');
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+            $(".submit").attr("disabled", false);
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+            $(".submit").attr("disabled", false);
+        },
+        // submitHandler: function(form) { // <- pass 'form' argument in
+        //     $(".submit").attr("disabled", true);
+        //     form.submit(); // <- use 'form' argument here.
+        // }
     });
 });
 </script>

@@ -90,8 +90,9 @@ class PhyClinicsController extends Controller
                 ->rawColumns(['contact', 'actions', 'photo'])
                 ->make(true);
         }
+        $pageData['days'] = $this->weekDays;
 
-        return view('backend.physician.list_physicians_clinics');
+        return view('backend.physician.list_physicians_clinics',$pageData);
     }
 
     /**
