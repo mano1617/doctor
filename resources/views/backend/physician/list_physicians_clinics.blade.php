@@ -47,7 +47,7 @@
                             <h4 class="modal-title">Update Consultant</h4>
                             <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
-                        <form id="editPhysician" enctype="multipart/form-data" method="post" action="">
+                        <form id="editConsultant" enctype="multipart/form-data" method="post" action="">
                     {{csrf_field()}}
                     <input type="hidden" name="_method" value="PUT">
                         <div class="modal-body">
@@ -169,10 +169,10 @@
                             <h4 class="modal-title">Create new Consultant</h4>
                             <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
-                        <form id="createPhysician" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.consultants.store') }}">
+                        <form id="createConsultant" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.consultants.store') }}">
                     {{csrf_field()}}
                         <div class="modal-body">
-                            <input type="hidden2" name="clinic">
+                            <input type="hidden" name="clinic">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -311,7 +311,7 @@ $(function() {
         $("#clinic").val($(this).data('row'));
         $(".removeSel").val('');
         $(".removeCheck").prop('checked',false);
-        $("#editPhysician").attr('action',"{{ route('admin.physician.consultants.index') }}/"+$(this).data('row'));
+        $("#editConsultant").attr('action',"{{ route('admin.physician.consultants.index') }}/"+$(this).data('row'));
 
         $.ajax({
             method : 'get',
@@ -374,7 +374,7 @@ $(function() {
         });
     });
 
-    $("#editPhysician").validate({
+    var editConsultantJS = $("#editConsultant").validate({
         errorPlacement: function errorPlacement(error, element) { element.before(error); },
         errorElement: "span",
         errorPlacement: function(error, element) {
@@ -392,13 +392,30 @@ $(function() {
             $(element).removeClass("is-invalid");
             $(".submit").attr("disabled", false);
         },
-        // submitHandler: function(form) { // <- pass 'form' argument in
-        //     $(".submit").attr("disabled", true);
-        //     form.submit(); // <- use 'form' argument here.
-        // }
+        submitHandler: function(form) {
+
+            $(".submit").attr("disabled", true);
+            var clinicId = $("#addConsults").data('clinic');
+
+            $.ajax({
+                method : 'post',
+                url : $(form).attr('action'),
+                data : $(form).serialize(),
+                dataType:'json',
+                success:function(result)
+                {
+                    Swal.fire('Success!',result.message,'success').then(()=>{
+                        editConsultantJS.resetForm();
+                        $(form)[0].reset();
+                        $("#edit_consults").modal("hide");
+                        $('body #viewConsult_btn_'+clinicId).trigger('click');
+                    });
+                },
+            });
+        }
     });
 
-    $("#createPhysician").validate({
+    var createConsultantJS = $("#createConsultant").validate({
         errorPlacement: function errorPlacement(error, element) { element.before(error); },
         errorElement: "span",
         errorPlacement: function(error, element) {
@@ -416,10 +433,27 @@ $(function() {
             $(element).removeClass("is-invalid");
             $(".submit").attr("disabled", false);
         },
-        // submitHandler: function(form) { // <- pass 'form' argument in
-        //     $(".submit").attr("disabled", true);
-        //     form.submit(); // <- use 'form' argument here.
-        // }
+        submitHandler: function(form) {
+
+            $(".submit").attr("disabled", true);
+            var clinicId = $("#addConsults").data('clinic');
+
+            $.ajax({
+                method : 'post',
+                url : "{{ route('admin.physician.consultants.store') }}",
+                data : $(form).serialize(),
+                dataType:'json',
+                success:function(result)
+                {
+                    Swal.fire('Success!',result.message,'success').then(()=>{
+                        createConsultantJS.resetForm();
+                        $(form)[0].reset();
+                        $("#add_consults").modal("hide");
+                        $('body #viewConsult_btn_'+clinicId).trigger('click');
+                    });
+                },
+            });
+        }
     });
 });
 </script>

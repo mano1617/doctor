@@ -140,9 +140,12 @@ class PhyConsultantsController extends Controller
             'message' => 'Successfully consultant has been created.',
         ];
 
-        $request->session()->flash('flashData', $this->flashData);
+        // $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->back();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Successfully consultant has been created.',
+        ]);
     }
 
     /**
@@ -184,7 +187,6 @@ class PhyConsultantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        print_r($request->all());
 
         $data = PhysicianClinicConsultsModel::find($id);
 
@@ -236,9 +238,12 @@ class PhyConsultantsController extends Controller
             'message' => 'Successfully consultant detail has been updated.',
         ];
 
-        $request->session()->flash('flashData', $this->flashData);
+        // $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->back();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Successfully consultant detail has been updated.',
+        ]);
 
     }
 

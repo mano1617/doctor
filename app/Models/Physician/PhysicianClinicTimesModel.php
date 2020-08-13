@@ -9,7 +9,7 @@ class PhysicianClinicTimesModel extends Model
     protected $table = "lmr_phys_clinic_working_day";
 
     protected $fillable = [
-        'user_id', 'clinic_id', 'day_name', 'morning_session_time', 'evening_session_time', 'description', 'status'
+        'user_id', 'clinic_id', 'clinic_type', 'day_name', 'morning_session_time', 'evening_session_time', 'description', 'status'
     ];
 
     public function user()

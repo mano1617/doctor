@@ -32,6 +32,20 @@ Breadcrumbs::for('admin.physician.clinics.edit', function ($trail) {
     $trail->push('Update Clinic');
 });
 
+Breadcrumbs::for('admin.physician.branches.index', function ($trail) {
+    $trail->push('Users', '');
+    $trail->push('Physicians', route('admin.physician.index'));
+    $trail->push('Branches', route('admin.physician.branches.index'));
+});
+
+Breadcrumbs::for('admin.physician.branches.create', function ($trail) {
+    $trail->push('Users', '');
+    $trail->push('Physicians', route('admin.physician.index'));
+    $trail->push('Branches', route('admin.physician.branches.index'));
+    $trail->push('Create New Branch', '');
+});
+
+
 Breadcrumbs::for('admin.physician.consultants.index', function ($trail) {
     if (request()->has('clinic')) {
         $trail->push('Clinics', route('admin.physician.clinics.index', ['physician' => request()->physician]));

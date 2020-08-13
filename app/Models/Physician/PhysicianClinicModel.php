@@ -10,7 +10,7 @@ class PhysicianClinicModel extends Model
 
     protected $fillable = [
         'clinic_type','user_id', 'name', 'address', 'district', 'state', 'country', 'pincode', 'landmark', 'mobile_no', 'landline',
-        'email_address', 'website', 'map_image', 'status', 'description'
+        'email_address', 'website', 'map_image', 'status', 'description', 'other_description'
     ];
 
     public function user()

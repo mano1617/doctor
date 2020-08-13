@@ -81,7 +81,7 @@ class PhyClinicsController extends Controller
 
                     $actions .= '<a href="' . route('admin.physician.clinics.edit', $row->id) . '"  class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     // $actions .= '<a href="' . route('admin.physician.consultants.index', ['page_option' => 'clinics', 'clinic' => $row->id, 'physician' => $physicianId]) . '" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-user"></i></a>';
-                    $actions .= '<a href="javascript:void(0);" data-rowId ="' . $row->id . '" title="View Consultants" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-users"></i></a>';
+                    $actions .= '<a href="javascript:void(0);" id="viewConsult_btn_' . $row->id . '" data-rowId ="' . $row->id . '" title="View Consultants" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-users"></i></a>';
                     $actions .= ' <a title="View Gallery" href="" class="btn btn-outline-dark"><i class="fa fa-fw fa-photo"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="' . route('admin.physician.clinics.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
@@ -92,7 +92,7 @@ class PhyClinicsController extends Controller
         }
         $pageData['days'] = $this->weekDays;
 
-        return view('backend.physician.list_physicians_clinics',$pageData);
+        return view('backend.physician.list_physicians_clinics', $pageData);
     }
 
     /**
@@ -117,6 +117,9 @@ class PhyClinicsController extends Controller
      */
     public function store(Request $request)
     {
+
+        $desc = isset($request->cli_wrk_others) ? trim($request->cli_wrk_others) : '';
+
         //Clinic creation
         $createClinic = PhysicianClinicModel::create([
             'clinic_type' => 1,
@@ -133,42 +136,32 @@ class PhyClinicsController extends Controller
             'landline' => trim($request->cli_landno),
             'description' => trim($request->cli_about_us),
             'landmark' => trim($request->cli_landmark),
+            'other_description' => trim($desc),
         ]);
 
-        //Clinic times
-        if (empty($request->cli_wrk_others)) {
-            foreach ($this->weekDays as $dayKey => $day) {
-                $cliWorkDay = [
-                    'user_id' => $request->user,
-                    'clinic_id' => $createClinic->id,
-                    'day_name' => $dayKey,
-                    'morning_session_time' => '',
-                    'evening_session_time' => '',
-                ];
-                if (trim($request->input('wrk_day_' . $dayKey)) != '') {
-                    if (trim($request->input('cli_' . $dayKey . '_mst')) != '' && trim($request->input('cli_' . $dayKey . '_med')) != '') {
-                        $cliWorkDay['morning_session_time'] = trim($request->input('cli_' . $dayKey . '_mst')) . '-' . trim($request->input('cli_' . $dayKey . '_med'));
-                    }
 
-                    if (trim($request->input('cli_' . $dayKey . '_nst')) != '' && trim($request->input('cli_' . $dayKey . '_ned')) != '') {
-                        $cliWorkDay['evening_session_time'] = trim($request->input('cli_' . $dayKey . '_nst')) . '-' . trim($request->input('cli_' . $dayKey . '_ned'));
-                    }
+        foreach ($this->weekDays as $dayKey => $day) {
+            $cliWorkDay = [
+                'user_id' => $request->user,
+                'clinic_id' => $createClinic->id,
+                'day_name' => $dayKey,
+                'morning_session_time' => '',
+                'evening_session_time' => '',
+            ];
+            if (trim($request->input('wrk_day_' . $dayKey)) != '') {
+                if (trim($request->input('cli_' . $dayKey . '_mst')) != '' && trim($request->input('cli_' . $dayKey . '_med')) != '') {
+                    $cliWorkDay['morning_session_time'] = trim($request->input('cli_' . $dayKey . '_mst')) . '-' . trim($request->input('cli_' . $dayKey . '_med'));
+                }
 
+                if (trim($request->input('cli_' . $dayKey . '_nst')) != '' && trim($request->input('cli_' . $dayKey . '_ned')) != '') {
+                    $cliWorkDay['evening_session_time'] = trim($request->input('cli_' . $dayKey . '_nst')) . '-' . trim($request->input('cli_' . $dayKey . '_ned'));
+                }
+                if (trim($cliWorkDay['morning_session_time']) != '' || trim($cliWorkDay['evening_session_time']) != '') {
                     PhysicianClinicTimesModel::create($cliWorkDay);
                 }
             }
-
-        } else {
-
-            PhysicianClinicTimesModel::create([
-                'user_id' => $request->user,
-                'clinic_id' => $createClinic->id,
-                'day_name' => 'others',
-                'morning_session_time' => '',
-                'evening_session_time' => '',
-                'description' => empty($request->cli_wrk_others) ? '' : trim($request->cli_wrk_others),
-            ]);
         }
+  
 
         $this->flashData = [
             'status' => 1,
@@ -223,6 +216,8 @@ class PhyClinicsController extends Controller
     {
         $recordInfo = PhysicianClinicModel::find($id);
 
+        $desc = isset($request->cli_wrk_others) ? trim($request->cli_wrk_others) : '';
+
         PhysicianClinicModel::where('id', $id)->update([
             'clinic_type' => 1,
             'name' => trim($request->cli_name),
@@ -237,12 +232,14 @@ class PhyClinicsController extends Controller
             'landline' => trim($request->cli_landno),
             'description' => trim($request->cli_about_us),
             'landmark' => trim($request->cli_landmark),
+            'other_description' => trim($desc),
         ]);
 
         //Delete prev records
         PhysicianClinicTimesModel::where([
-            'user_id' => $recordInfo->user_id,
-            'clinic_id' => $id,
+            ['user_id', '=', $recordInfo->user_id],
+            ['clinic_id', '=', $id],
+            ['status', '!=', '2'],
         ])->update([
             'status' => '2',
         ]);
@@ -264,19 +261,10 @@ class PhyClinicsController extends Controller
                 if (trim($request->input('cli_' . $dayKey . '_nst')) != '' && trim($request->input('cli_' . $dayKey . '_ned')) != '') {
                     $cliWorkDay['evening_session_time'] = trim($request->input('cli_' . $dayKey . '_nst')) . '-' . trim($request->input('cli_' . $dayKey . '_ned'));
                 }
-                PhysicianClinicTimesModel::create($cliWorkDay);
+                if (trim($cliWorkDay['morning_session_time']) != '' || trim($cliWorkDay['evening_session_time']) != '') {
+                    PhysicianClinicTimesModel::create($cliWorkDay);
+                }
             }
-        }
-
-        if (!empty($request->cli_wrk_others)) {
-            PhysicianClinicTimesModel::create([
-                'user_id' => $recordInfo->user_id,
-                'clinic_id' => $id,
-                'day_name' => 'others',
-                'morning_session_time' => '',
-                'evening_session_time' => '',
-                'description' => empty($request->cli_wrk_others) ? '' : trim($request->cli_wrk_others),
-            ]);
         }
 
         $this->flashData = [
@@ -324,9 +312,9 @@ class PhyClinicsController extends Controller
     public function listConsultants(Request $request)
     {
         return response()->json([
-            'html' => view('backend.physician.list_physician_consultants',[
-                'data' => PhysicianClinicModel::find($request->clinicId)
-            ])->render()
+            'html' => view('backend.physician.list_physician_consultants', [
+                'data' => PhysicianClinicModel::find($request->clinicId),
+            ])->render(),
         ]);
     }
 }
