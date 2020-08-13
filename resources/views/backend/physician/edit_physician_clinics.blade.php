@@ -6,6 +6,9 @@
 @endpush
 
 @section('content')
+
+@include('backend.includes.alert')
+
     <div class="row">
         <div class="col">
             <div class="card">
@@ -169,66 +172,50 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_mst"></label>
-                                            <input type="text" placeholder="00:00" @if(count($clWorkingDay)>0) value="{{ $mornTime[0] }}" @endif name="cli_{{ $kday }}_mst" class="form-control timeFormats">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <div class="form-group">
-                                            <label for="cli_{{ $kday }}_mst_ap"></label>
-                                            <select name="cli_{{ $kday }}_mst_ap" class="form-control">
-                                                <option value="am">AM</option>
-                                                <option value="pm">PM</option>
+                                            <select name="cli_{{ $kday }}_mst" class="form-control removeSel">
+                                                <option value="">--select--</option>
+                                                @for($i=0;$i<=11;$i++)
+                                                <option @if(count($clWorkingDay)>0 && $mornTime[0]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                                @endfor
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-2" style="border-right:1px solid #000;">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_med"></label>
-                                            <input type="text" placeholder="00:00" @if(count($clWorkingDay)>0) value="{{ $mornTime[1] }}" @endif name="cli_{{ $kday }}_med" class="form-control timeFormats">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1" style="border-right: 1px solid #000;">
-                                        <div class="form-group">
-                                            <label for="cli_{{ $kday }}_med_ap"></label>
-                                            <select name="cli_{{ $kday }}_med_ap" class="form-control">
-                                                <option value="am">AM</option>
-                                                <option value="pm">PM</option>
+                                            <select name="cli_{{ $kday }}_med" class="form-control removeSel">
+                                                <option value="">--select--</option>
+                                                @for($i=1;$i<=12;$i++)
+                                                <option @if(count($clWorkingDay)>0 && $mornTime[1]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                                @endfor
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_nst"></label>
-                                            <input type="text" placeholder="00:00" @if(count($clWorkingDay)>0) value="{{ $evenTime[1] }}" @endif name="cli_{{ $kday }}_nst" class="form-control timeFormats">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <div class="form-group">
-                                            <label for="mobile_no"></label>
-                                            <select name="cli_{{ $kday }}_nst_ap" class="form-control">
-                                                <option value="am">AM</option>
-                                                <option value="pm">PM</option>
+                                            <select name="cli_{{ $kday }}_nst" class="form-control removeSel">
+                                                <option value="">--select--</option>
+                                                @for($i=12;$i<=23;$i++)
+                                                <option @if(count($clWorkingDay)>0 && $evenTime[0]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                                @endfor
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_ned"></label>
-                                            <input type="text" placeholder="00:00" @if(count($clWorkingDay)>0) value="{{ $evenTime[1] }}" @endif name="cli_{{ $kday }}_ned" class="form-control timeFormats">
-                                        </div>
-                                    </div> 
-                                    <div class="col-sm-1">
-                                        <div class="form-group">
-                                            <label for="mobile_no"></label>
-                                            <select name="cli_{{ $kday }}_ned_ap" class="form-control">
-                                                <option value="am">AM</option>
-                                                <option value="pm">PM</option>
+                                            <select name="cli_{{ $kday }}_ned" class="form-control removeSel">
+                                                <option value="">--select--</option>
+                                                @for($i=13;$i<=24;$i++)
+                                                <option @if(count($clWorkingDay)>0 && $evenTime[1]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
+                                                @endfor
                                             </select>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             @endforeach
                             @php
@@ -238,8 +225,8 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label> 
-                                        <input type="checkbox" @if(count($clWorkingDaysOthrs)>0) checked @endif name="wrk_times_others" value="1"> Others</label>
-                                        <textarea class="form-control" name="cli_wrk_others" cols="30" rows="5">@if(count($clWorkingDaysOthrs)>0){{trim($clWorkingDaysOthrs[0]['description'])}}@endif</textarea>
+                                        <input type="checkbox" @if(trim($data->other_description)!='') checked @endif name="wrk_times_others" value="1"> Others</label>
+                                        <textarea class="form-control" name="cli_wrk_others" cols="30" rows="5">{{trim($data->other_description)}}</textarea>
                                     </div>
                                 </div>
                             </div>

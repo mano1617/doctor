@@ -135,11 +135,7 @@
 
         $("body").on("click", ".removeRow", function(e)
             {
-                var altBtnId = $(this).data('id');
-                if(altBtnId)
-                {
-                    var btnId = $(this).attr('id');
-                }
+                var clinicId = $(this).data('clinic');
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -160,10 +156,9 @@
                         'success'
                         ).then(()=>{
 
-                            if(altBtnId)
+                            if(clinicId)
                             {
-                                $('#'+btnId).remove();
-                                $('#'+altBtnId).remove();
+                                $('body #viewConsult_btn_'+clinicId).trigger('click');
                             }else{
                                 window.location.reload();
                             }
