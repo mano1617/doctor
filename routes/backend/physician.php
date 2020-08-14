@@ -26,6 +26,7 @@ Route::group(['prefix' => 'users'],function()
     Route::resource('branches', 'PhyBranchesController')->names([
         'index' => 'physician.branches.index',
         'create' => 'physician.branches.create',
+        'edit' => 'physician.branches.edit',
         'store' => 'physician.branches.store',
         'update' => 'physician.branches.update',
     ]);

@@ -118,7 +118,7 @@ class PhyClinicsController extends Controller
     public function store(Request $request)
     {
 
-        $desc = isset($request->cli_wrk_others) ? trim($request->cli_wrk_others) : '';
+        $desc = isset($request->wrk_times_others) ? trim($request->cli_wrk_others) : '';
 
         //Clinic creation
         $createClinic = PhysicianClinicModel::create([
@@ -216,7 +216,7 @@ class PhyClinicsController extends Controller
     {
         $recordInfo = PhysicianClinicModel::find($id);
 
-        $desc = isset($request->cli_wrk_others) ? trim($request->cli_wrk_others) : '';
+        $desc = isset($request->wrk_times_others) ? trim($request->cli_wrk_others) : '';
 
         PhysicianClinicModel::where('id', $id)->update([
             'clinic_type' => 1,
