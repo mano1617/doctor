@@ -226,7 +226,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                
+
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">College<sup class="text-danger">*</sup></label>
@@ -260,7 +260,7 @@
                             </div>
                             <div id="eduDiv">
                                 <hr>
-                                <div class="row">                                
+                                <div class="row">
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="additional_qualification_1">Additional Qualification</label>
@@ -486,8 +486,8 @@
                                 </div>
                             </div>
                             </section>
-                        
-                        <h3>Branches</h3>
+
+                            <h3>Branches</h3>
                             <section>
                             <br />
                                 <div class="row">
@@ -687,7 +687,7 @@ $(function()
         @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
             joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
         @endforeach
-                        
+
         var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="education">Additional Qualification</label><select name="additional_qualification_'+row+'" class="form-control">'+desigOptions+'</select></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+row+'">Branch of Medicine</label><input type="text" name="add_prof_branch_'+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_college_'+row+'">College</label><input type="text" name="add_prof_college_'+row+'" class="form-control"></div></div>';
