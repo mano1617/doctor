@@ -486,8 +486,28 @@
                                 </div>
                             </div>
                             </section>
-
-
+                        
+                        <h3>Branches</h3>
+                            <section>
+                            <br />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="sector">Have Branches<sup class="text-danger">*</sup></label>
+                                            <div class="col-form-label">
+                                                <div class="form-check form-check-inline mr-1">
+                                                    <input class="form-check-input" checked name="clinic_br_detail" id="inline_br_radio11" type="radio" value="1">
+                                                    <label class="form-check-label" for="inline_br_radio11">Yes</label>
+                                                </div>
+                                                <div class="form-check form-check-inline mr-1">
+                                                    <input class="form-check-input" name="clinic_br_detail" id="inline_br_radio22" type="radio" value="0" >
+                                                    <label class="form-check-label" for="inline_br_radio22">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
 
                         </div>
                     </form>

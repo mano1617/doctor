@@ -37,7 +37,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required data-rule-digits="true" data-rule-minlength="10" data-rule-maxlength="14" name="cli_mobile_no" class="form-control">
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cli_mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -181,27 +181,13 @@
     </div><!--row-->
 @endsection
 @push('after-scripts')
-    <script src="{{ asset('assets/backend/jquery.maskedinput/jquery.maskedinput.js') }}"></script>
+    <!-- <script src="{{ asset('assets/backend/jquery.maskedinput/jquery.maskedinput.js') }}"></script> -->
 
 <script>
 $(function()
 {
-    $('.timeFormats').mask('99:99');
+    // $('.timeFormats').mask('99:99');
     
-    $(".wrk_day").on("change", function(e)
-    {
-        if($(this).is(':checked'))
-        {
-            //$("input[name='cli_"+$(this).val()+"_mst'], input[name='cli_"+$(this).val()+"_med'], input[name='cli_"+$(this).val()+"_nst'], input[name='cli_"+$(this).val()+"_ned']").attr("required","required");
-        }else{
-            //$("input[name='cli_"+$(this).val()+"_mst'], input[name='cli_"+$(this).val()+"_med'], input[name='cli_"+$(this).val()+"_nst'], input[name='cli_"+$(this).val()+"_ned']").removeAttr("required");
-        }
-
-        form.resetForm();
-        //$("span.error").hide();
-        //$(".error").removeClass("error");
-    });
-
     $("#cli_country").on("change", function(e)
     {
         var content = '<option value="">--select--</option>';

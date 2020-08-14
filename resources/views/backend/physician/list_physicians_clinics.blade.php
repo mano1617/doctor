@@ -26,8 +26,8 @@
                                 <thead>
                                     <tr>
                                         <th width="5%">#</th>
-                                        <th>NAME</th>
-                                        <th>ADDRESS</th>
+                                        <th width="20%">NAME</th>
+                                        <th width="30%">ADDRESS</th>
                                         <th>CONTACT</th>
                                         <th>ACTIONS</th>
                                     </tr>

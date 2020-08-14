@@ -180,45 +180,32 @@
     </div><!--row-->
 @endsection
 @push('after-scripts')
-    <script src="{{ asset('assets/backend/jquery.maskedinput/jquery.maskedinput.js') }}"></script>
+    <!-- <script src="{{ asset('assets/backend/jquery.maskedinput/jquery.maskedinput.js') }}"></script> -->
 
 <script>
 $(function()
 {
-    $('.timeFormats').mask('99:99');
+    // $('.timeFormats').mask('99:99');
 
     var form = $("#createPhysician").validate({
-    errorPlacement: function errorPlacement(error, element) { element.before(error); },
-    rules: {
-        cli_name : {
-        }
-    },
-    messages : {
-        cli_name : {
-            remote : 'The email address is already exists'
-        }
-    },
-    errorElement: "span",
-    errorPlacement: function(error, element) {
-        $(".submit").attr("disabled", false);
-        error.addClass("error invalid-feedback");
-        //error.parent("div.form-group").addClass("has-error");
-        element.parent("div.form-group").append(error);
-        element.addClass('is-invalid');
-    },
-    highlight: function(element, errorClass, validClass) {
-        $(element).addClass("is-invalid");
-        $(".submit").attr("disabled", false);
-    },
-    unhighlight: function(element, errorClass, validClass) {
-        $(element).removeClass("is-invalid");
-        $(".submit").attr("disabled", false);
-    },
-    // submitHandler: function(form) { // <- pass 'form' argument in
-    //     $(".submit").attr("disabled", true);
-    //     form.submit(); // <- use 'form' argument here.
-    // }
-});
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            $(".submit").attr("disabled", false);
+            error.addClass("error invalid-feedback");
+            //error.parent("div.form-group").addClass("has-error");
+            element.parent("div.form-group").append(error);
+            element.addClass('is-invalid');
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+            $(".submit").attr("disabled", false);
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+            $(".submit").attr("disabled", false);
+        },
+    });
 
 });
 
