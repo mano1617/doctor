@@ -13,14 +13,20 @@ class CreateGalleriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('galleries', function (Blueprint $table) {
+        Schema::create('lmr_galleries', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('clinic_id');
+            $table->mediumText('title');
+            $table->mediumText('file_path');
+            $table->mediumText('file_type');
+            $table->mediumText('description');           
+            $table->integer('sorting')->default(0);
+            $table->enum('status',['0','1','2'])->default('1')->comment('0 is deactive, 1 is active, 2 is removed');
             $table->timestamps();
-            $table->string('title');
-            $table->string('image_path');
-            $table->tinyInteger('clinic_id');
-            $table->tinyInteger('physician_id');
-            $table->tinyInteger('order_no');
+            $table->engine = 'InnoDB';
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('clinic_id')->references('id')->on('lmr_physician_clinic')->onDelete('cascade');
         });
     }
 
