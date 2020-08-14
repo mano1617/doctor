@@ -226,7 +226,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                
+
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_desig">College<sup class="text-danger">*</sup></label>
@@ -251,10 +251,16 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!-- <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="prof_certif_1">Upload Certificate</label>
+                                        <input type="file" name="prof_certif_1">
+                                    </div>
+                                </div> -->
                             </div>
                             <div id="eduDiv">
                                 <hr>
-                                <div class="row">                                
+                                <div class="row">
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="additional_qualification_1">Additional Qualification</label>
@@ -295,6 +301,12 @@
                                             <input type="text" name="add_prof_place_1" class="form-control">
                                         </div>
                                     </div>
+                                    <!-- <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="add_prof_certif_1">Upload Certificate</label>
+                                            <input type="file" name="add_prof_certif_1">
+                                        </div>
+                                    </div> -->
                                     <div class="col-sm-3">
                                         <a style="margin-top:30px;" id="addEducation" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
                                     </div>
@@ -475,7 +487,27 @@
                             </div>
                             </section>
 
-
+                            <h3>Branches</h3>
+                            <section>
+                            <br />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="sector">Have Branches<sup class="text-danger">*</sup></label>
+                                            <div class="col-form-label">
+                                                <div class="form-check form-check-inline mr-1">
+                                                    <input class="form-check-input" checked name="clinic_br_detail" id="inline_br_radio11" type="radio" value="1">
+                                                    <label class="form-check-label" for="inline_br_radio11">Yes</label>
+                                                </div>
+                                                <div class="form-check form-check-inline mr-1">
+                                                    <input class="form-check-input" name="clinic_br_detail" id="inline_br_radio22" type="radio" value="0" >
+                                                    <label class="form-check-label" for="inline_br_radio22">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
 
                         </div>
                     </form>
@@ -655,7 +687,7 @@ $(function()
         @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
             joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
         @endforeach
-                        
+
         var content = '<div id="edu_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="education">Additional Qualification</label><select name="additional_qualification_'+row+'" class="form-control">'+desigOptions+'</select></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+row+'">Branch of Medicine</label><input type="text" name="add_prof_branch_'+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_college_'+row+'">College</label><input type="text" name="add_prof_college_'+row+'" class="form-control"></div></div>';
@@ -727,8 +759,8 @@ form.children("div").steps({
     onStepChanging: function (event, currentIndex, newIndex)
     {
         form.validate().settings.ignore = ":disabled,:hidden";
-        // return form.valid();
-        return true;//form.valid();
+        return form.valid();
+        // return true;//form.valid();
     },
     onFinishing: function (event, currentIndex)
     {

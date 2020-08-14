@@ -75,7 +75,10 @@ class PhysicianController extends Controller
 
                     $actions .= '<a title="Edit" href="' . route('admin.physician.edit', $row->id) . '" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     $actions .= '<a href="' . route('admin.physician.clinics.index', ['physician' => $row->id]) . '" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
-                    $actions .= ' <a title="View Branches" href="' . route('admin.physician.branches.index', ['physician' => $row->id]) . '" class="btn btn-outline-dark"><i class="fa fa-fw fa-plus-square"></i></a>';
+                    if($row->physicianProfile->has_branches==1)
+                    {
+                        $actions .= ' <a title="View Branches" href="' . route('admin.physician.branches.index', ['physician' => $row->id]) . '" class="btn btn-outline-dark"><i class="fa fa-fw fa-bank"></i></a>';
+                    }
                     $actions .= ' <a title="Delete" href="javascript:void(0);" data-rowurl="' . route('admin.physician.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
                     return $actions;
@@ -164,7 +167,7 @@ class PhysicianController extends Controller
             'landline' => trim($request->landno) != '' ? $request->landno : null,
             'address' => trim($request->address),
             'about_me' => trim($request->about_me),
-            'has_branches' => 0, //trim($request->about_me),
+            'has_branches' => trim($request->clinic_br_detail),
             'map_image' => $locationMap, //trim($request->about_me),
             //'qr_code' => ''//trim($request->about_me),
             'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),
@@ -349,7 +352,7 @@ class PhysicianController extends Controller
             'landline' => trim($request->landno) != '' ? $request->landno : null,
             'address' => trim($request->address),
             'about_me' => trim($request->about_me),
-            'has_branches' => 0, //trim($request->about_me),
+            'has_branches' => trim($request->clinic_br_detail),
             'map_image' => $locationMap,
             //'qr_code' => ''//trim($request->about_me),
             'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),

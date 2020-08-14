@@ -92,6 +92,7 @@ class PhyConsultantsController extends Controller
      */
     public function store(Request $request)
     {
+
         $clinicData = PhysicianClinicModel::find($request->clinic);
 
         //Consultant Creation
@@ -118,16 +119,19 @@ class PhyConsultantsController extends Controller
             ];
             if (trim($request->input('cons_day_' . $dayKey)) != '') {
                 if (trim($request->input('cli_cons_' . $dayKey . '_mst')) != '' && trim($request->input('cli_cons_' . $dayKey . '_med')) != '') {
-                    $cliConsWorkDay['morning_session_time'] = date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_mst') . ' ' . $request->input('cli_cons_' . $dayKey . '_mst_ap'))));
-                    $cliConsWorkDay['morning_session_time'] .= '-' . date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_med') . ' ' . $request->input('cli_cons_' . $dayKey . '_med_ap'))));
+                    $cliConsWorkDay['morning_session_time'] = $request->input('cli_cons_' . $dayKey . '_mst');
+                    $cliConsWorkDay['morning_session_time'] .= '-' . $request->input('cli_cons_' . $dayKey . '_med');
                 }
 
                 if (trim($request->input('cli_cons_' . $dayKey . '_nst')) != '' && trim($request->input('cli_cons_' . $dayKey . '_ned')) != '') {
-                    $cliConsWorkDay['evening_session_time'] = date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_nst') . ' ' . $request->input('cli_cons_' . $dayKey . '_nst_ap'))));
-                    $cliConsWorkDay['evening_session_time'] .= '-' . date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_ned') . ' ' . $request->input('cli_cons_' . $dayKey . '_ned_ap'))));
+                    $cliConsWorkDay['evening_session_time'] = $request->input('cli_cons_' . $dayKey . '_nst');
+                    $cliConsWorkDay['evening_session_time'] .= '-' . $request->input('cli_cons_' . $dayKey . '_ned');
                 }
 
-                PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+                if (trim($cliConsWorkDay['morning_session_time']) != '' || trim($cliConsWorkDay['evening_session_time']) != '') {
+                    PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+                }
+
             }
         }
 
@@ -136,9 +140,12 @@ class PhyConsultantsController extends Controller
             'message' => 'Successfully consultant has been created.',
         ];
 
-        $request->session()->flash('flashData', $this->flashData);
+        // $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->route('admin.physician.consultants.index', ['clinic' => $request->clinic, 'physician' => $clinicData->user_id]);
+        return response()->json([
+            'status' => 1,
+            'message' => 'Successfully consultant has been created.',
+        ]);
     }
 
     /**
@@ -149,7 +156,12 @@ class PhyConsultantsController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = PhysicianClinicConsultsModel::find($id);
+
+        return response()->json([
+            'data' => $data,
+            'times' => $data->workingDays()->get(),
+        ]);
     }
 
     /**
@@ -175,13 +187,9 @@ class PhyConsultantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        print_r($request->all());
 
         $data = PhysicianClinicConsultsModel::find($id);
 
-        // echo $data->user_id;
-        // echo $data->clinic_id;
-        //Consultant Creation
         PhysicianClinicConsultsModel::where([
             ['id', '=', $id],
         ])->update([
@@ -192,13 +200,13 @@ class PhyConsultantsController extends Controller
             'others' => trim($request->cli_cons_wrk_others),
         ]);
 
-        //Clinic consult times
         PhysicianClinicConsultsTimesModel::where([
             ['consulting_id', '=', $id],
             ['status', '!=', '2'],
         ])->update([
             'status' => '2',
         ]);
+
         foreach ($this->weekDays as $dayKey => $day) {
             $cliConsWorkDay = [
                 'user_id' => $data->user_id,
@@ -210,16 +218,18 @@ class PhyConsultantsController extends Controller
             ];
             if (trim($request->input('cons_day_' . $dayKey)) != '') {
                 if (trim($request->input('cli_cons_' . $dayKey . '_mst')) != '' && trim($request->input('cli_cons_' . $dayKey . '_med')) != '') {
-                    $cliConsWorkDay['morning_session_time'] = date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_mst') . ' ' . $request->input('cli_cons_' . $dayKey . '_mst_ap'))));
-                    $cliConsWorkDay['morning_session_time'] .= '-' . date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_med') . ' ' . $request->input('cli_cons_' . $dayKey . '_med_ap'))));
+                    $cliConsWorkDay['morning_session_time'] = $request->input('cli_cons_' . $dayKey . '_mst');
+                    $cliConsWorkDay['morning_session_time'] .= '-' . $request->input('cli_cons_' . $dayKey . '_med');
                 }
 
                 if (trim($request->input('cli_cons_' . $dayKey . '_nst')) != '' && trim($request->input('cli_cons_' . $dayKey . '_ned')) != '') {
-                    $cliConsWorkDay['evening_session_time'] = date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_nst') . ' ' . $request->input('cli_cons_' . $dayKey . '_nst_ap'))));
-                    $cliConsWorkDay['evening_session_time'] .= '-' . date('H:i:s', strtotime(trim($request->input('cli_cons_' . $dayKey . '_ned') . ' ' . $request->input('cli_cons_' . $dayKey . '_ned_ap'))));
+                    $cliConsWorkDay['evening_session_time'] = $request->input('cli_cons_' . $dayKey . '_nst');
+                    $cliConsWorkDay['evening_session_time'] .= '-' . $request->input('cli_cons_' . $dayKey . '_ned');
                 }
 
-                PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+                if (trim($cliConsWorkDay['morning_session_time']) != '' || trim($cliConsWorkDay['evening_session_time']) != '') {
+                    PhysicianClinicConsultsTimesModel::create($cliConsWorkDay);
+                }
             }
         }
 
@@ -228,9 +238,12 @@ class PhyConsultantsController extends Controller
             'message' => 'Successfully consultant detail has been updated.',
         ];
 
-        $request->session()->flash('flashData', $this->flashData);
+        // $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->back();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Successfully consultant detail has been updated.',
+        ]);
 
     }
 

@@ -10,7 +10,7 @@ class PhysicianClinicModel extends Model
 
     protected $fillable = [
         'clinic_type','user_id', 'name', 'address', 'district', 'state', 'country', 'pincode', 'landmark', 'mobile_no', 'landline',
-        'email_address', 'website', 'map_image', 'status', 'description'
+        'email_address', 'website', 'map_image', 'status', 'description', 'other_description'
     ];
 
     public function user()
@@ -21,6 +21,13 @@ class PhysicianClinicModel extends Model
     public function workingDays()
     {
         return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where('status','1');
+    }
+
+    public function consultants()
+    {
+        return $this->hasMany(PhysicianClinicConsultsModel::class,'clinic_id')->where([
+            ['status','!=','2']
+        ]);
     }
     
 }

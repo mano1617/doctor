@@ -94,6 +94,13 @@
         {
             $("body").on("click", ".changeStatus", function(e)
             {
+
+                var altBtnId = $(this).data('id');
+                if(altBtnId)
+                {
+                    var btnId = $(this).attr('id');
+                }
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You want to change the this!",
@@ -112,11 +119,15 @@
                         '',
                         'success'
                         ).then(()=>{
-                                        window.location.reload();
+                            if(altBtnId)
+                            {
+                                $('body a#'+btnId).hide();
+                                $('body a#'+altBtnId).show();
+                            }else{
+                                window.location.reload();
+                            }
                         })
                                     },'JSON');
-
-                        
                     }
             });
 
@@ -124,6 +135,8 @@
 
         $("body").on("click", ".removeRow", function(e)
             {
+                var clinicId = $(this).data('clinic');
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -134,7 +147,6 @@
                     confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                     if (result.value) {
-
                             
                         $.get($(this).data("rowurl"), function(result)
                                     {
@@ -143,7 +155,13 @@
                         '',
                         'success'
                         ).then(()=>{
-                                        window.location.reload();
+
+                            if(clinicId)
+                            {
+                                $('body #viewConsult_btn_'+clinicId).trigger('click');
+                            }else{
+                                window.location.reload();
+                            }
                         })
                                     },'JSON');
                                             

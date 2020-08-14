@@ -101,7 +101,7 @@ $(function() {
         serverSide: true,
         ajax: "{{ route('admin.mstr.branch_medicine.index') }}",
         columns: [
-                { data: 'id', name: 'id' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'name', name: 'name' },
                 { data: 'actions', name: 'actions' }
             ]

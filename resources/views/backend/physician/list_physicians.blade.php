@@ -44,7 +44,7 @@ $(function() {
         serverSide: true,
         ajax: "{{ route('admin.physician.index') }}",
         columns: [
-                { data: 'id', name: 'id' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'first_name', name: 'first_name' },
                 { data: 'gender', name: 'gender' },
                 { data: 'photo', name: 'photo' },
