@@ -72,9 +72,34 @@ class PhysicianController extends Controller
 
                         $actions = '<a href="javascript:void(0);" title="Unlock" class="btn btn-outline-success changeStatus" data-rowurl="' . route('admin.physician.updateStatus', [$row->id, 1]) . '" data-row="' . $row->id . '"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
                     }
+                    $filtered = [];
+                    $edu = $row->physicianeducation()->get();
+                    if(count($edu)>0)
+                    {
+                        $filtered = $edu->filter(function ($value, $key) {
+                            return trim(strtolower($value['branch_of_medicine'])) == 'homoeopathy';
+                        });
+                    }
 
-                    $actions .= '<a title="Edit" href="' . route('admin.physician.edit', $row->id) . '" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    $actions .= '<a href="' . route('admin.physician.clinics.index', ['physician' => $row->id]) . '" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
+                    $profFiltered = [];
+                    $prof = $row->physicianProfession()->get();
+                    if(count($prof)>0)
+                    {
+                        $profFiltered = $prof->filter(function ($value, $key) {
+                            if(trim($value['sector']) == '1' && trim($value['clinic_type']) == '1')
+                            {
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        });
+                    }
+
+                    $actions .= ' <a title="Edit" href="' . route('admin.physician.edit', $row->id) . '" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
+                    if(count($filtered)>0 && count($profFiltered)>0)
+                    {
+                        $actions .= ' <a href="' . route('admin.physician.clinics.index', ['physician' => $row->id]) . '" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
+                    }
                     if($row->physicianProfile->has_branches==1)
                     {
                         $actions .= ' <a title="View Branches" href="' . route('admin.physician.branches.index', ['physician' => $row->id]) . '" class="btn btn-outline-dark"><i class="fa fa-fw fa-bank"></i></a>';
@@ -188,11 +213,11 @@ class PhysicianController extends Controller
         //Add Additional Education
         for ($i = 1; $i <= trim($request->edu_rows); $i++) {
             if ($request->has('additional_qualification_' . $i)) {
-                PhysicianAdditionalEduModel::create([
+                PhysicianEduModel::create([
                     'user_id' => $user->id,
+                    'branch_of_medicine' => trim($request->input('add_prof_branch_' . $i)),
                     'professional_qualification' => trim($request->input('additional_qualification_' . $i)),
-                    'branch' => trim($request->input('add_prof_branch_' . $i)),
-                    'college' => trim($request->input('add_prof_college_' . $i)),
+                    'college_name' => trim($request->input('add_prof_college_' . $i)),
                     'join_year' => trim($request->input('add_prof_joinyear_' . $i)),
                     'place' => trim($request->input('add_prof_place_' . $i)),
                 ]);
@@ -358,47 +383,37 @@ class PhysicianController extends Controller
             'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),
         ]);
 
-        //Edu Update
-        $edus = PhysicianEduModel::where('user_id', $id)->get();
-        if (count($edus) > 0) {
-            PhysicianEduModel::where([
-                ['user_id', '=', $id],
-                ['id', '=', $edus[0]->id],
-            ])->update([
-                'branch_of_medicine' => trim($request->input('branch_of_medicine_1')),
-                'registration_no' => trim($request->input('registration_no_1')),
-                'medical_council' => trim($request->input('medical_council_1')),
-                'professional_qualification' => trim($request->input('professional_qualification_1')),
-                'college_name' => trim($request->input('prof_college_1')),
-                'join_year' => trim($request->input('prof_joinyear_1')),
-                'place' => trim($request->input('prof_place_1')),
-            ]);
-
-        } else {
-            PhysicianEduModel::create([
-                'user_id' => $id,
-                'branch_of_medicine' => trim($request->input('branch_of_medicine_1')),
-                'registration_no' => trim($request->input('registration_no_1')),
-                'medical_council' => trim($request->input('medical_council_1')),
-                'professional_qualification' => trim($request->input('professional_qualification_1')),
-                'college_name' => trim($request->input('prof_college_1')),
-                'join_year' => trim($request->input('prof_joinyear_1')),
-                'place' => trim($request->input('prof_place_1')),
-            ]);
-        }
-
         //Delete additional edu
-        PhysicianAdditionalEduModel::where('user_id', $id)->delete();
+        PhysicianEduModel::where('user_id', $id)->delete();
+        PhysicianEduModel::create([
+            'user_id' => $id,
+            'branch_of_medicine' => trim($request->input('branch_of_medicine_1')),
+            'registration_no' => trim($request->input('registration_no_1')),
+            'medical_council' => trim($request->input('medical_council_1')),
+            'professional_qualification' => trim($request->input('professional_qualification_1')),
+            'college_name' => trim($request->input('prof_college_1')),
+            'join_year' => trim($request->input('prof_joinyear_1')),
+            'place' => trim($request->input('prof_place_1')),
+        ]);
+
         for ($i = 1; $i <= trim($request->edu_rows); $i++) {
             if ($request->has('additional_qualification_' . $i)) {
-                PhysicianAdditionalEduModel::create([
+                PhysicianEduModel::create([
                     'user_id' => $id,
+                    'branch_of_medicine' => trim($request->input('add_prof_branch_' . $i)),
                     'professional_qualification' => trim($request->input('additional_qualification_' . $i)),
-                    'branch' => trim($request->input('add_prof_branch_' . $i)),
-                    'college' => trim($request->input('add_prof_college_' . $i)),
+                    'college_name' => trim($request->input('add_prof_college_' . $i)),
                     'join_year' => trim($request->input('add_prof_joinyear_' . $i)),
                     'place' => trim($request->input('add_prof_place_' . $i)),
                 ]);
+                // PhysicianAdditionalEduModel::create([
+                //     'user_id' => $id,
+                //     'professional_qualification' => trim($request->input('additional_qualification_' . $i)),
+                //     'branch' => trim($request->input('add_prof_branch_' . $i)),
+                //     'college' => trim($request->input('add_prof_college_' . $i)),
+                //     'join_year' => trim($request->input('add_prof_joinyear_' . $i)),
+                //     'place' => trim($request->input('add_prof_place_' . $i)),
+                // ]);
             }
         }
 
