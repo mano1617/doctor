@@ -220,9 +220,8 @@
                                 <br>
                             @php
                                 $educations = $userData->physicianEducation()->get();
-                                $addEducations = $userData->physicianAdditionalEducation()->activeOnly();
                             @endphp
-                            <input type="hidden" name="edu_rows" value="1">
+                            <input type="hidden" name="edu_rows" value="{{ (count($educations) == 0 ? 1 : count($educations)-1) }}">
                             <div id="eduDiv">
                             @if(count($educations))
                             <div class="row">
@@ -342,8 +341,12 @@
                             </div>
                             @endif
                                     
-                            @if(count($addEducations))
-                                @foreach($addEducations as $adk => $addEdu)
+                            @if(count($educations)>1)
+                                @php
+                                    $educations = $educations->forget(0);
+                                    $educations = $educations->values();
+                                @endphp
+                                @foreach($educations as $adk => $addEdu)
                                 <hr>
                                 <div id="edu_row_{{ $adk+1 }}">
                                     <div class="row" >                                
@@ -361,13 +364,13 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="add_prof_branch_{{ $adk+1 }}">Branch of Medicine</label>
-                                                <input type="text" value="{{$addEdu['branch']}}" name="add_prof_branch_{{ $adk+1 }}" class="form-control">
+                                                <input type="text" value="{{$addEdu['branch_of_medicine']}}" name="add_prof_branch_{{ $adk+1 }}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="add_prof_college_{{ $adk+1 }}">College</label>
-                                                <input type="text" value="{{$addEdu['college']}}" name="add_prof_college_{{ $adk+1 }}" class="form-control">
+                                                <input type="text" value="{{$addEdu['college_name']}}" name="add_prof_college_{{ $adk+1 }}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
@@ -587,7 +590,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">Since<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="prof_since_1" class="form-control since">
+                                        <input type="text" required name="prof_since_1" class="form-control monthYear">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -969,14 +972,16 @@ $(function()
             content+= '<div class="form-inline"><div class="form-group">&nbsp;&nbsp;<label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<select name="prof_desig_'+row+'" required class="form-control">'+desigOptions+'</select>';
             content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control">';
             content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" required name="prof_palce_'+row+'" class="form-control">';
-            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" data-rule-digits="true" required name="prof_since_'+row+'" class="form-control">';
+            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" required name="prof_since_'+row+'" class="form-control monthYear">';
             content+= '</div></div><div class="row"><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
 
         $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);
 
         $("input[name='prof_since_"+row+"']").datepicker({
-            format : 'dd-mm-yyyy',
+            format: "mm-yyyy",
+            viewMode: "months",
+            minViewMode: "months",
             autoclose : true,
             endDate: '+0d',
         });
