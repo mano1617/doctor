@@ -43,6 +43,11 @@ class CreateLmrPhysicianClinicTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        Schema::table('lmr_physician_clinic', function ($table) {
+            $table->dropForeign('lmr_physician_clinic_user_id_foreign');
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('lmr_physician_clinic');
     }
 }

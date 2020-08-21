@@ -7,6 +7,7 @@ use App\Models\Auth\User;
 use App\Models\CountryModel;
 use App\Models\Physician\PhysicianClinicModel;
 use App\Models\Physician\PhysicianClinicTimesModel;
+use App\Models\Physician\PhysicianClinicConsultsModel;
 use App\Models\StateModel;
 use DataTables;
 use Illuminate\Http\Request;
@@ -309,9 +310,23 @@ class PhyClinicsController extends Controller
 
     public function listConsultants(Request $request)
     {
+         $selfConsult = PhysicianClinicConsultsModel::where([
+            ['clinic_id','=',$request->clinicId],
+            ['self_register','=','1'],
+            ['status','!=','2']
+        ])->count();
+
+        $clinicData = PhysicianClinicModel::find($request->clinicId);
+
         return response()->json([
+            'clinicData' => $selfConsult > 0 ? [] : [
+                'id' => $clinicData->user->id,
+                'name' => trim($clinicData->user->first_name.' '.$clinicData->user->last_name),
+                'mobile' => $clinicData->user->physicianProfile->mobile_no,
+                'email' => $clinicData->user->email
+            ],
             'html' => view('backend.physician.list_physician_consultants', [
-                'data' => PhysicianClinicModel::find($request->clinicId),
+                'data' => $clinicData,
             ])->render(),
         ]);
     }

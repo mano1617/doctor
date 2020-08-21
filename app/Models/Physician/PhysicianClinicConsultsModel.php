@@ -9,7 +9,7 @@ class PhysicianClinicConsultsModel extends Model
     protected $table = "lmr_phys_clinic_consulting";
 
     protected $fillable = [
-        'user_id', 'clinic_id', 'name', 'speciality', 'email_address', 'mobile_no', 'monthly_visit', 'others', 'description','status'
+        'user_id', 'clinic_id', 'self_register', 'name', 'speciality', 'email_address', 'mobile_no', 'monthly_visit', 'others', 'description','status'
     ];
 
     public function user()

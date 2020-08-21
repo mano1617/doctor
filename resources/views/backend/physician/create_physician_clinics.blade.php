@@ -208,7 +208,6 @@
                                 </div>
                             </div>
                             </div>
-                            <hr />
                 </div><!--card-body-->
     <div class="card-footer" align="right">
         <button type="submit" class="btn btn-success submit">Submit</button>
