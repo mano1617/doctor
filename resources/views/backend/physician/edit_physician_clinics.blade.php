@@ -105,8 +105,8 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="landno">Landline Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" value="{{$data->landline}}" required data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
+                                        <label for="landno">Landline Number</label>
+                                        <input type="text" value="{{$data->landline}}" data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
                                     </div>
                                 </div>                                                    
                             </div>
@@ -231,7 +231,6 @@
                                 </div>
                             </div>
                             </div>
-                            <hr />
                 </div><!--card-body-->
     <div class="card-footer" align="right">
         <button type="submit" class="btn btn-success submit">Submit</button>

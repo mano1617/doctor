@@ -173,11 +173,14 @@
                     {{csrf_field()}}
                         <div class="modal-body">
                             <input type="hidden" name="clinic">
+                            <input type="hidden" name="clinic_user">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Name<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_cons_doc_name" class="form-control">
+                                        <select name="add_self_reg" id="add_self_reg" class="form-control"></select>
+                                        <input type="text" style="display:none;" name="cli_cons_doc_name" id="add_cli_cons_doc_name" class="form-control">
+                                        <a style="display:none;" href="javascript:void(0);" title="Clear" id="clearPhyData" class="text-danger"><i class="fa fa-arrow-left"></i>Go Back</a>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -301,6 +304,38 @@ $(function() {
             ]
     });
 
+    $("select[name='add_self_reg']").on("change",function(e)
+    {
+        var dataSelf = $(this).find(':selected').data('self');
+
+        if(dataSelf==2)
+        {
+            $("input[name='clinic_user']").val('');
+            $("#clearPhyData").show();
+            $(this).val($(this).find("option:first").val());
+            $(this).removeAttr('required').hide();
+            $("#add_cli_cons_doc_name").show().attr('required',true);
+            $("input[name='cli_cons_doc_email'], input[name='cli_cons_doc_mobile']").val('');
+
+        }else{
+            $("#clearPhyData").hide();
+            $("input[name='clinic_user']").val($(this).val());
+            $("input[name='cli_cons_doc_email']").val($(this).data('email'));
+            $("input[name='cli_cons_doc_mobile']").val($(this).data('mobile'));
+            $("#add_cli_cons_doc_name").val().removeAttr('required').hide();
+        }
+    });
+
+    $("#clearPhyData").on("click", function(e)
+    {
+        $(this).hide();
+        $("#add_cli_cons_doc_name").val('').removeAttr('required').hide();
+        $("#add_self_reg").attr("required",true).show();
+        $("input[name='clinic_user']").val('');
+        $("input[name='cli_cons_doc_email'], input[name='cli_cons_doc_mobile']").val('');
+
+    });
+
     $("body").on('click', '#addConsults', function(e)
     {
         $("#add_consults").modal("show");
@@ -359,7 +394,7 @@ $(function() {
     {
         $("input[name='clinic']").val($(this).data('rowid'));
         $.ajax({
-            method : 'post',
+            type : 'post',
             url : "{{ route('admin.physician.clinics.listConsultants') }}",
             data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}'},
             dataType:'json',
@@ -369,6 +404,24 @@ $(function() {
             },
             success:function(result)
             {
+                if(Object.keys(result.clinicData).length>0)
+                {
+                    var selfContent  = '<option value="">--select--</option>';
+                        selfContent += '<option value="'+result.clinicData.id+'" data-self="1">'+result.clinicData.name+'</option>'
+                        selfContent += '<option value="new" data-self="2">New</option>'
+                    $("#add_self_reg").show().html(selfContent);
+
+                    $("#add_self_reg").attr("required",true);
+                    $("#add_self_reg").attr("data-mobile",result.clinicData.mobile);
+                    $("#add_self_reg").attr("data-email",result.clinicData.email);
+                    $("#add_cli_cons_doc_name").removeAttr('required').val('').hide();
+
+                }else{
+                    $("#clearPhyData").hide();
+                    $("#add_self_reg").removeAttr('required').html('').hide();
+                    $("#add_cli_cons_doc_name").attr('required',true).show();
+                }
+                
                 $("#consultantContainer").html(result.html);
             },
         });

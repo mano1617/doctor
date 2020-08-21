@@ -92,14 +92,14 @@ class PhyConsultantsController extends Controller
      */
     public function store(Request $request)
     {
-
         $clinicData = PhysicianClinicModel::find($request->clinic);
 
         //Consultant Creation
         $consultant = PhysicianClinicConsultsModel::create([
+            'self_register' => trim($request->clinic_user)!='' ? '1' : '0',
             'user_id' => $clinicData->user_id,
             'clinic_id' => $request->clinic,
-            'name' => trim($request->cli_cons_doc_name),
+            'name' => trim($request->clinic_user)!='' ? $clinicData->user->fullname  : trim($request->cli_cons_doc_name),
             'speciality' => trim($request->cli_cons_doc_spec),
             'email_address' => trim($request->cli_cons_doc_email),
             'mobile_no' => trim($request->cli_cons_doc_mobile),
