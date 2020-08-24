@@ -148,6 +148,14 @@
                                 Memberships
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/physician/gallery'))
+                        }}" href="{{ route('admin.physician.gallery.index') }}">
+                                Gallery
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 

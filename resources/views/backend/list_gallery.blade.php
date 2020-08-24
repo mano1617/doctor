@@ -10,7 +10,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Professional Qualifications List</strong>
+                    <strong>Gallery List</strong>
                     <a href="#create_desig" data-toggle="modal" class="btn btn-outline-success float-right"><i class="fa fa-fw fa-plus"></i>CREATE</a>
                 </div><!--card-header-->
                 <div class="card-body">
@@ -20,7 +20,7 @@
                                 <thead>
                                     <tr>
                                         <th width="5%">#</th>
-                                        <th>NAME</th>
+                                        <th>TITLE</th>
                                         <th>ACTIONS</th>
                                     </tr>
                                 </thead>
@@ -36,18 +36,26 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Create New Professional Qualification</h4>
+                    <h4 class="modal-title">Create New Gallery</h4>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
-                <form method="post" action="{{ route('admin.mstr.branch_medicine.store') }}" id="add_desg">
+                <form method="post" action="{{ route('admin.physician.gallery.store') }}" id="add_desg" enctype="multipart/form-data">
                     {{csrf_field()}}
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" id="add_memb_name" name="memb_name" placeholder="Enter membership name" class="form-control">
+                                    <label for="name">TITLE</label>
+                                    <input type="text" id="add_memb_name" name="title" placeholder="Enter image name" class="form-control">
                                     <input type="hidden" name="memb_id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Upload Image</label>
+                                    <input type="file" id="" name="image" placeholder="upload image" class="form-control">                                    
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Description</label>                                    
+                                    <textarea name="description" rows="4" cols="50" placeholder="Enter Description" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +73,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Update Professional Qualification</h4>
+                    <h4 class="modal-title">Update Gallery</h4>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <form method="post" action="" id="edit_desg">
@@ -75,8 +83,8 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" name="memb_name" id="memb_name" placeholder="Enter membership name" class="form-control">
+                                    <label for="name">TITLE</label>
+                                    <input type="text" name="title" id="title" placeholder="Enter membership name" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -115,9 +123,9 @@ $(function() {
             dataType : 'JSON',
             success: function(result)
             {
-                $("#edit_desg").attr('action',"{{ route('admin.mstr.branch_medicine.index') }}/"+result['data']['id']);
+                $("#edit_desg").attr('action',"{{ route('admin.physician.gallery.index') }}/"+result['data']['id']);
                 $("input[name='memb_id']").val(result['data']['id']);
-                $("#memb_name").val(result['data']['name']);
+                $("#memb_name").val(result['data']['title']);
                 $("#edit_desig").modal("show");
             }
         });

@@ -23,6 +23,7 @@ class GalleryController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
             $users = GalleryModel::select(['id', 'title','file_path','file_path','sorting', 'status'])
                 ->bothInActive();
@@ -69,7 +70,33 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->hasFile('image')) {
+            $destinationPath = 'img/';
+            $files = $request->file('image'); // will get all files                   
+            $file_name = $files->getClientOriginalName(); //Get file original name
+            $files->move($destinationPath , $file_name); // move files to destination folder
+            $ext = $files->getClientOriginalExtension();
+            
+        }
+
+        $createClinic = GalleryModel::create([
+            'title' => trim($request->title),
+            'user_id' => 1,
+            'clinic_id' => 1,
+            'file_path' =>  $file_name,
+            'file_type' => $ext,
+            'description' => $request->description,
+            'sorting' => '1'
+        ]);
+
+        $this->flashData = [
+            'status' => 1,
+            'message' => 'Successfully data has been created.',
+        ];
+
+        $request->session()->flash('flashData', $this->flashData);
+
+        return redirect()->route('admin.physician.gallery.index');
     }
 
     /**
