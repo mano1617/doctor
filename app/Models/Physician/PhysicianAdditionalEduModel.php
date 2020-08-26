@@ -9,7 +9,7 @@ class PhysicianAdditionalEduModel extends Model
     protected $table = "lmr_physician_add_edu";
 
     protected $fillable = [
-        'user_id' ,'professional_qualification', 'branch', 'college', 'join_year', 'place'
+        'user_id' ,'professional_qualification', 'parent_edu_id', 'branch', 'college', 'join_year', 'place'
     ];
 
     public function user()
