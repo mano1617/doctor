@@ -21,7 +21,12 @@ class PhysicianEduModel extends Model
 
     public function professional()
     {
-        return $this->belongsTo(DesignationMasterModel::class,'professional_qualification');
+        return $this->belongsTo(DesignationMasterModel::class, 'professional_qualification');
+    }
+    
+    public function additionalEdu()
+    {
+        return $this->hasMany(PhysicianAdditionalEduModel::class, 'parent_edu_id');
     }
     
 }
