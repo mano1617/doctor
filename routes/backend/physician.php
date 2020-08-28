@@ -41,7 +41,6 @@ Route::group(['prefix' => 'users'],function()
         'update' => 'physician.consultants.update',
     ]);
     Route::get('consultants/update/status/{userId}/{statusCode}','PhyConsultantsController@updateStatus')->name('physician.consultants.updateStatus');
-
     Route::resource('gallery', 'GalleryController')->names([
         'index' => 'physician.gallery.index',        
         'store' => 'physician.gallery.store',
