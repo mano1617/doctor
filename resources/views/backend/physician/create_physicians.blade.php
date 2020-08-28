@@ -741,7 +741,7 @@ form.validate({
     },
 });
 form.children("div").steps({
-    startIndex: 1,
+    startIndex: 0,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
