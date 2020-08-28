@@ -96,14 +96,14 @@
                             Clinics
                     </a>
                 </li>
-                
+
                 <li class="nav-item nav-dropdown {{
                     active_class(Route::is('admin/physicians*'), 'open')
                 }}">
                         <a class="nav-link nav-dropdown-toggle {{
                             active_class(Route::is('admin/physicians*'))
                         }}" href="#">
-                        <i class="nav-icon fas fa-users"></i>Users 
+                        <i class="nav-icon fas fa-users"></i>Users
                     </a>
 
                     <ul class="nav-dropdown-items">
@@ -123,7 +123,7 @@
                         <a class="nav-link nav-dropdown-toggle {{
                             active_class(Route::is('admin/master*'))
                         }}" href="#">
-                        <i class="nav-icon fas fa-cogs"></i>Master Pages 
+                        <i class="nav-icon fas fa-cogs"></i>Master Pages
                     </a>
 
                     <ul class="nav-dropdown-items">
@@ -148,14 +148,6 @@
                                 Memberships
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{
-                            active_class(Route::is('admin/physician/gallery'))
-                        }}" href="{{ route('admin.physician.gallery.index') }}">
-                                Gallery
-                            </a>
-                        </li>
-
                     </ul>
                 </li>
 
