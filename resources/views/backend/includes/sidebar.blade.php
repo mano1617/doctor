@@ -114,6 +114,13 @@
                                 Physicians
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/physicians'))
+                        }}" href="{{ route('admin.medical-student.index') }}">
+                                Medical Student
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

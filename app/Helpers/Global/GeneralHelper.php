@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('app_name')) {
+if (!function_exists('app_name')) {
     /**
      * Helper to grab the application name.
      *
@@ -12,7 +12,19 @@ if (! function_exists('app_name')) {
     }
 }
 
-if (! function_exists('gravatar')) {
+if (!function_exists('randomString')) {
+    /**
+     * Access the gravatar helper.
+     */
+    function randomString($limit = 6)
+    {
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+
+        return substr(str_shuffle($permitted_chars), 0, $limit);
+    }
+}
+
+if (!function_exists('gravatar')) {
     /**
      * Access the gravatar helper.
      */
