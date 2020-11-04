@@ -397,8 +397,8 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Mention(Years)<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="exp_homoeo_1" class="form-control">
+                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="exp_homoeo_1" placeholder="Mention in years" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -655,8 +655,8 @@ $(function()
             content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text" readOnly required style="background-color:white" name="exp_fryr_'+row+'" class="form-control">';
             content +='</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
             content +='<input type="text" readOnly required style="background-color:white" name="exp_toyr_'+row+'" class="form-control monthYear"></div></div></div>';
-            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Mention(Years)<sup class="text-danger">*</sup></label>';
-            content +='<input type="text" required name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
+            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';
+            content +='<input type="text" required placeholder="Mention in years" name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
 
         $("input[name='exp_rows']").val(row);
