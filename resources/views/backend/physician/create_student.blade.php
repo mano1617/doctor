@@ -191,7 +191,11 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="edu_branch_of_medicine_1">Branch of Medicine<sup class="text-danger">*</sup></label>
-                                            <input type="text" required name="edu_branch_of_medicine_1" class="form-control">
+                                            <select required name="edu_branch_of_medicine_1" class="form-control">
+                                                <option value="homoeopathy">Homoeopathy</option>
+                                                <option value="allopathy">Allopathy</option>
+                                                <option value="ayurveda">Ayurveda</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -332,8 +336,9 @@ $(function()
             content += '</div>';
 
             content += '<div class="row"><div class="col-sm-6"><div class="form-group"><label for="edu_branch_of_medicine_'+row+'">Branch of Medicine<sup class="text-danger">*</sup></label>';
-            content += '<input type="text" required name="edu_branch_of_medicine_'+row+'" class="form-control"></div></div>';
-            
+            content += '<select required name="edu_branch_of_medicine_'+row+'" class="form-control"><option value="homoeopathy">Homoeopathy</option><option value="allopathy">Allopathy</option>';
+            content += '<option value="ayurveda">Ayurveda</option></select></div></div>';
+
             content += '<div class="col-sm-6"><div class="form-group"><label for="edu_college_'+row+'">Name of College<sup class="text-danger">*</sup></label><input type="text" required name="edu_college_'+row+'" class="form-control">';
             content += '</div></div></div>';
 
@@ -503,7 +508,7 @@ form.validate({
     },
 });
 form.children("div").steps({
-    startIndex: 0,
+    startIndex: 2,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",

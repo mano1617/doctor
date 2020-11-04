@@ -149,8 +149,12 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="district" value="{{ $userData->physicianProfile->district }}" class="form-control">
+                                        <label for="district">City<sup class="text-danger">*</sup></label>
+                                        <select required name="district" class="form-control">
+                                            @foreach($cities as $ck)
+                                            <option @if($userData->physicianProfile->district==$ck->id) selected @endif value="{{ $ck->id }}">{{ $ck->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -161,13 +165,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="landmark">Landmark</label>
                                         <textarea name="landmark" class="form-control" >{{ $userData->physicianProfile->landmark }}</textarea>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <!-- <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="loc_image">Location Image</label><br>
                                         <input type="file" name="loc_image">
@@ -177,36 +181,35 @@
                                         <img src="{{ url('storage/app/location_images/'.$userData->physicianProfile->map_image) }}" width="65" height="65">
                                     </a>
                                     @endif
-                                </div>
+                                </div> -->
                                 @php
-                                    $latitude = $longitude = '';
+                                    /*$latitude = $longitude = '';
                                     if(trim($userData->physicianProfile->latitude_longitude)!='')
                                     {
                                         $latlong = explode('*', trim($userData->physicianProfile->latitude_longitude));
                                         $latitude = $latlong[0];
                                         $longitude = $latlong[1];
-                                    }
+                                    }*/
                                 @endphp
-                                <div class="col-sm-3">
+                                <!-- <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="latitude">Latitude</label><br>
-                                        <input type="text" value="{{ $latitude }}" class="form-control" name="latitude">
+                                        <input type="text" value="" class="form-control" name="latitude">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="longitude">Longitude</label><br>
-                                        <input type="text" value="{{ $longitude }}" class="form-control" name="longitude">
+                                        <input type="text" value="" class="form-control" name="longitude">
                                     </div>
-                                </div>
+                                </div> -->
                                 <!-- <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="qr_code_image">QR Code Image</label><br>
                                         <input type="file" name="qr_code_image">
                                     </div>
                                 </div>                         -->
-                            </div>
-                            <div class="row">
+                            
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="about_me">About Me<sup class="text-danger">*</sup></label>
@@ -368,7 +371,7 @@
                             <div id="mainRowCnt"></div>
 
                             </section>
-                            <h3>Profession</h3>
+                            <h3>Work</h3>
                             @php
                                 $professions = $userData->physicianProfession()->get();
                             @endphp
@@ -383,6 +386,7 @@
                                 @endphp
                                     <div id="prof_row_{{$ppk+1}}">
                             <div class="row">
+                            <div class="col-sm-12"><h5>Working as:</h5></div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="sector">Sector<sup class="text-danger">*</sup></label>
@@ -535,6 +539,7 @@
                                 @endphp
                                 <div id="exp_row_{{$pexk+1}}">
                                 <div class="row">
+                                <div class="col-sm-12"><h5>Worked as:</h5></div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="sector">Designation<sup class="text-danger">*</sup></label>
@@ -544,7 +549,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="prof_desig">Worked At<sup class="text-danger">*</sup></label>
-                                        <input type="text" value="{{$pExp['institution']}}" required name="exp_wrkat_{{$pexk+1}}" class="form-control">
+                                        <input type="text" value="{{$pExp['institution']}}" placeholder="Name of Institution/ Clinic/ Hospital/ etc." required name="exp_wrkat_{{$pexk+1}}" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -574,7 +579,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
+                                        <label for="sector">Mention(Years)<sup class="text-danger">*</sup></label>
                                         <input type="text" value="{{$pExp['homoeo_experience_years']}}" required name="exp_homoeo_{{$pexk+1}}" class="form-control">
                                     </div>
                                 </div>
@@ -592,6 +597,7 @@
                                 @endforeach
                             @else
 <div class="row">
+<div class="col-sm-12"><h5>Worked as:</h5></div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="sector">Designation<sup class="text-danger">*</sup></label>
@@ -601,7 +607,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="prof_desig">Worked At<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="exp_wrkat_1" class="form-control">
+                                        <input type="text" required name="exp_wrkat_1" placeholder="Name of Institution/ Clinic/ Hospital/ etc." class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -631,7 +637,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
+                                        <label for="sector">Mention(Years)<sup class="text-danger">*</sup></label>
                                         <input type="text" required name="exp_homoeo_1" class="form-control">
                                     </div>
                                 </div>
@@ -704,7 +710,7 @@
                             </div>
                             </section>
 
-                            <h3>Achievements</h3>
+                            <h3>Achievements / Designations</h3>
                             @php
                                 $achievementsEdit = $userData->physicianMembAchives()->where('record_type','achievement')->get();
                             @endphp
@@ -718,8 +724,7 @@
                                     <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="sector">About Achievment</label>
-                                            <textarea name="ach_{{$pahk+1}}" cols="30" rows="5" class="form-control">{{$pAch['description']}}</textarea>
+                                            <textarea name="ach_{{$pahk+1}}" placeholder="About Achievements / Designations" cols="30" rows="5" class="form-control">{{$pAch['description']}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -901,8 +906,8 @@ $(function()
     {
         var row = parseInt($("input[name='ach_rows']").val());
         row++;
-        var content = '<div id="ach_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">About Achievment</label>';
-            content+= '<textarea name="ach_'+row+'" cols="30" rows="5" class="form-control"></textarea></div></div>';
+        var content = '<div id="ach_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group">';
+            content+= '<textarea name="ach_'+row+'" cols="30" rows="5" placeholder="About Achievements / Designations" class="form-control"></textarea></div></div>';
             content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#ach_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
         $("input[name='ach_rows']").val(row);
         $("#achDiv").append(content);
@@ -937,7 +942,7 @@ $(function()
 
         var row = parseInt($("input[name='prof_rows']").val());
         row++;
-        var content = '<div id="prof_row_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="sector">Sector<sup class="text-danger">*</sup></label>';
+        var content = '<div id="prof_row_'+row+'"><div class="row"><div class="col-sm-12"><h5>Working as:</h5></div><div class="col-sm-3"><div class="form-group"><label for="sector">Sector<sup class="text-danger">*</sup></label>';
             content+= '<div class="col-form-label"><div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="sector_'+row+'" id="inline-radio1" type="radio" value="1">';
             content+= '<label class="form-check-label" for="inline-radio1">Private</label></div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="sector_'+row+'" id="inline-radio2" type="radio" value="2">';
             content+= '<label class="form-check-label" for="inline-radio2">Government</label></div></div></div></div>';
@@ -967,15 +972,15 @@ $(function()
     {
         var row = parseInt($("input[name='exp_rows']").val());
         row++;
-        var content = '<div id="exp_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Designation<sup class="text-danger">*</sup></label>';
+        var content = '<div id="exp_row_'+row+'"><div class="row"><div class="col-sm-12"><h5>Worked as:</h5></div><div class="col-sm-6"><div class="form-group"><label for="sector">Designation<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_desig_'+row+'" class="form-control"></div></div><div class="col-sm-6"><div class="form-group">';
-            content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" required name="exp_wrkat_'+row+'" class="form-control">';
+            content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" placeholder="Name of Institution/ Clinic/ Hospital/ etc." required name="exp_wrkat_'+row+'" class="form-control">';
             content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-2"><div class="form-group">';
             content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text" readOnly required style="background-color:white" name="exp_fryr_'+row+'" class="form-control">';
             content +='</div></div><div class="col-sm-2"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
             content +='<input type="text" readOnly required style="background-color:white" name="exp_toyr_'+row+'" class="form-control"></div></div></div>';
-            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';
+            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Mention(Years)<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
 

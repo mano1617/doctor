@@ -14,6 +14,7 @@ use App\Models\Physician\PhysicianMembershipModel;
 use App\Models\Physician\PhysicianProfessionModel;
 use App\Models\Physician\PhysicianAdditionalEduModel;
 use App\Models\Physician\PhysicianProfileModel;
+use App\Models\CityModel;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +48,7 @@ class PhysicianController extends Controller
                     return $row->first_name . ' ' . $row->last_name;
                 })
                 ->addColumn('gender', function ($row) {
-                    return ucwords($row->physicianEducation->registration_no);
+                    return $row->physicianEducation ? ucwords($row->physicianEducation->registration_no) : '';
                 })
                 ->addColumn('contact', function ($row) {
                     $contact = '<i class="fa fa-envelope fa-fw"></i>' . $row->email;
@@ -127,9 +128,10 @@ class PhysicianController extends Controller
             'saturday' => 'Saturday',
             'sunday' => 'Sunday',
         ];
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['designations'] = DesignationMasterModel::activeOnly();
         $pageData['brMedicines'] = MedicineMasterModel::activeOnly();
+        $pageData['cities'] = CityModel::activeOnly();
 
         return view('backend.physician.create_physicians', $pageData);
     }
@@ -163,12 +165,12 @@ class PhysicianController extends Controller
                 'avatars', $request->file('image'), $avatarName
             );
         }
-        if ($request->has('loc_image')) {
-            $locationMap = $user->id . '_' . time() . '.' . $request->file('loc_image')->extension();
-            Storage::putFileAs(
-                'location_images', $request->file('loc_image'), $locationMap
-            );
-        }
+        // if ($request->has('loc_image')) {
+        //     $locationMap = $user->id . '_' . time() . '.' . $request->file('loc_image')->extension();
+        //     Storage::putFileAs(
+        //         'location_images', $request->file('loc_image'), $locationMap
+        //     );
+        // }
 
         $data = $avatarName;
 
@@ -188,9 +190,9 @@ class PhysicianController extends Controller
             'address' => trim($request->address),
             'about_me' => trim($request->about_me),
             'has_branches' => trim($request->clinic_br_detail),
-            'map_image' => $locationMap, //trim($request->about_me),
+            //'map_image' => $locationMap, //trim($request->about_me),
             //'qr_code' => ''//trim($request->about_me),
-            'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),
+            // 'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),
         ]);
 
         //Add Education
@@ -313,6 +315,7 @@ class PhysicianController extends Controller
      */
     public function edit($id)
     {
+        $pageData['cities'] = CityModel::activeOnly();
         $pageData['brMedicines'] = MedicineMasterModel::activeOnly();
         $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
         $pageData['days'] = [
@@ -325,9 +328,9 @@ class PhysicianController extends Controller
             'sunday' => 'Sunday',
         ];
         $pageData['userData'] = User::find($id);
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['states'] = CountryModel::find($pageData['userData']->physicianProfile->country);
-        $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
+        $pageData['states'] = $pageData['states'] ? $pageData['states']->states()->where('id',19)->get() : [];
         $pageData['designations'] = DesignationMasterModel::activeOnly();
 
         return view('backend.physician.edit_physicians', $pageData);
@@ -352,7 +355,7 @@ class PhysicianController extends Controller
         //profile updation
         $getProfile = PhysicianProfileModel::where('user_id', $id)->first();
         $avatarName = $getProfile->avatar;
-        $locationMap = $getProfile->map_image;
+        //$locationMap = $getProfile->map_image;
 
         if ($request->has('image')) {
             $avatarName = $id . '_' . time() . '.' . $request->file('image')->extension();
@@ -362,12 +365,12 @@ class PhysicianController extends Controller
         }
         $data = $avatarName;
 
-        if ($request->has('loc_image')) {
-            $locationMap = $id . '_' . time() . '.' . $request->file('loc_image')->extension();
-            Storage::putFileAs(
-                'location_images', $request->file('loc_image'), $locationMap
-            );
-        }
+        // if ($request->has('loc_image')) {
+        //     $locationMap = $id . '_' . time() . '.' . $request->file('loc_image')->extension();
+        //     Storage::putFileAs(
+        //         'location_images', $request->file('loc_image'), $locationMap
+        //     );
+        // }
 
         PhysicianProfileModel::where('user_id', $id)->update([
             'avatar' => $avatarName,
@@ -384,9 +387,9 @@ class PhysicianController extends Controller
             'address' => trim($request->address),
             'about_me' => trim($request->about_me),
             'has_branches' => trim($request->clinic_br_detail),
-            'map_image' => $locationMap,
+            // 'map_image' => $locationMap,
             //'qr_code' => ''//trim($request->about_me),
-            'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),
+            //'latitude_longitude' => trim($request->latitude) . '*' . trim($request->longitude),
         ]);
 
         //Delete additional edu

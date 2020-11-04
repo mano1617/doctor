@@ -44,6 +44,9 @@
         ]
     ]);
 @endphp
+
+@include('backend.includes.alert')
+
     <div class="row">
         <div class="col">
             <div class="card">
@@ -227,7 +230,11 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="edu_branch_of_medicine_1">Branch of Medicine<sup class="text-danger">*</sup></label>
-                                            <input type="text" value="{{ count($educat) >0 ? $educat[0]['branch_of_medicine'] : '' }}" required name="edu_branch_of_medicine_1" class="form-control">
+                                            <select required name="edu_branch_of_medicine_1" class="form-control">
+                                                <option @if(count($educat)>0) @if($educat[0]['branch_of_medicine']=='homoeopathy') selected @endif @endif value="homoeopathy">Homoeopathy</option>
+                                                <option @if(count($educat)>0) @if($educat[0]['branch_of_medicine']=='allopathy') selected @endif @endif value="allopathy">Allopathy</option>
+                                                <option @if(count($educat)>0) @if($educat[0]['branch_of_medicine']=='ayurveda') selected @endif @endif value="ayurveda">Ayurveda</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -385,7 +392,11 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="edu_branch_of_medicine_{{ $ek+1 }}">Branch of Medicine<sup class="text-danger">*</sup></label>
-                                            <input type="text" value="{{ $value->branch_of_medicine }}" required name="edu_branch_of_medicine_{{ $ek+1 }}" class="form-control">
+                                            <select required name="edu_branch_of_medicine_{{ $ek+1 }}" class="form-control">
+                                                <option @if($value->branch_of_medicine=='homoeopathy') selected @endif value="homoeopathy">Homoeopathy</option>
+                                                <option @if($value->branch_of_medicine=='allopathy') selected @endif value="allopathy">Allopathy</option>
+                                                <option @if($value->branch_of_medicine=='ayurveda') selected @endif value="ayurveda">Ayurveda</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -572,7 +583,8 @@ $(function()
             content += '</div>';
 
             content += '<div class="row"><div class="col-sm-6"><div class="form-group"><label for="edu_branch_of_medicine_'+row+'">Branch of Medicine<sup class="text-danger">*</sup></label>';
-            content += '<input type="text" required name="edu_branch_of_medicine_'+row+'" class="form-control"></div></div>';
+            content += '<select required name="edu_branch_of_medicine_'+row+'" class="form-control"><option value="homoeopathy">Homoeopathy</option><option value="allopathy">Allopathy</option>';
+            content += '<option value="ayurveda">Ayurveda</option></select></div></div>';
 
             content += '<div class="col-sm-6"><div class="form-group"><label for="edu_college_'+row+'">Name of College<sup class="text-danger">*</sup></label><input type="text" required name="edu_college_'+row+'" class="form-control">';
             content += '</div></div></div>';
