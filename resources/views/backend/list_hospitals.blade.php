@@ -396,7 +396,7 @@ $(function() {
         $.ajax({
             type : 'post',
             url : "{{ route('admin.physician.clinics.listConsultants') }}",
-            data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}'},
+            data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}',hospital:1},
             dataType:'json',
             beforeSend : function()
             {
