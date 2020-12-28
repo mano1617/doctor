@@ -97,5 +97,19 @@ Breadcrumbs::for('admin.mstr.branch_medicine.index', function ($trail) {
     $trail->push('Professional Qualification', '');
 });
 
+Breadcrumbs::for('admin.hospitals.index', function ($trail) {
+    $trail->push('Hospitals', '');
+});
+
+Breadcrumbs::for('admin.hospitals.create', function ($trail) {
+    $trail->push('Hospitals', '');
+    $trail->push('Create New Hospital', '');
+});
+
+Breadcrumbs::for('admin.hospitals.edit', function ($trail) {
+    $trail->push('Hospitals', '');
+    $trail->push('Edit Hospital', '');
+});
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/log-viewer.php';

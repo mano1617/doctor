@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\StateModel;
 
 class StateSeeder extends Seeder
 {
@@ -11,6 +12,7 @@ class StateSeeder extends Seeder
      */
     public function run()
     {
+        StateModel::truncate();
         DB::table('lmr_states')->insert([
             [
                 "id" => "1",
@@ -98,97 +100,97 @@ class StateSeeder extends Seeder
                 "country_id" => "101",
             ],
             [
-                "id" => "19",
+                "id" => "18",
                 "name" => "Kerala",
                 "country_id" => "101",
             ],
             [
-                "id" => "20",
+                "id" => "19",
                 "name" => "Lakshadweep",
                 "country_id" => "101",
             ],
             [
-                "id" => "21",
+                "id" => "20",
                 "name" => "Madhya Pradesh",
                 "country_id" => "101",
             ],
             [
-                "id" => "22",
+                "id" => "21",
                 "name" => "Maharashtra",
                 "country_id" => "101",
             ],
             [
-                "id" => "23",
+                "id" => "22",
                 "name" => "Manipur",
                 "country_id" => "101",
             ],
             [
-                "id" => "24",
+                "id" => "23",
                 "name" => "Meghalaya",
                 "country_id" => "101",
             ],
             [
-                "id" => "25",
+                "id" => "24",
                 "name" => "Mizoram",
                 "country_id" => "101",
             ],
             [
-                "id" => "26",
+                "id" => "25",
                 "name" => "Nagaland",
                 "country_id" => "101",
             ],
             [
-                "id" => "29",
+                "id" => "26",
                 "name" => "Odisha",
                 "country_id" => "101",
             ],
             [
-                "id" => "31",
-                "name" => "Pondicherry",
+                "id" => "27",
+                "name" => "Puducherry",
                 "country_id" => "101",
             ],
             [
-                "id" => "32",
+                "id" => "28",
                 "name" => "Punjab",
                 "country_id" => "101",
             ],
             [
-                "id" => "33",
+                "id" => "29",
                 "name" => "Rajasthan",
                 "country_id" => "101",
             ],
             [
-                "id" => "34",
+                "id" => "30",
                 "name" => "Sikkim",
                 "country_id" => "101",
             ],
             [
-                "id" => "35",
+                "id" => "31",
                 "name" => "Tamil Nadu",
                 "country_id" => "101",
             ],
             [
-                "id" => "36",
+                "id" => "32",
                 "name" => "Telangana",
                 "country_id" => "101",
             ],
             [
-                "id" => "37",
+                "id" => "33",
                 "name" => "Tripura",
                 "country_id" => "101",
             ],
             [
-                "id" => "38",
+                "id" => "34",
                 "name" => "Uttar Pradesh",
                 "country_id" => "101",
             ],
             [
-                "id" => "39",
+                "id" => "35",
                 "name" => "Uttarakhand",
                 "country_id" => "101",
             ],
             [
-                "id" => "41",
+                "id" => "36",
                 "name" => "West Bengal",
                 "country_id" => "101",
             ],

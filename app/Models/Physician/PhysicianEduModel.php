@@ -3,6 +3,7 @@
 namespace App\Models\Physician;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\MedicineMasterModel;
 
 class PhysicianEduModel extends Model
 {
@@ -27,6 +28,11 @@ class PhysicianEduModel extends Model
     public function additionalEdu()
     {
         return $this->hasMany(PhysicianAdditionalEduModel::class, 'parent_edu_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(MedicineMasterModel::class, 'branch_of_medicine');
     }
     
 }

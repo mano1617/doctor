@@ -97,6 +97,15 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link {{
+                        active_class(Route::is('admin/hospitals'))
+                    }}" href="{{ route('admin.hospitals.index') }}">
+                        <i class="nav-icon fas fa-h-square"></i>
+                            Hospitals
+                    </a>
+                </li>
+
                 <li class="nav-item nav-dropdown {{
                     active_class(Route::is('admin/physicians*'), 'open')
                 }}">
@@ -136,9 +145,16 @@
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link {{
+                            active_class(Route::is('admin/master/professional_qualifications'))
+                        }}" href="{{ route('admin.mstr.pro_qualify.index') }}">
+                                Professional Qualification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
                             active_class(Route::is('admin/master/branch_medicines'))
                         }}" href="{{ route('admin.mstr.branch_medicine.index') }}">
-                                Professional Qualification
+                                Branch Of Medicine
                             </a>
                         </li>
                         <li class="nav-item">

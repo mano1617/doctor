@@ -9,7 +9,7 @@ class PhysicianProfileModel extends Model
     protected $table = "lmr_profile_physician";
 
     protected $fillable = [
-        'user_id', 'gender', 'avatar', 'address', 'dob', 'age', 'district', 'state', 'country', 'pincode', 'landmark', 'mobile_no',
+        'name_prefix' ,'user_id', 'gender', 'avatar', 'address', 'dob', 'age', 'district', 'state', 'country', 'pincode', 'landmark', 'mobile_no',
         'landline', 'about_me', 'map_image', 'qr_code', 'has_branches', 'status', 'latitude_longitude'
     ];
 

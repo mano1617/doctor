@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\CountryModel;
 use App\Models\DesignationMasterModel;
+use App\Models\ProfessionQualifyModel;
 use App\Models\MedicineMasterModel;
 use App\Models\PhysicianMembershipMasterModel;
 use App\Models\Physician\PhysicianEduModel;
@@ -14,7 +15,7 @@ use App\Models\Physician\PhysicianMembershipModel;
 use App\Models\Physician\PhysicianProfessionModel;
 use App\Models\Physician\PhysicianAdditionalEduModel;
 use App\Models\Physician\PhysicianProfileModel;
-use App\Models\CityModel;
+use App\Models\DistrictModel;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -75,9 +76,15 @@ class PhysicianController extends Controller
                     }
                     $filtered = [];
                     $edu = $row->physicianeducation()->get();
+                    // print_r($edu->pluck('branch.name'));
                     if (count($edu) > 0) {
                         $filtered = $edu->filter(function ($value, $key) {
-                            return trim(strtolower($value['branch_of_medicine'])) == 'homoeopathy';
+                            if($value->branch)
+                            {
+                                if($value->branch->name)
+                                return trim(strtolower($value->branch->name)) == 'homoeopathy';
+                            // return trim(strtolower($value['branch_of_medicine'])) == 'homoeopathy';
+                            }
                         });
                     }
 
@@ -95,11 +102,12 @@ class PhysicianController extends Controller
 
                     $actions .= ' <a title="Edit" href="' . route('admin.physician.edit', $row->id) . '" class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     if (count($filtered) > 0 && count($profFiltered) > 0) {
-                        $actions .= ' <a href="' . route('admin.physician.clinics.index', ['physician' => $row->id]) . '" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
+                        $actions .= ' <a title="View Clinics" href="' . route('admin.physician.clinics.index', ['physician' => $row->id]) . '" title="View Clinics" class="btn btn-outline-info"><i class="fa fa-fw fa-hospital-o"></i></a>';
                     }
                     if ($row->physicianProfile->has_branches == 1) {
                         $actions .= ' <a title="View Branches" href="' . route('admin.physician.branches.index', ['physician' => $row->id]) . '" class="btn btn-outline-dark"><i class="fa fa-fw fa-bank"></i></a>';
                     }
+
                     $actions .= ' <a title="Delete" href="javascript:void(0);" data-rowurl="' . route('admin.physician.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
                     return $actions;
@@ -130,8 +138,10 @@ class PhysicianController extends Controller
         ];
         $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['designations'] = DesignationMasterModel::activeOnly();
+        $pageData['professionals'] = ProfessionQualifyModel::activeOnly();
         $pageData['brMedicines'] = MedicineMasterModel::activeOnly();
-        $pageData['cities'] = CityModel::activeOnly();
+        $pageData['pmk'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
+        $pageData['branchOfMedicine'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
 
         return view('backend.physician.create_physicians', $pageData);
     }
@@ -315,8 +325,9 @@ class PhysicianController extends Controller
      */
     public function edit($id)
     {
-        $pageData['cities'] = CityModel::activeOnly();
+        $pageData['cities'] = DistrictModel::activeOnly();
         $pageData['brMedicines'] = MedicineMasterModel::activeOnly();
+        $pageData['professionals'] = ProfessionQualifyModel::activeOnly();
         $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
         $pageData['days'] = [
             'monday' => 'Monday',
@@ -330,8 +341,9 @@ class PhysicianController extends Controller
         $pageData['userData'] = User::find($id);
         $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['states'] = CountryModel::find($pageData['userData']->physicianProfile->country);
-        $pageData['states'] = $pageData['states'] ? $pageData['states']->states()->where('id',19)->get() : [];
+        $pageData['states'] = $pageData['states'] ? $pageData['states']->states()->get() : [];
         $pageData['designations'] = DesignationMasterModel::activeOnly();
+        $pageData['branchOfMedicine'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
 
         return view('backend.physician.edit_physicians', $pageData);
     }

@@ -1,8 +1,11 @@
 <?php
 
+Route::resource('hospitals', 'HospitalController');
+Route::post('hospitals/check-email-address','HospitalController@checkAddress')->name('hospitals.checkEmail');
+Route::get('hospitals/update/status/{userId}/{statusCode}','HospitalController@updateStatus')->name('hospitals.updateStatus'); 
+
 Route::group(['prefix' => 'users'],function()
 {
-
     Route::resource('physicians', 'PhysicianController')->names([
         'index' => 'physician.index',
         'create' => 'physician.create',

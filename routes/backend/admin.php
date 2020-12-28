@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\DashboardController;
 Route::redirect('/', '/admin/dashboard', 301);
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('list/states', [DashboardController::class, 'listStates'])->name('getStates');
+Route::get('list/districts', [DashboardController::class, 'listDistricts'])->name('getDistricts');
 
 require __DIR__ . '/physician.php';
 
@@ -35,6 +36,15 @@ Route::group(['prefix' => 'master'], function () {
     ]);
     Route::get('memberships/update/status/{userId}/{statusCode}', 'MembershipMasterController@updateStatus')->name('mstr.membership.updateStatus');
     Route::post('memberships/check-duplicate', 'MembershipMasterController@checkDuplicate')->name('mstr.membership.checkDuplicate');
+
+    Route::resource('professional_qualifications', 'ProfessionQualifyController')->names([
+        'index' => 'mstr.pro_qualify.index',
+        'store' => 'mstr.pro_qualify.store',
+        'edit' => 'mstr.pro_qualify.edit',
+        'update' => 'mstr.pro_qualify.update',
+    ]);
+    Route::get('professional_qualifications/update/status/{userId}/{statusCode}', 'ProfessionQualifyController@updateStatus')->name('mstr.pro_qualify.updateStatus');
+    Route::post('professional_qualifications/check-duplicate', 'ProfessionQualifyController@checkDuplicate')->name('mstr.pro_qualify.checkDuplicate');
 
     Route::resource('branch_medicines', 'BrMedicineMasterController')->names([
         'index' => 'mstr.branch_medicine.index',

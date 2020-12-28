@@ -33,22 +33,33 @@
                                 @endif
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Name<sup class="text-danger">*</sup></label>
+                                            <label for="">Name of the Clinic<sup class="text-danger">*</sup></label>
                                             <input type="text" name="cli_name" value="{{$data->name}}" required class="form-control">
                                         </div>
                                     </div>
                                     @if(request()->physician)
                                     <input type="hidden" value="{{ request()->physician }}" name="mainChoice">
                                     <input type="hidden" value="{{ request()->physician }}" name="user">
-                                    <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="address">Address<sup class="text-danger">*</sup></label>
-                                        <textarea name="cli_address" required class="form-control" >{{$data->address}}</textarea>
-                                    </div>
-                                    </div>
+                                    
                                     @endif
                                 </div>
                                 <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="address">Address<sup class="text-danger">*</sup></label>
+                                            <textarea name="cli_address" required class="form-control" >{{$data->address}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="landmark">Land Mark</label>
+                                        <textarea name="cli_landmark" class="form-control" >{{$data->landmark}}</textarea>
+                                    </div>
+                                </div> 
+                                    
+                                                             
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="country">Country<sup class="text-danger">*</sup></label>
@@ -60,34 +71,55 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="state">State<sup class="text-danger">*</sup></label>
-                                        <select required name="cli_state" id="cli_state" class="form-control">
+
+                                  <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="state">State<sup class="text-danger">*</sup></label>
+                                            <select required name="cli_state" id="cli_state" class="form-control">
                                             <option value="">--select--</option>
                                             @foreach($states as $ck => $state)
                                             <option @if($data->state==$state->id) selected @endif value="{{ $state->id }}">{{ $state->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div>    
                                 <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_district" value="{{$data->district}}" class="form-control">
+                                        <div class="form-group">
+                                            <label for="district">District<sup class="text-danger">*</sup></label>
+                                            <select required name="cli_district" id="district" class="form-control">
+                                                <option value="">--select--</option>
+                                                @foreach($cities as $sk => $city)
+                                                <option @if($data->district==$city->id) selected @endif value="{{ $city->id }}">{{ $city->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
+                                        <label for="pincode">PIN code<sup class="text-danger">*</sup></label>
                                         <input type="text" value="{{$data->pincode}}" required data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" name="cli_pincode" class="form-control">
                                     </div>
                                 </div>
+                                
                             </div>
-                                <div class="row">
+                            <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="mobile_no">Email Address<sup class="text-danger">*</sup></label>
+                                        <label for="landno">Landline</label>
+                                        <input type="text" value="{{$data->landline}}" data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="mobile_no">Contact Number<sup class="text-danger">*</sup></label>
+                                        <input type="text" onkeypress="return Validate(event);" required placeholder="+91 XXXXXXXXXX" data-rule-minlength="10" data-rule-maxlength="14" value="{{$data->mobile_no}}" name="cli_mobile_no" class="form-control">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="mobile_no">Email Id<sup class="text-danger">*</sup></label>
                                         <input type="email" required name="cli_email" value="{{$data->email_address}}" class="form-control">
                                     </div>
                                 </div>
@@ -97,34 +129,10 @@
                                         <input type="text" data-rule-url="true"  name="cli_website" value="{{$data->website}}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required data-rule-digits="true" data-rule-minlength="10" value="{{$data->mobile_no}}" data-rule-maxlength="11" name="cli_mobile_no" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="landno">Landline Number</label>
-                                        <input type="text" value="{{$data->landline}}" data-rule-minlength="5" data-rule-maxlength="15"  name="cli_landno" class="form-control">
-                                    </div>
-                                </div>                                                    
+                                                                                    
                             </div>
                             <div class="row">
-                            @if(!request()->physician)
-                                    <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="address">Address<sup class="text-danger">*</sup></label>
-                                        <textarea name="cli_address" required class="form-control" >{{$data->address}}</textarea>
-                                    </div>
-                                    </div>
-                                    @endif
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="landmark">Landmark</label>
-                                        <textarea name="cli_landmark" class="form-control" >{{$data->landmark}}</textarea>
-                                    </div>
-                                </div> 
+                                
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -246,8 +254,31 @@
 <script>
 $(function()
 {
-    // $('.timeFormats').mask('99:99');
 
+$("#cli_state").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>';
+
+        if($.trim($(this).val())=='')
+        {
+            $("#district").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/districts') }}",{stateId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                    });
+                }
+
+                $("#district").html(content);
+
+            },'JSON');
+        }
+    });
 
     $("#cli_country").on("change", function(e)
     {
@@ -294,8 +325,16 @@ $(function()
     },
 });
 
-});
 
+});
+function Validate(event) {
+        var regex = new RegExp("^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$");
+        var key = String.fromCharCode(event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+            event.preventDefault();
+            return false;
+        }
+    }
 </script>
 
 @endpush

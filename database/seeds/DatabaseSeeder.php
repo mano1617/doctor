@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MembershipsTable::class);
         $this->call(CountrySeeder::class);
         $this->call(StateSeeder::class);
+        $this->call(DistrictSeeder::class);
 
         Model::reguard();
     }

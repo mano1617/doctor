@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\MedicineMasterModel;
+use App\Models\ProfessionQualifyModel;
 use DataTables;
 use DB;
 
-class BrMedicineMasterController extends Controller
+class ProfessionQualifyController extends Controller
 {
     protected $flashData = [
         'status' => 0,
@@ -22,7 +22,7 @@ class BrMedicineMasterController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $users = MedicineMasterModel::select(['id', 'name', 'status'])
+            $users = ProfessionQualifyModel::select(['id', 'name', 'status'])
                 ->bothInActive();
 
             return Datatables::of($users)
@@ -32,13 +32,13 @@ class BrMedicineMasterController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     if ($row->status == '1') {
-                        $actions = '<a href="javascript:void(0);" title="Lock" class="btn btn-outline-dark changeStatus" data-rowurl="' . route('admin.mstr.branch_medicine.updateStatus', [$row->id, 0]) . '" data-row="' . $row->id . '"><i class="fa fa-fw fa-lock"></i></a> ';
+                        $actions = '<a href="javascript:void(0);" title="Lock" class="btn btn-outline-dark changeStatus" data-rowurl="' . route('admin.mstr.pro_qualify.updateStatus', [$row->id, 0]) . '" data-row="' . $row->id . '"><i class="fa fa-fw fa-lock"></i></a> ';
                     } else if ($row->status == 0) {
-                        $actions = '<a href="javascript:void(0);" title="Unlock" class="btn btn-outline-success changeStatus" data-rowurl="' . route('admin.mstr.branch_medicine.updateStatus', [$row->id, 1]) . '" data-row="' . $row->id . '"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
+                        $actions = '<a href="javascript:void(0);" title="Unlock" class="btn btn-outline-success changeStatus" data-rowurl="' . route('admin.mstr.pro_qualify.updateStatus', [$row->id, 1]) . '" data-row="' . $row->id . '"><i class="fa fa-fw fa-unlock-alt"></i></a> ';
                     }
 
-                    $actions .= '<a title="Update" data-href="' . route('admin.mstr.branch_medicine.edit', $row->id) . '" href="javascript:void(0)" class="btn btn-outline-info editRow"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    $actions .= ' <a title="Delete" href="javascript:void(0);" data-rowurl="' . route('admin.mstr.branch_medicine.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
+                    $actions .= '<a title="Update" data-href="' . route('admin.mstr.pro_qualify.edit', $row->id) . '" href="javascript:void(0)" class="btn btn-outline-info editRow"><i class="fa fa-fw fa-pencil"></i></a> ';
+                    $actions .= ' <a title="Delete" href="javascript:void(0);" data-rowurl="' . route('admin.mstr.pro_qualify.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
                     return $actions;
                 })
@@ -46,7 +46,7 @@ class BrMedicineMasterController extends Controller
                 ->make(true);
         }
 
-        return view('backend.list_mstr_branch_medicine');
+        return view('backend.list_mstr_pro_qualify');
     }
 
     /**
@@ -67,18 +67,9 @@ class BrMedicineMasterController extends Controller
      */
     public function store(Request $request)
     {
-        $createClinic = MedicineMasterModel::create([
+        $createClinic = ProfessionQualifyModel::create([
             'name' => trim($request->memb_name)
         ]);
-
-        if($request->has('return_mode'))
-        {
-            return response()->json([
-                'status' => 1,
-                'data' => MedicineMasterModel::select(['id','name'])->activeOnly(),
-                'message' => 'Successfully data has been created.'
-            ]);
-        }
 
         $this->flashData = [
             'status' => 1,
@@ -87,7 +78,7 @@ class BrMedicineMasterController extends Controller
 
         $request->session()->flash('flashData', $this->flashData);
 
-        return redirect()->route('admin.mstr.branch_medicine.index');
+        return redirect()->route('admin.mstr.pro_qualify.index');
     }
 
     /**
@@ -110,7 +101,7 @@ class BrMedicineMasterController extends Controller
     public function edit($id)
     {
         return response()->json([
-            'data' => MedicineMasterModel::select(['id','name'])->find($id)
+            'data' => ProfessionQualifyModel::select(['id','name'])->find($id)
         ]);
     }
 
@@ -123,7 +114,7 @@ class BrMedicineMasterController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $createClinic = MedicineMasterModel::where('id',$id)->update([
+        $createClinic = ProfessionQualifyModel::where('id',$id)->update([
             'name' => trim($request->memb_name)
         ]);
 
@@ -155,7 +146,7 @@ class BrMedicineMasterController extends Controller
         $rowIdTrue = ($request->has('rowId') ? TRUE : FALSE);
         $rowId = ($request->has('rowId') ? trim($request->rowId) : '');
 
-        if(MedicineMasterModel::where([
+        if(ProfessionQualifyModel::where([
             ['name','=',trim($request->memb_name)],
             ['status','!=','2']
         ])
@@ -172,7 +163,7 @@ class BrMedicineMasterController extends Controller
 
     public function updateStatus(Request $request, $userId, $statusCode)
     {
-        $result = MedicineMasterModel::where('id', trim($userId))
+        $result = ProfessionQualifyModel::where('id', trim($userId))
             ->update([
                 'status' => trim($statusCode)
             ]);

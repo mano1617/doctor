@@ -18,11 +18,41 @@
 }
 </style>
 @endpush
-
+@php
+$cYear = date('Y');
+@endphp
 @section('content')
 
 @include('backend.includes.alert')
-
+<div class="modal fade" id="addDynamicBranch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Branch Of Medicine</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form method="post"  id="add_desg">
+                {{csrf_field()}}
+                <input type="hidden" name="return_mode" value="ajax">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="add_memb_name" name="memb_name" placeholder="Enter membership name" class="form-control">
+                                <input type="hidden" name="memb_id">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="bBtn" type="submit">Submit</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     <div class="row">
         <div class="col">
             <div class="card">
@@ -77,7 +107,7 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="image">Image</label><br>
+                                        <label for="image">Profile Picture</label><br>
                                         <input type="file" name="image">
                                     </div>
                                     @if(trim($userData->physicianProfile->avatar)!='')
@@ -108,7 +138,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" value="{{ $userData->physicianProfile->mobile_no }}" name="mobile_no" class="form-control">
+                                        <input type="text" placeholder="+91 XXXXXXXXXX" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" value="{{ $userData->physicianProfile->mobile_no }}" name="mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -150,7 +180,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="district">City<sup class="text-danger">*</sup></label>
-                                        <select required name="district" class="form-control">
+                                        <select required name="district" id="district" class="form-control">
                                             @foreach($cities as $ck)
                                             <option @if($userData->physicianProfile->district==$ck->id) selected @endif value="{{ $ck->id }}">{{ $ck->name }}</option>
                                             @endforeach
@@ -234,7 +264,13 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
-                                                <input type="text" required value="{{ $eval->branch_of_medicine }}" name="branch_of_medicine_{{ ($ek+1) }}" class="form-control">
+                                                <select required name="branch_of_medicine_{{ ($ek+1) }}" id="branch_of_medicine_{{ ($ek+1) }}" class="form-control">
+                                                <option value="">--select--</option>
+                                                @foreach($branchOfMedicine as $ck => $branch)
+                                                <option @if($branch->id==$eval->branch_of_medicine) selected @endif value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <a href="#addDynamicBranch" data-option="{{ ($ek+1) }}" data-toggle="modal" class="mt-3 crBr" ><i class="fa fa-fw fa-plus"></i>Add New</a>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
@@ -254,7 +290,7 @@
                                                 <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
                                                 <select name="professional_qualification_{{ ($ek+1) }}" required class="form-control">
                                                     <option value="">--select--</option>
-                                                    @foreach($brMedicines as $brMedicine)
+                                                    @foreach($professionals as $brMedicine)
                                                     <option @if($eval->professional_qualification==$brMedicine->id) selected @endif value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
                                                     @endforeach
                                                 </select>
@@ -309,7 +345,7 @@
                                                 <label for="additional_qualification_{{ $ek+1 }}{{ $adk+1 }}">Additional Qualification</label>
                                                 <select name="additional_qualification_{{ $ek+1 }}{{ $adk+1 }}" required class="form-control">
                                                     <option value="">--select--</option>
-                                                    @foreach($brMedicines as $brMedicine)
+                                                    @foreach($professionals as $brMedicine)
                                                     <option @if($addEdu->professional_qualification==$brMedicine->id) selected @endif value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
                                                     @endforeach
                                                 </select>
@@ -318,7 +354,12 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label for="add_prof_branch_{{ $ek+1 }}{{ $adk+1 }}">Branch<sup class="text-danger">*</sup></label>
-                                                <input type="text" required value="{{$addEdu->branch}}" name="add_prof_branch_{{ $ek+1 }}{{ $adk+1 }}" class="form-control">
+                                                <select required name="add_prof_branch_{{ $ek+1 }}{{ $adk+1 }}" class="form-control">
+                                                    <option value="">--select--</option>
+                                                    @foreach($branchOfMedicine as $brn)
+                                                    <option @if($addEdu->branch==$brn->id) selected @endif value="{{$brn->id}}">{{$brn->name}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
@@ -565,13 +606,21 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <input type="text"  value="{{$pExpYear[0]}}" readOnly required style="background-color:white" name="exp_fryr_{{$pexk+1}}" class="form-control monthYear">
+                                        <select name="exp_fryr_{{$pexk+1}}" class="form-control">
+                                            @for($i=0;$i<=60;$i++)
+                                            <option @if($pExpYear[0]==($cYear-$i)) selected @endif value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <input type="text"  value="{{$pExpYear[1]}}" readOnly required style="background-color:white" name="exp_toyr_{{$pexk+1}}" class="form-control monthYear">
+                                        <select name="exp_toyr_{{$pexk+1}}" class="form-control">
+                                            @for($i=0;$i<=60;$i++)
+                                            <option @if($pExpYear[1]==($cYear-$i)) selected @endif value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -579,7 +628,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
+                                        <label for="sector">Mention<sup class="text-danger">*</sup></label>
                                         <input type="text" placeholder="Mention in years" value="{{$pExp['homoeo_experience_years']}}" required name="exp_homoeo_{{$pexk+1}}" class="form-control">
                                     </div>
                                 </div>
@@ -623,13 +672,21 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <input type="text"  readOnly required style="background-color:white" name="exp_fryr_1" class="form-control monthYear">
+                                        <select name="exp_fryr_1" class="form-control">
+                                            @for($i=0;$i<=60;$i++)
+                                            <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <input type="text"  readOnly required style="background-color:white" name="exp_toyr_1" class="form-control monthYear">
+                                        <select name="exp_toyr_1"  class="form-control">
+                                            @for($i=0;$i<=60;$i++)
+                                            <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -637,7 +694,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
+                                        <label for="sector">Mention<sup class="text-danger">*</sup></label>
                                         <input type="text" placeholder="Mention in years" required name="exp_homoeo_1" class="form-control">
                                     </div>
                                 </div>
@@ -663,10 +720,13 @@
                             @if(count($membershipsEdit)>0)
                                 @foreach($membershipsEdit as $pmk => $pMemb)
                                 <div id="mem_row_{{$pmk+1}}">
+                                @if($pmk!=0)
+                                <hr>
+                                @endif
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="sector">Membership Title</label>
+                                            <label for="sector">Member of</label>
                                             <select name="mem_{{$pmk+1}}" class="form-control">
                                             <option value="">--select--</option>
                                             @foreach($memberships as $member)
@@ -683,7 +743,7 @@
                                     @endif
                                 </div>
                                 </div>
-                                <hr>
+                                
                                 </div>
 
                                 @endforeach
@@ -691,7 +751,7 @@
 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="sector">Membership Title</label>
+                                            <label for="sector">Member of</label>
                                             <select name="mem_1" class="form-control">
                                             <option value="">--select--</option>
                                             @foreach($memberships as $member)
@@ -787,7 +847,7 @@
     <script src="{{ asset('assets/backend/jquery.steps/jquery.steps.min.js') }}"></script>
 <script>
 function Validate(event) {
-        var regex = new RegExp("^[0-9+]");
+        var regex = new RegExp("^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$");
         var key = String.fromCharCode(event.charCode ? event.which : event.charCode);
         if (!regex.test(key)) {
             event.preventDefault();
@@ -796,6 +856,115 @@ function Validate(event) {
     }
 $(function()
 {
+    $("#state").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>';
+
+        if($.trim($(this).val())=='')
+        {
+            $("#district").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/districts') }}",{stateId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        // if(vals.id==18)
+                        // {
+                            content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                        //}
+                    });
+                }
+
+                $("#district").html(content);
+
+            },'JSON');
+        }
+    });
+
+    var brSelect = 1;
+    $("body").on('click', ".crBr", function (e) {
+        brSelect=$(this).data('option');
+    });
+
+    var yrs = '';
+    @for($i=0;$i<=60;$i++)
+        yrs+='<option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>';
+    @endfor
+
+var createForm = $("#add_desg").validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        rules: {
+            memb_name : {
+                required : true,
+                remote: {
+                    url: "{{ route('admin.mstr.branch_medicine.checkDuplicate') }}",
+                    type: "post",
+                    data : {
+                        '_token' : function() { return $("meta[name='csrf-token']").attr('content'); }
+                    }
+                }
+            }
+        },
+        messages : {
+            memb_name : {
+                remote : 'The medicine name is already exists'
+            }
+        },
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            error.addClass("error invalid-feedback");
+            //error.parent("div.form-group").addClass("has-error");
+            element.parent("div.form-group").append(error);
+            element.addClass('is-invalid');
+            $("#bBtn").prop('disabled',false);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                method : 'post',
+                url : "{{ route('admin.mstr.branch_medicine.store') }}",
+                data : $(form).serialize(),
+                dataType:'json',
+                success:function(result)
+                {
+                    var options = '<option value="">--select--</option>'
+
+                    $(result.data).each(function(ind,val)
+                    {
+                        options+= '<option value="'+val['id']+'">'+val['name']+'</option>'
+                    });
+
+                    $('body').find("select[name='branch_of_medicine_"+brSelect+"']").html(options);
+
+                    Swal.fire('Success!',result.message,'success').then(()=>{
+                        createForm.resetForm();
+                        $(form)[0].reset();
+                        $("#bBtn").prop('disabled',false);
+                        $("#addDynamicBranch").modal("hide");
+                    });
+                },
+            });
+        }
+    });
+
+    $("#addDynamicBranch").on('hide.bs.modal', function(){
+        createForm . resetForm();
+        $("#bBtn").prop('disabled',false);
+    });
+
+    var brMedicines ='<option value="">--select--</option>';
+    @foreach($branchOfMedicine as $ck => $branch)
+        brMedicines +='<option value="{{ $branch->id }}">{{ $branch->name }}</option>';
+    @endforeach
 
     $("#addMainRow").on("click", function(e)
     {
@@ -803,7 +972,7 @@ $(function()
         row++;
 
         var desigOptions = '<option value="">--select--</option>';
-        @foreach($brMedicines as $brMedicine)
+        @foreach($professionals as $brMedicine)
             desigOptions +='<option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>';
         @endforeach
 
@@ -812,9 +981,8 @@ $(function()
             joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
         @endforeach
 
-
-        var content = '<div style="border:2px solid #A5846A;padding:10px;" id="dyMainRow_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><input type="text" required name="branch_of_medicine_'+row+'" class="form-control">';
-            content += '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control">';
+        var content = '<div style="border:2px solid #A5846A;padding:10px;" id="dyMainRow_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><select required name="branch_of_medicine_'+row+'" class="form-control">'+brMedicines+'</select>';
+            content += '<a href="#addDynamicBranch" data-option="'+row+'" data-toggle="modal" class="mt-3 crBr" ><i class="fa fa-fw fa-plus"></i>Add New</a></div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control">';
             content += '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label><input type="text" required name="medical_council_'+row+'" class="form-control">';
             content += '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label><select name="professional_qualification_'+row+'" required class="form-control">';
             content += desigOptions+'</select></div></div></div>';
@@ -837,7 +1005,7 @@ $(function()
         row++;
 
         var desigOptions = '<option value="">--select--</option>';
-        @foreach($brMedicines as $brMedicine)
+        @foreach($professionals as $brMedicine)
             desigOptions +='<option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>';
         @endforeach
 
@@ -847,7 +1015,7 @@ $(function()
         @endforeach
 
         var content = '<div id="edu_row_'+mainRow+''+row+'"><hr><div class="row"><div class="col-sm-3"><div class="form-group"><label for="education">Additional Qualification<sup class="text-danger">*</sup></label><select required name="additional_qualification_'+mainRow+''+row+'" class="form-control">'+desigOptions+'</select></div></div>';
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+mainRow+''+row+'">Branch<sup class="text-danger">*</sup></label><input required type="text" name="add_prof_branch_'+mainRow+''+row+'" class="form-control"></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+mainRow+''+row+'">Branch<sup class="text-danger">*</sup></label><select required name="add_prof_branch_'+mainRow+''+row+'" class="form-control">'+brMedicines+'</select></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_college_'+mainRow+''+row+'">College<sup class="text-danger">*</sup></label><input required type="text" name="add_prof_college_'+mainRow+''+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_joinyear_'+mainRow+''+row+'">Year<sup class="text-danger">*</sup></label><select required name="add_prof_joinyear_'+mainRow+''+row+'" class="form-control">'+joinYearOptions+'</select></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_place_'+mainRow+''+row+'">Place<sup class="text-danger">*</sup></label><input type="text" required name="add_prof_place_'+mainRow+''+row+'" class="form-control"></div></div>';
@@ -894,13 +1062,6 @@ $(function()
         endDate: '+0d',
     });
 
-    $(".monthYear").datepicker( {
-        format: "mm-yyyy",
-        viewMode: "months",
-        minViewMode: "months",
-        autoclose : true,
-        endDate: '+0d',
-    });
 
     $("#addAchiev").on("click", function(e)
     {
@@ -923,11 +1084,11 @@ $(function()
 
         var row = parseInt($("input[name='mem_rows']").val());
         row++;
-        var content = '<div id="mem_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Membership Title</label>';
+        var content = '<div id="mem_row_'+row+'"><hr><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Member of</label>';
             content+= '<select name="mem_'+row+'" class="form-control"><option value="">--select--</option>';
             content+= membs;
             content+='</select></div></div>';
-            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#mem_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#mem_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div></div>';
         $("input[name='mem_rows']").val(row);
         $("#memDiv").append(content);
 
@@ -977,10 +1138,10 @@ $(function()
             content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" placeholder="Name of Institution/ Clinic/ Hospital/ etc." required name="exp_wrkat_'+row+'" class="form-control">';
             content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-2"><div class="form-group">';
-            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text" readOnly required style="background-color:white" name="exp_fryr_'+row+'" class="form-control">';
+            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><select name="exp_fryr_'+row+'" class="form-control">'+yrs+'</select>';
             content +='</div></div><div class="col-sm-2"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
-            content +='<input type="text" readOnly required style="background-color:white" name="exp_toyr_'+row+'" class="form-control"></div></div></div>';
-            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';
+            content +='<select name="exp_toyr_'+row+'" class="form-control">'+yrs+'</select></div></div></div>';
+            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Mention<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required placeholder="Mention in years" name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
 

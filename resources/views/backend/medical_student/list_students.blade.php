@@ -11,7 +11,8 @@
             <div class="card">
                 <div class="card-header">
                     <strong>Medical Student Lists</strong>
-                    <a href="{{ route('admin.medical-student.create') }}" class="btn btn-outline-success float-right"><i class="fa fa-fw fa-plus"></i>CREATE</a>
+                    <a href="{{ route('admin.medical-student.create') }}" class="btn btn-outline-success float-right">
+                    <i class="fa fa-fw fa-plus"></i>NEW</a>
                 </div><!--card-header-->
                 <div class="card-body">
                     <div class="row row-cols-12">
@@ -21,6 +22,7 @@
                                     <tr>
                                         <th width="5%">#</th>
                                         <th>NAME</th>
+                                        <th>BRANCH OF MEDICINE</th>
                                         <th>PHOTO</th>
                                         <th>GENDER</th>
                                         <th>CONTACT</th>
@@ -46,6 +48,7 @@ $(function() {
         columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'first_name', name: 'first_name' },
+                { data: 'medicine', name: 'medicine' },
                 { data: 'photo', name: 'photo' },
                 { data: 'gender', name: 'gender' },
                 { data: 'contact', name: 'contact' },

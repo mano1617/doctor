@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', app_name() . ' | Master Pages | Branch Of Medicines' )
+@section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
 
 @section('content')
 
@@ -10,7 +10,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Branch Of Medicines List</strong>
+                    <strong>Professional Qualifications List</strong>
                     <a href="#create_desig" data-toggle="modal" class="btn btn-outline-success float-right"><i class="fa fa-fw fa-plus"></i>CREATE</a>
                 </div><!--card-header-->
                 <div class="card-body">
@@ -36,17 +36,17 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Create New Branch Of Medicine</h4>
+                    <h4 class="modal-title">Create New Professional Qualification</h4>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
-                <form method="post" action="{{ route('admin.mstr.branch_medicine.store') }}" id="add_desg">
+                <form method="post" action="{{ route('admin.mstr.pro_qualify.store') }}" id="add_desg">
                     {{csrf_field()}}
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" id="add_memb_name" name="memb_name" placeholder="Enter membership name" class="form-control">
+                                    <input type="text" id="add_memb_name" name="memb_name" placeholder="Enter name" class="form-control">
                                     <input type="hidden" name="memb_id">
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Update Branch Of Medicine</h4>
+                    <h4 class="modal-title">Update Professional Qualification</h4>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <form method="post" action="" id="edit_desg">
@@ -76,7 +76,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" name="memb_name" id="memb_name" placeholder="Enter membership name" class="form-control">
+                                    <input type="text" name="memb_name" id="memb_name" placeholder="Enter name" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -95,11 +95,10 @@
 @push('after-scripts')
 <script>
 $(function() {
-
     $('#userTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('admin.mstr.branch_medicine.index') }}",
+        ajax: "{{ route('admin.mstr.pro_qualify.index') }}",
         columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'name', name: 'name' },
@@ -115,7 +114,7 @@ $(function() {
             dataType : 'JSON',
             success: function(result)
             {
-                $("#edit_desg").attr('action',"{{ route('admin.mstr.branch_medicine.index') }}/"+result['data']['id']);
+                $("#edit_desg").attr('action',"{{ route('admin.mstr.pro_qualify.index') }}/"+result['data']['id']);
                 $("input[name='memb_id']").val(result['data']['id']);
                 $("#memb_name").val(result['data']['name']);
                 $("#edit_desig").modal("show");
@@ -143,10 +142,10 @@ $(function() {
             memb_name : {
                 required : true,
                 remote: {
-                    url: "{{ route('admin.mstr.branch_medicine.checkDuplicate') }}",
+                    url: "{{ route('admin.mstr.pro_qualify.checkDuplicate') }}",
                     type: "post",
                     data : {
-                        '_token' : function() { return $("meta[name='csrf-token']").attr('content'); },
+                        '_token' : function() { return '{{ csrf_token() }}' },
                         'rowId' : function() { return $.trim($("input[name='memb_id']").val()) }
                     }
                 }
@@ -154,7 +153,7 @@ $(function() {
         },
         messages : {
             memb_name : {
-                remote : 'The medicine name is already exists'
+                remote : 'The name is already exists'
             }
         },
         errorElement: "span",
@@ -179,17 +178,17 @@ $(function() {
             memb_name : {
                 required : true,
                 remote: {
-                    url: "{{ route('admin.mstr.branch_medicine.checkDuplicate') }}",
+                    url: "{{ route('admin.mstr.pro_qualify.checkDuplicate') }}",
                     type: "post",
                     data : {
-                        '_token' : function() { return $("meta[name='csrf-token']").attr('content'); }
+                        '_token' : function() { return '{{ csrf_token() }}' }
                     }
                 }
             }
         },
         messages : {
             memb_name : {
-                remote : 'The medicine name is already exists'
+                remote : 'The name is already exists'
             }
         },
         errorElement: "span",

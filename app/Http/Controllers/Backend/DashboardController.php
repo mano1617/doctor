@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CountryModel;
+use App\Models\StateModel;
+
 /**
  * Class DashboardController.
  */
@@ -23,6 +25,14 @@ class DashboardController extends Controller
         return response()->json([
             'status' => 1,
             'data' => CountryModel::find(trim($request->countryId))->states
+        ]);
+    }
+
+    public function listDistricts(Request $request)
+    {
+        return response()->json([
+            'status' => 1,
+            'data' => StateModel::find(trim($request->stateId))->cities
         ]);
     }
 }

@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
+@section('title', app_name() . ' | Users | Medical Student | Add New Medical Student')
 
 @push('after-styles')
 <link rel="stylesheet" href="{{ asset('assets/backend/jquery.steps/jquery.steps.css') }}">
@@ -44,11 +44,41 @@
         ]
     ]);
 @endphp
+<div class="modal fade" id="addDynamicBranch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create New Branch Of Medicine</h4>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <form method="post"  id="add_desg">
+                    {{csrf_field()}}
+                    <input type="hidden" name="return_mode" value="ajax">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" id="add_memb_name" name="memb_name" placeholder="Enter membership name" class="form-control">
+                                    <input type="hidden" name="memb_id">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" type="submit">Submit</button>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Create New Medical Student</strong>
+                    <strong>Register New Medical Student</strong>
                     <a href="{{ route('admin.medical-student.index') }}" class="btn btn-danger float-right">
                     <i class="fa fa-fw fa-arrow-left"></i>GO BACK</a>
                 </div><!--card-header-->
@@ -61,55 +91,65 @@
                             <section>
                             <br>
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-1">
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <select name="title" class="form-control">
+                                            <option value="dr">Dr</option>
+                                            <option value="mr">Mr</option>
+                                            <option value="mrs">Mrs</option>
+                                            <option value="ms">Ms</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
                                     <div class="form-group">
                                         <label for="firstname">Name<sup class="text-danger">*</sup></label>
-                                        <input type="text" required placeholder="Dr./Mr./Mrs./Ms" name="firstname" class="form-control">
+                                        <input type="text" required placeholder="Enter name" name="firstname" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="image">Profile Photo</label><br>
-                                        <input type="file" name="image">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="email_address">Email Address<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="email_address" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="mobile_no" class="form-control">
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div class="row">
-                                
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="age">Age<sup class="text-danger">*</sup></label>
-                                        <input type="text" required  name="age" data-rule-digits="true" data-rule-min="18" data-rule-max="60" class="form-control">
+                                        <input type="text" required placeholder="Age in years" name="age" data-rule-digits="true" data-rule-min="18" data-rule-max="60" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="dob">Date Of Birth<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="dob" autocomplete="off" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="gener">Sex<sup class="text-danger">*</sup></label>
                                         <select name="gender" class="form-control">
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
                                             <option value="transgender">Transgender</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="address">Address<sup class="text-danger">*</sup></label>
+                                        <textarea name="address" required class="form-control" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="district">District<sup class="text-danger">*</sup></label>
+                                        <select required name="district" class="form-control">
+                                            @foreach($cities as $ck)
+                                            <option value="{{ $ck->id }}">{{ $ck->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="state">State<sup class="text-danger">*</sup></label>
+                                        <select required name="state" id="state" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($states as $sk => $state)
+                                            <option @if($state->id==19) selected @endif value="{{ $state->id }}">{{ $state->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -128,38 +168,51 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label for="state">State<sup class="text-danger">*</sup></label>
-                                        <select required name="state" id="state" class="form-control">
-                                            <option value="">--select--</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="district" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
                                         <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
                                         <input type="text" data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" required name="pincode" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
+                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="mobile_no" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="address">Address<sup class="text-danger">*</sup></label>
-                                        <textarea name="address" required class="form-control" ></textarea>
+                                        <label for="email_address">Email Address<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="email_address" class="form-control">
                                     </div>
                                 </div>
+                                
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="about_me">About Me<sup class="text-danger">*</sup></label>
-                                        <textarea name="about_me" required class="form-control" ></textarea>
+                                        <label for="about_me">About Me</label>
+                                        <textarea name="about_me" class="form-control" ></textarea>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="image">Profile Photo</label><br>
+                                        <input type="file" name="image">
+                                    </div>
+                                </div>
+                                
+                                <!-- <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="dob">Date Of Birth<sup class="text-danger">*</sup></label>
+                                        <input type="text" required name="dob" autocomplete="off" class="form-control">
+                                    </div>
+                                </div> -->
+                                
+                            </div>
+                            
+                            <div class="row">
+                                
                             </div>
                             </section>
 
@@ -171,7 +224,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="sector">About Achievment</label>
+                                            <label for="sector">Achievements / Designations</label>
                                             <textarea placeholder="About Achievements / Designations" name="ach_1" cols="30" rows="5" class="form-control"></textarea>
                                         </div>
                                     </div>
@@ -192,16 +245,19 @@
                                         <div class="form-group">
                                             <label for="edu_branch_of_medicine_1">Branch of Medicine<sup class="text-danger">*</sup></label>
                                             <select required name="edu_branch_of_medicine_1" class="form-control">
-                                                <option value="homoeopathy">Homoeopathy</option>
-                                                <option value="allopathy">Allopathy</option>
-                                                <option value="ayurveda">Ayurveda</option>
+                                                <option value="">--select--</option>
+                                                @foreach($branchOfMedicine as $ck => $branch)
+                                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                                @endforeach
                                             </select>
+                                        <a href="#addDynamicBranch" data-toggle="modal" class="mt-3" ><i class="fa fa-fw fa-plus"></i>Add New</a>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="edu_college_1">Name of College<sup class="text-danger">*</sup></label>
-                                            <input type="text" required name="edu_college_1" class="form-control">
+                                            <input type="text" placeholder="Enter college Name" required name="edu_college_1" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +300,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-10">
                                                         <div class="form-group">
-                                                            <label for="sector">Membership Title</label>
+                                                            <label for="sector">Membership</label>
                                                             <select name="edu_mem_1_1" class="form-control">
                                                             <option value="">--select--</option>
                                                             @foreach($memberships as $member)
@@ -265,7 +321,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-10">
                                                         <div class="form-group">
-                                                            <label for="sector">About Achievment</label>
+                                                            <label for="sector">Achievements / Designations</label>
                                                             <textarea placeholder="About Achievements / Designations" name="edu_ach_1_1" cols="30" rows="5" class="form-control"></textarea>
                                                         </div>
                                                     </div>
@@ -277,13 +333,13 @@
                                     </div>
                                 </div>
 
-                                    <div class="row">
+                                    <!-- <div class="row">
                                         <div class="col-sm-12">
                                             <hr>
                                             <a id="addMainRow" class="btn btn-success float-right"><i class="fa fa-fw fa-plus"></i></a>
                                         </div>
                                     </div>
-                                <br>
+                                <br> -->
                             </div>
                             <div id="mainRowCnt"></div>
                             </section>
@@ -309,6 +365,9 @@ function Validate(event) {
     }
 $(function()
 {
+
+    $("select[name='country']").val(101);
+
     $("#addMainRow").on("click", function(e)
     {
         var row = parseInt($("input[name='main_row']").val());
@@ -355,11 +414,11 @@ $(function()
             content += '</div></div>';
 
             content +='<div class="row"><div class="col-sm-6"><input type="hidden" name="edu_mem_rows_'+row+'" value="1">';
-            content +='<div id="edu_memDiv_'+row+'"><div class="row"><div class="col-sm-10"><div class="form-group"><label for="edu_mem_'+row+'_1">Membership Title</label>';
+            content +='<div id="edu_memDiv_'+row+'"><div class="row"><div class="col-sm-10"><div class="form-group"><label for="edu_mem_'+row+'_1">Membership</label>';
             content +='<select name="edu_mem_'+row+'_1" class="form-control">'+memOptions+'</select></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-edu="'+row+'" class="btn btn-success addMembership"><i class="fa fa-fw fa-plus"></i></a></div></div>';
             content +='</div></div><div class="col-sm-6"><input type="hidden" name="edu_ach_rows_'+row+'" value="1"><div id="edu_achDiv_'+row+'"><div class="row">';
-            content +='<div class="col-sm-10"><div class="form-group"><label for="edu_ach_'+row+'_1">About Achievment</label><textarea placeholder="About Achievements / Designations" name="edu_ach_'+row+'_1" cols="30" rows="5" class="form-control"></textarea>';
+            content +='<div class="col-sm-10"><div class="form-group"><label for="edu_ach_'+row+'_1">Achievements / Designations</label><textarea placeholder="About Achievements / Designations" name="edu_ach_'+row+'_1" cols="30" rows="5" class="form-control"></textarea>';
             content +='</div></div><div class="col-sm-2"><a style="margin-top:30px;" data-edu="'+row+'" class="btn btn-success eduAddAchiev"><i class="fa fa-fw fa-plus"></i></a></div></div></div></div></div>';
 
             
@@ -420,7 +479,7 @@ $(function()
         row++;
         var content = '<div id="ach_row_'+row+'" class="achcl">';
             content+='<hr />';
-            content+=' <div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">About Achievment</label>';
+            content+=' <div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Achievements / Designations</label>';
             content+= '<textarea name="ach_'+row+'" cols="30" rows="5" placeholder="About Achievements / Designations" class="form-control"></textarea></div></div>';
             content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#ach_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div></div>';
         $("input[name='ach_rows']").val(row);
@@ -433,7 +492,7 @@ $(function()
         var row = parseInt($("input[name='edu_ach_rows_"+eduRow+"']").val());
         row++;
         var content = '<div id="edu_ach_row_'+eduRow+'_'+row+'" class="achcl">';
-            content+=' <div class="row"><div class="col-sm-10"><div class="form-group"><label for="membership">About Achievment</label>';
+            content+=' <div class="row"><div class="col-sm-10"><div class="form-group"><label for="membership">Achievements / Designations</label>';
             content+= '<textarea name="edu_ach_'+eduRow+'_'+row+'" cols="30" rows="5" placeholder="About Achievements / Designations" class="form-control"></textarea></div></div>';
             content+= '<div class="col-sm-2"><a style="margin-top:30px;" data-container="#edu_ach_row_'+eduRow+'_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div></div>';
         $("input[name='edu_ach_rows_"+eduRow+"']").val(row);
@@ -450,7 +509,7 @@ $(function()
 
         var row = parseInt($("input[name='edu_mem_rows_"+eduRow+"']").val());
         row++;
-        var content = '<div id="edu_mem_row_'+eduRow+'_'+row+'"><div class="row"><div class="col-sm-10"><div class="form-group"><label for="membership">Membership Title</label>';
+        var content = '<div id="edu_mem_row_'+eduRow+'_'+row+'"><div class="row"><div class="col-sm-10"><div class="form-group"><label for="membership">Membership</label>';
             content+= '<select name="edu_mem_'+eduRow+'_'+row+'" class="form-control"><option value="">--select--</option>';
             content+= membs;
             content+='</select></div></div>';
@@ -507,8 +566,70 @@ form.validate({
         $(element).removeClass("is-invalid");
     },
 });
+
+var createForm = $("#add_desg").validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        rules: {
+            memb_name : {
+                required : true,
+                remote: {
+                    url: "{{ route('admin.mstr.branch_medicine.checkDuplicate') }}",
+                    type: "post",
+                    data : {
+                        '_token' : function() { return $("meta[name='csrf-token']").attr('content'); }
+                    }
+                }
+            }
+        },
+        messages : {
+            memb_name : {
+                remote : 'The medicine name is already exists'
+            }
+        },
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            error.addClass("error invalid-feedback");
+            //error.parent("div.form-group").addClass("has-error");
+            element.parent("div.form-group").append(error);
+            element.addClass('is-invalid');
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                method : 'post',
+                url : "{{ route('admin.mstr.branch_medicine.store') }}",
+                data : $(form).serialize(),
+                dataType:'json',
+                success:function(result)
+                {
+                    var options = '<option value="">--select--</option>'
+
+                    $(result.data).each(function(ind,val)
+                    {
+                        options+= '<option value="'+val['id']+'">'+val['name']+'</option>'
+                    });
+
+                    $("select[name='edu_branch_of_medicine_1']").html(options);
+
+                    Swal.fire('Success!',result.message,'success').then(()=>{
+                        createForm.resetForm();
+                        $(form)[0].reset();
+                        $("#addDynamicBranch").modal("hide");
+                        
+                    });
+                },
+            });
+        }
+    });
+
 form.children("div").steps({
-    startIndex: 2,
+    startIndex: 0,
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",

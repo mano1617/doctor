@@ -19,7 +19,39 @@
 </style>
 @endpush
 
+@php
+$cYear = date('Y');
+@endphp
 @section('content')
+<div class="modal fade" id="addDynamicBranch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Branch Of Medicine</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form method="post"  id="add_desg">
+                {{csrf_field()}}
+                <input type="hidden" name="return_mode" value="ajax">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="add_memb_name" name="memb_name" placeholder="Enter membership name" class="form-control">
+                                <input type="hidden" name="memb_id">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="bBtn" type="submit">Submit</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     <div class="row">
         <div class="col">
             <div class="card">
@@ -98,13 +130,13 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
-                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="mobile_no" class="form-control">
+                                        <input type="text" onkeypress="return Validate(event);" required placeholder="+91 XXXXXXXXXX" data-rule-minlength="10" data-rule-maxlength="14" name="mobile_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="landno">Landline Number</label>
-                                        <input type="text" data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="15" name="landno" class="form-control">
+                                        <input type="text" data-rule-digits="true" placeholder="std_code XXXXXX" data-rule-minlength="5" data-rule-maxlength="15" name="landno" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -137,10 +169,8 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="district">City<sup class="text-danger">*</sup></label>
-                                        <select required name="district" class="form-control">
-                                            @foreach($cities as $ck)
-                                            <option value="{{ $ck->id }}">{{ $ck->name }}</option>
-                                            @endforeach
+                                        <select required name="district" id="district" class="form-control">
+                                            <option value="">--select--</option>
                                         </select>
                                     </div>
                                 </div>
@@ -201,7 +231,13 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label>
-                                            <input type="text" required name="branch_of_medicine_1" class="form-control">
+                                            <select required name="branch_of_medicine_1" class="form-control">
+                                                <option value="">--select--</option>
+                                                @foreach($branchOfMedicine as $ck => $branch)
+                                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <a href="#addDynamicBranch" data-option="1" data-toggle="modal" class="mt-3 crBr" ><i class="fa fa-fw fa-plus"></i>Add New</a>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
@@ -221,7 +257,7 @@
                                             <label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label>
                                             <select name="professional_qualification_1" required class="form-control">
                                                 <option value="">--select--</option>
-                                                @foreach($brMedicines as $brMedicine)
+                                                @foreach($professionals as $brMedicine)
                                                 <option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>
                                                 @endforeach
                                             </select>
@@ -333,17 +369,17 @@
 
                                 <div class="form-group">&nbsp;&nbsp;&nbsp;
                                     <label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
-                                    <input type="text" required name="prof_palce_1" class="form-control">
+                                    <input type="text" placeholder="Enter place" required name="prof_palce_1" class="form-control">
                                 </div>
 
                                 <div class="form-group">&nbsp;&nbsp;&nbsp;
                                     <label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;
-                                    <input type="text" style="background-color:white" readOnly required name="prof_since_1" class="form-control monthYear">
+                                    <input type="text" placeholder="dd-mm-yyyy" style="background-color:white" readOnly required name="prof_since_1" class="form-control since">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <a style="margin-top:30px;" id="addProfession" class="btn btn-success "><i class="fa fa-fw fa-plus"></i></a>
+                                    <a style="margin-top:30px;" id="addProfession" class="btn btn-success"><i class="fa fa-fw fa-plus"></i></a>
                                 </div>
                             </div>
                             <hr>
@@ -383,13 +419,21 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <input type="text" readOnly required style="background-color:white" name="exp_fryr_1" class="form-control monthYear">
+                                        <select name="exp_fryr_1"  class="form-control">
+                                            @for($i=0;$i<=60;$i++)
+                                            <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <input type="text" readOnly required style="background-color:white" name="exp_toyr_1" class="form-control monthYear">
+                                        <select name="exp_toyr_1"  class="form-control">
+                                            @for($i=0;$i<=60;$i++)
+                                            <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +441,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>
+                                        <label for="sector">Mention<sup class="text-danger">*</sup></label>
                                         <input type="text" required name="exp_homoeo_1" placeholder="Mention in years" class="form-control">
                                     </div>
                                 </div>
@@ -418,7 +462,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="sector">Membership Title</label>
+                                            <label for="sector">Member of</label>
                                             <select name="mem_1" class="form-control">
                                             <option value="">--select--</option>
                                             @foreach($memberships as $member)
@@ -487,7 +531,7 @@
     <script src="{{ asset('assets/backend/jquery.steps/jquery.steps.min.js') }}"></script>
 <script>
 function Validate(event) {
-        var regex = new RegExp("^[0-9+]");
+        var regex = new RegExp("^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$");
         var key = String.fromCharCode(event.charCode ? event.which : event.charCode);
         if (!regex.test(key)) {
             event.preventDefault();
@@ -502,7 +546,7 @@ $(function()
         row++;
 
         var desigOptions = '<option value="">--select--</option>';
-        @foreach($brMedicines as $brMedicine)
+        @foreach($professionals as $brMedicine)
             desigOptions +='<option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>';
         @endforeach
 
@@ -511,8 +555,13 @@ $(function()
             joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
         @endforeach
 
+        var brMedicines ='<option value="">--select--</option>';
+        @foreach($branchOfMedicine as $ck => $branch)
+            brMedicines +='<option value="{{ $branch->id }}">{{ $branch->name }}</option>';
+        @endforeach
 
-        var content = '<br><div style="border:2px solid #A5846A;padding:10px;" id="dyMainRow_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><input type="text" required name="branch_of_medicine_'+row+'" class="form-control">';
+        var content = '<br><div style="border:2px solid #A5846A;padding:10px;" id="dyMainRow_'+row+'"><div class="row"><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Branch of Medicine<sup class="text-danger">*</sup></label><select required name="branch_of_medicine_'+row+'" class="form-control">'+brMedicines+'</select>';
+            content += '<a href="#addDynamicBranch" data-option="'+row+'" data-toggle="modal" class="mt-3 crBr" ><i class="fa fa-fw fa-plus"></i>Add New</a>';
             content += '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Registration Number<sup class="text-danger">*</sup></label><input type="text" required name="registration_no_'+row+'" class="form-control">';
             content += '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Medical Council<sup class="text-danger">*</sup></label><input type="text" required name="medical_council_'+row+'" class="form-control">';
             content += '</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_desig">Professional Qualification<sup class="text-danger">*</sup></label><select name="professional_qualification_'+row+'" required class="form-control">';
@@ -544,14 +593,42 @@ $(function()
                 {
                     $(result['data']).each(function(ind,vals)
                     {
-                        if(vals.id==19)
-                        {
+                        // if(vals.id==18)
+                        // {
                             content+='<option value="'+vals.id+'">'+vals.name+'</option>';
-                        }
+                        //}
                     });
                 }
 
                 $("#state").html(content);
+
+            },'JSON');
+        }
+    });
+
+    $("#state").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>';
+
+        if($.trim($(this).val())=='')
+        {
+            $("#district").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/districts') }}",{stateId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        // if(vals.id==18)
+                        // {
+                            content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                        //}
+                    });
+                }
+
+                $("#district").html(content);
 
             },'JSON');
         }
@@ -563,19 +640,17 @@ $(function()
         endDate: '-18y'
     });
 
+    var yrs = '';
+    @for($i=0;$i<=60;$i++)
+        yrs+='<option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>';
+    @endfor
+
     $(".since").datepicker({
         format : 'dd-mm-yyyy',
         autoclose : true,
         endDate: '+0d',
     });
 
-    $(".monthYear").datepicker( {
-        format: "mm-yyyy",
-        viewMode: "months",
-        minViewMode: "months",
-        autoclose : true,
-        endDate: '+0d',
-    });
 
     $("#addAchiev").on("click", function(e)
     {
@@ -598,11 +673,11 @@ $(function()
 
         var row = parseInt($("input[name='mem_rows']").val());
         row++;
-        var content = '<div id="mem_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Membership Title</label>';
+        var content = '<div id="mem_row_'+row+'"><hr><div class="row"><div class="col-sm-6"><div class="form-group"><label for="membership">Member of</label>';
             content+= '<select name="mem_'+row+'" class="form-control"><option value="">--select--</option>';
             content+= membs;
             content+='</select></div></div>';
-            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#mem_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
+            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#mem_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div></div>';
         $("input[name='mem_rows']").val(row);
         $("#memDiv").append(content);
 
@@ -626,17 +701,15 @@ $(function()
             content+= '<div class="form-check form-check-inline mr-1"><input class="form-check-input" checked name="clinic_detail_'+row+'" id="inline-radio1" type="radio" value="1"><label class="form-check-label" for="inline-radio11">Own Clinic</label>';
             content+= '</div><div class="form-check form-check-inline mr-1"><input class="form-check-input" name="clinic_detail_'+row+'" id="inline-radio2" type="radio" value="2" ><label class="form-check-label" for="inline-radio22">Others</label>';
             content+= '</div></div></div></div></div>';
-            content+= '<div class="form-inline"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<select name="prof_desig_'+row+'" required class="form-control">'+desigOptions+'</select></div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control"></div>';
-            content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text" required name="prof_palce_'+row+'" class="form-control"></div>';
-            content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input style="background-color:white" readOnly type="text" required name="prof_since_'+row+'" class="form-control"></div>';
+            content+= '<div class="form-inline"><div class="form-group"><label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<select name="prof_desig_'+row+'" required class="form-control">'+desigOptions+'</select></div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input placeholder="Name of Institution/ Clinic/ Hospital/ Etc." type="text"  required name="prof_org_'+row+'" class="form-control"></div>';
+            content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input type="text" placeholder="Enter place" required name="prof_palce_'+row+'" class="form-control"></div>';
+            content+= '<div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;<input style="background-color:white" readOnly type="text" placeholder="dd-mm-yyyy" required name="prof_since_'+row+'" class="form-control"></div>';
             content+= '</div><div class="row"><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div></div>';
         $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);
 
         $("input[name='prof_since_"+row+"']").datepicker({
-            format: "mm-yyyy",
-            viewMode: "months",
-            minViewMode: "months",
+            format : 'dd-mm-yyyy',
             autoclose : true,
             endDate: '+0d',
         });
@@ -652,24 +725,15 @@ $(function()
             content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" placeholder="Name of Institution/ Clinic/ Hospital/ etc." required name="exp_wrkat_'+row+'" class="form-control">';
             content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-3"><div class="form-group">';
-            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><input type="text" readOnly required style="background-color:white" name="exp_fryr_'+row+'" class="form-control">';
+            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><select name="exp_fryr_'+row+'" class="form-control">'+yrs+'</select>';
             content +='</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
-            content +='<input type="text" readOnly required style="background-color:white" name="exp_toyr_'+row+'" class="form-control monthYear"></div></div></div>';
-            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Exp in field of Homoeopathy<sup class="text-danger">*</sup></label>';
+            content +='<select name="exp_toyr_'+row+'" class="form-control">'+yrs+'</select></div></div></div>';
+            content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Mention<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required placeholder="Mention in years" name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';
 
         $("input[name='exp_rows']").val(row);
         $("#expDiv").append(content);
-
-        $("input[name='exp_fryr_"+row+"'], input[name='exp_toyr_"+row+"']").datepicker( {
-            format: "mm-yyyy",
-            viewMode: "months",
-            minViewMode: "months",
-            autoclose : true,
-            endDate: '+0d',
-        });
-
     });
 
 
@@ -680,7 +744,7 @@ $(function()
         row++;
 
         var desigOptions = '<option value="">--select--</option>';
-        @foreach($brMedicines as $brMedicine)
+        @foreach($professionals as $brMedicine)
             desigOptions +='<option value="{{$brMedicine->id}}">{{$brMedicine->name}}</option>';
         @endforeach
 
@@ -689,8 +753,13 @@ $(function()
             joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
         @endforeach
 
+        var brOptions ='<option value="">--select--</option>';
+        @foreach($branchOfMedicine as $brMed)
+            brOptions +='<option value="{{$brMed->id}}">{{$brMed->name}}</option>';
+        @endforeach
+
         var content = '<div id="edu_row_'+mainRow+''+row+'"><hr><div class="row"><div class="col-sm-3"><div class="form-group"><label for="education">Additional Qualification<sup class="text-danger">*</sup></label><select required name="additional_qualification_'+mainRow+''+row+'" class="form-control">'+desigOptions+'</select></div></div>';
-            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+mainRow+''+row+'">Branch<sup class="text-danger">*</sup></label><input required type="text" name="add_prof_branch_'+mainRow+''+row+'" class="form-control"></div></div>';
+            content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_branch_'+mainRow+''+row+'">Branch<sup class="text-danger">*</sup></label><select required name="add_prof_branch_'+mainRow+''+row+'" class="form-control">'+brOptions+'</select></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_college_'+mainRow+''+row+'">College<sup class="text-danger">*</sup></label><input required type="text" name="add_prof_college_'+mainRow+''+row+'" class="form-control"></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_joinyear_'+mainRow+''+row+'">Year<sup class="text-danger">*</sup></label><select required name="add_prof_joinyear_'+mainRow+''+row+'" class="form-control">'+joinYearOptions+'</select></div></div>';
             content+= '<div class="col-sm-3"><div class="form-group"><label for="add_prof_place_'+mainRow+''+row+'">Place<sup class="text-danger">*</sup></label><input type="text" required name="add_prof_place_'+mainRow+''+row+'" class="form-control"></div></div>';
@@ -708,6 +777,20 @@ $(function()
     });
 
 });
+
+jQuery.validator.addMethod("regex", function(value, element) {
+  // allow any non-whitespace characters as the host part
+  return this.optional( element ) || /^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/.test( value );
+}, 'Please enter a valid email address.');
+
+$.validator.addMethod(
+        "regex22",
+        function(value, element, regexp) {
+            var re = new RegExp("^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/");
+            return this.optional(element) || re.test(value);
+        },
+        "Please check your input."
+);
 
     var form = $("#createPhysician");
 form.validate({
@@ -749,6 +832,79 @@ form.validate({
         $(element).removeClass("is-invalid");
     },
 });
+
+    var brSelect = 1;
+    $("body").on('click', ".crBr", function (e) {
+        brSelect=$(this).data('option');
+    });
+
+var createForm = $("#add_desg").validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        rules: {
+            memb_name : {
+                required : true,
+                remote: {
+                    url: "{{ route('admin.mstr.branch_medicine.checkDuplicate') }}",
+                    type: "post",
+                    data : {
+                        '_token' : function() { return $("meta[name='csrf-token']").attr('content'); }
+                    }
+                }
+            }
+        },
+        messages : {
+            memb_name : {
+                remote : 'The medicine name is already exists'
+            }
+        },
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            error.addClass("error invalid-feedback");
+            //error.parent("div.form-group").addClass("has-error");
+            element.parent("div.form-group").append(error);
+            element.addClass('is-invalid');
+            $("#bBtn").prop('disabled',false);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+                method : 'post',
+                url : "{{ route('admin.mstr.branch_medicine.store') }}",
+                data : $(form).serialize(),
+                dataType:'json',
+                success:function(result)
+                {
+                    var options = '<option value="">--select--</option>'
+
+                    $(result.data).each(function(ind,val)
+                    {
+                        options+= '<option value="'+val['id']+'">'+val['name']+'</option>'
+                    });
+
+                    $('body').find("select[name='branch_of_medicine_"+brSelect+"']").html(options);
+
+                    Swal.fire('Success!',result.message,'success').then(()=>{
+                        createForm.resetForm();
+                        $(form)[0].reset();
+                        $("#bBtn").prop('disabled',false);
+                        $("#addDynamicBranch").modal("hide");
+                    });
+                },
+            });
+        }
+    });
+
+    $("#addDynamicBranch").on('hide.bs.modal', function(){
+        createForm . resetForm();
+        $("#bBtn").prop('disabled',false);
+    });
+
 form.children("div").steps({
     startIndex: 0,
     headerTag: "h3",

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use App\Models\DistrictModel;
 use App\Models\CountryModel;
 use App\Models\DesignationMasterModel;
 use App\Models\MedicineMasterModel;
+use App\Models\ProfessionQualifyModel;
 use App\Models\PhysicianMembershipMasterModel;
 use App\Models\Physician\PhysicianAdditionalEduModel;
 use App\Models\Physician\PhysicianEduModel;
@@ -44,7 +46,10 @@ class MedicalStudentController extends Controller
             return Datatables::of($users)
                 ->addIndexColumn()
                 ->addColumn('first_name', function ($row) {
-                    return $row->first_name . ' ' . $row->last_name;
+                    return trim(ucwords($row->physicianProfile->name_prefix).'.'.$row->first_name . ' ' . $row->last_name);
+                })
+                ->addColumn('medicine', function ($row) {
+                    return $row->studentEducation->branch ? $row->studentEducation->branch->name : '';
                 })
                 ->addColumn('gender', function ($row) {
                     return ucwords($row->physicianProfile->gender);
@@ -119,6 +124,10 @@ class MedicalStudentController extends Controller
     {
         $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
         $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['states'] = CountryModel::find(101);
+        $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
+        $pageData['branchOfMedicine'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
+        $pageData['cities'] = DistrictModel::activeOnly();
 
         return view('backend.physician.create_student', $pageData);
     }
@@ -153,18 +162,18 @@ class MedicalStudentController extends Controller
         }
 
         PhysicianProfileModel::create([
+            'name_prefix' => trim($request->title),
             'user_id' => $user->id,
             'avatar' => $avatarName,
             'gender' => trim($request->gender),
-            'dob' => \Carbon\Carbon::parse(trim($request->dob))->format('Y-m-d'),
-            'age' => \Carbon\Carbon::parse(trim($request->dob))->age,
+            'age' => $request->age,
             'district' => trim($request->district),
             'state' => trim($request->state),
             'country' => trim($request->country),
             'pincode' => trim($request->pincode),
             'mobile_no' => trim($request->mobile_no),
             'address' => trim($request->address),
-            'about_me' => trim($request->about_me),
+            'about_me' => trim($request->about_me)!='' ? trim($request->about_me) : null,
         ]);
 
         //Add Education
@@ -189,7 +198,7 @@ class MedicalStudentController extends Controller
                     }
                 }
 
-                $parEdu = PhysicianEduModel::create([
+                PhysicianEduModel::create([
                     'user_id' => $user->id,
                     'branch_of_medicine' => trim($request->input('edu_branch_of_medicine_' . $m)),
                     'registration_no' => serialize($memberships),
@@ -245,11 +254,13 @@ class MedicalStudentController extends Controller
     {
         $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
         $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['branchOfMedicine'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
 
         $pageData['userData'] = User::find($id);
         $pageData['countries'] = CountryModel::activeOnly();
         $pageData['states'] = CountryModel::find($pageData['userData']->physicianProfile->country);
         $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
+        $pageData['cities'] = DistrictModel::activeOnly();
 
         return view('backend.medical_student.edit_student', $pageData);
     }
@@ -284,17 +295,17 @@ class MedicalStudentController extends Controller
         PhysicianProfileModel::where([
             ['user_id', '=', $id]
         ])->update([
+            'name_prefix' => trim($request->title),
             'avatar' => $avatarName,
             'gender' => trim($request->gender),
-            'dob' => \Carbon\Carbon::parse(trim($request->dob))->format('Y-m-d'),
-            'age' => \Carbon\Carbon::parse(trim($request->dob))->age,
+            'age' => $request->age,
             'district' => trim($request->district),
             'state' => trim($request->state),
             'country' => trim($request->country),
             'pincode' => trim($request->pincode),
             'mobile_no' => trim($request->mobile_no),
             'address' => trim($request->address),
-            'about_me' => trim($request->about_me),
+            'about_me' => trim($request->about_me)!='' ? trim($request->about_me) : null,
         ]);
 
         PhysicianEduModel::where('user_id',$id)->delete();
@@ -320,7 +331,7 @@ class MedicalStudentController extends Controller
                     }
                 }
 
-                $parEdu = PhysicianEduModel::create([
+                PhysicianEduModel::create([
                     'user_id' => $id,
                     'branch_of_medicine' => trim($request->input('edu_branch_of_medicine_' . $m)),
                     'registration_no' => serialize($memberships),
