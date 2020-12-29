@@ -161,6 +161,7 @@ class PhyClinicsController extends Controller
             $cliWorkDay = [
                 'user_id' => $request->user,
                 'clinic_id' => $createClinic->id,
+                'clinic_type' => 'clinic',
                 'day_name' => $dayKey,
                 'morning_session_time' => '',
                 'evening_session_time' => '',
@@ -256,6 +257,7 @@ class PhyClinicsController extends Controller
         PhysicianClinicTimesModel::where([
             ['user_id', '=', $recordInfo->user_id],
             ['clinic_id', '=', $id],
+            ['clinic_type', '=', 'clinic'],
             ['status', '!=', '2'],
         ])->update([
             'status' => '2',
@@ -266,6 +268,7 @@ class PhyClinicsController extends Controller
             $cliWorkDay = [
                 'user_id' => $recordInfo->user_id,
                 'clinic_id' => $id,
+                'clinic_type' => 'clinic',
                 'day_name' => $dayKey,
                 'morning_session_time' => '',
                 'evening_session_time' => '',

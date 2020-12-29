@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Physician\PhysicianClinicTimesModel;
 use App\Models\Physician\PhysicianMembershipModel;
+use App\Models\Backend\HospitalConsultantModel;
 
 class HospitalModel extends Model
 {
@@ -21,7 +22,10 @@ class HospitalModel extends Model
 
     public function workingDays()
     {
-        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where('status','1');
+        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where([
+            ['status','=','1'],
+            ['clinic_type','=','hospital']
+        ]);
     }
 
     public function achievements()
@@ -31,7 +35,7 @@ class HospitalModel extends Model
 
     public function consultants()
     {
-        return $this->hasMany(PhysicianClinicConsultsModel::class,'clinic_id')->where([
+        return $this->hasMany(HospitalConsultantModel::class,'hospital_id')->where([
             ['status','!=','2']
         ]);
     }

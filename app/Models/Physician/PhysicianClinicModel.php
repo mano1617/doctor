@@ -20,7 +20,10 @@ class PhysicianClinicModel extends Model
 
     public function workingDays()
     {
-        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where('status','1');
+        return $this->hasMany(PhysicianClinicTimesModel::class,'clinic_id')->where([
+            ['status','=','1'],
+            ['clinic_type','=','clinic']
+        ]);
     }
 
     public function consultants()

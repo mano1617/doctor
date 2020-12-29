@@ -1,8 +1,29 @@
 <?php
 
-Route::resource('hospitals', 'HospitalController');
-Route::post('hospitals/check-email-address','HospitalController@checkAddress')->name('hospitals.checkEmail');
-Route::get('hospitals/update/status/{userId}/{statusCode}','HospitalController@updateStatus')->name('hospitals.updateStatus'); 
+Route::group(['prefix' => 'hospitals'],function()
+{
+    Route::resource('/', 'HospitalController')->names([
+        'index' => 'hospitals.index',
+        'create' => 'hospitals.create',
+        'store' => 'hospitals.store',
+        'edit' => 'hospitals.edit',
+        'update' => 'hospitals.update',
+    ]);
+    Route::post('check-email-address','HospitalController@checkAddress')->name('hospitals.checkEmail');
+    Route::get('update/status/{userId}/{statusCode}','HospitalController@updateStatus')->name('hospitals.updateStatus'); 
+    Route::post('list-consultants', 'HospitalController@listConsultants')->name('hospitals.listConsultants');
+
+    Route::resource('consultants', 'HospitalConsultant')->names([
+        'index' => 'hospitals.consultants.index',
+        'create' => 'hospitals.consultants.create',
+        'store' => 'hospitals.consultants.store',
+        'edit' => 'hospitals.consultants.edit',
+        'update' => 'hospitals.consultants.update',
+    ]);
+    Route::post('consultants/check-email-address', 'HospitalConsultant@checkAddress')->name('hospitals.consultants.checkEmail');
+    Route::get('consultants/update/status/{userId}/{statusCode}', 'HospitalConsultant@updateStatus')->name('hospitals.consultants.updateStatus');
+
+});
 
 Route::group(['prefix' => 'users'],function()
 {

@@ -11,6 +11,7 @@ use App\Models\DistrictModel;
 use App\Models\Physician\PhysicianClinicConsultsModel;
 use App\Models\Physician\PhysicianClinicTimesModel;
 use App\Models\StateModel;
+use App\Models\Backend\HospitalConsultantModel;
 use App\Models\Physician\PhysicianMembershipModel;
 use DataTables;
 use Illuminate\Database\Eloquent\Builder;
@@ -85,7 +86,7 @@ class HospitalController extends Controller
 
                     $actions .= '<a href="' . route('admin.hospitals.edit', $row->id) . '"  class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
                     // $actions .= '<a href="' . route('admin.physician.consultants.index', ['page_option' => 'clinics', 'clinic' => $row->id, 'physician' => $physicianId]) . '" title="View Consultants" class="btn btn-outline-info"><i class="fa fa-fw fa-user"></i></a>';
-                    // $actions .= '<a href="javascript:void(0);" id="viewConsult_btn_' . $row->id . '" data-rowId ="' . $row->id . '" title="View Consultants" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-users"></i></a>';
+                    $actions .= '<a href="javascript:void(0);" id="viewConsult_btn_' . $row->id . '" data-rowId ="' . $row->id . '" title="View Consultants" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-users"></i></a>';
                     // $actions .= ' <a title="View Gallery" href="' . route('admin.physician.gallery.index', ['clinic' => $row->id]) . '" class="btn btn-outline-dark"><i class="fa fa-fw fa-photo"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="' . route('admin.hospitals.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
@@ -195,6 +196,7 @@ class HospitalController extends Controller
             $cliWorkDay = [
                 'user_id' =>  Auth::id(),
                 'clinic_id' => $createClinic->id,
+                'clinic_type' => 'hospital',
                 'day_name' => $dayKey,
                 'morning_session_time' => '',
                 'evening_session_time' => '',
@@ -318,12 +320,14 @@ class HospitalController extends Controller
 
         PhysicianClinicTimesModel::where([
             ['user_id', '=',  Auth::id()],
+            ['clinic_type', '=', 'hospital'], 
             ['clinic_id', '=', $id]
         ])->delete();
         foreach ($this->weekDays as $dayKey => $day) {
             $cliWorkDay = [
                 'user_id' =>  Auth::id(),
                 'clinic_id' => $id,
+                'clinic_type' => 'hospital',
                 'day_name' => $dayKey,
                 'morning_session_time' => '',
                 'evening_session_time' => '',
@@ -384,4 +388,26 @@ class HospitalController extends Controller
         ]);
     }
 
+    public function listConsultants(Request $request)
+    {
+        $selfConsult = HospitalConsultantModel::where([
+            ['hospital_id', '=', $request->clinicId],
+            // ['self_register', '=', '1'],
+            ['status', '!=', '2'],
+        ])->count();
+
+        $clinicData = HospitalModel::find($request->clinicId);
+
+        return response()->json([
+            'clinicData' => [
+                'id' => $clinicData->user_id,
+                'name' => trim($clinicData->name),
+                'mobile' => $clinicData->mobile_no,
+                'email' => $clinicData->email_address,
+            ],
+            'html' => view('backend.physician.list_hospital_consultants', [
+                'data' => $clinicData,
+            ])->render(),
+        ]);
+    }
 }

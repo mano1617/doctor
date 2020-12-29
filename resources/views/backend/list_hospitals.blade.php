@@ -169,7 +169,7 @@
                             <h4 class="modal-title">Create new Consultant</h4>
                             <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
-                        <form id="createConsultant" enctype="multipart/form-data" method="post" action="{{ route('admin.physician.consultants.store') }}">
+                        <form id="createConsultant" enctype="multipart/form-data" method="post" action="{{ route('admin.hospitals.consultants.store') }}">
                     {{csrf_field()}}
                         <div class="modal-body">
                             <input type="hidden" name="clinic">
@@ -346,11 +346,11 @@ $(function() {
         $("#clinic").val($(this).data('row'));
         $(".removeSel").val('');
         $(".removeCheck").prop('checked',false);
-        $("#editConsultant").attr('action',"{{ route('admin.physician.consultants.index') }}/"+$(this).data('row'));
+        $("#editConsultant").attr('action',"{{ route('admin.hospitals.consultants.index') }}/"+$(this).data('row'));
 
         $.ajax({
             method : 'get',
-            url : "{{ route('admin.physician.consultants.index') }}/"+$(this).data('row'),
+            url : "{{ route('admin.hospitals.consultants.index') }}/"+$(this).data('row'),
             data : {id : $(this).data('row')},
             dataType:'json',
             success:function(result)
@@ -395,7 +395,7 @@ $(function() {
         $("input[name='clinic']").val($(this).data('rowid'));
         $.ajax({
             type : 'post',
-            url : "{{ route('admin.physician.clinics.listConsultants') }}",
+            url : "{{ route('admin.hospitals.listConsultants') }}",
             data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}',hospital:1},
             dataType:'json',
             beforeSend : function()
@@ -493,7 +493,7 @@ $(function() {
 
             $.ajax({
                 method : 'post',
-                url : "{{ route('admin.physician.consultants.store') }}",
+                url : "{{ route('admin.hospitals.consultants.store') }}",
                 data : $(form).serialize(),
                 dataType:'json',
                 success:function(result)
