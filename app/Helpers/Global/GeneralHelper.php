@@ -34,6 +34,19 @@ if (!function_exists('gravatar')) {
     }
 }
 
+if (!function_exists('dateConvert')) {
+    /**
+     * Return the route to the "home" page depending on authentication/authorization status.
+     *
+     * @return string
+     */
+    function dateConvert($date, $format = 'd-m-Y')
+    {
+        return \Carbon\Carbon::parse($date)->format($format);
+    }
+}
+
+
 if (! function_exists('home_route')) {
     /**
      * Return the route to the "home" page depending on authentication/authorization status.

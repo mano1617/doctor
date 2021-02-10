@@ -1,29 +1,36 @@
 <?php
 
-Route::group(['prefix' => 'hospitals'],function()
-{
-    Route::resource('/', 'HospitalController')->names([
+    Route::resource('hospitals', 'HospitalController')->names([
         'index' => 'hospitals.index',
         'create' => 'hospitals.create',
         'store' => 'hospitals.store',
         'edit' => 'hospitals.edit',
         'update' => 'hospitals.update',
     ]);
-    Route::post('check-email-address','HospitalController@checkAddress')->name('hospitals.checkEmail');
-    Route::get('update/status/{userId}/{statusCode}','HospitalController@updateStatus')->name('hospitals.updateStatus'); 
-    Route::post('list-consultants', 'HospitalController@listConsultants')->name('hospitals.listConsultants');
+    Route::post('hospitals/check-email-address','HospitalController@checkAddress')->name('hospitals.checkEmail');
+    Route::get('hospitals/update/status/{userId}/{statusCode}','HospitalController@updateStatus')->name('hospitals.updateStatus'); 
+    Route::post('hospitals/list-consultants', 'HospitalController@listConsultants')->name('hospitals.listConsultants');
+    Route::post('hospitals/list-galleries', 'HospitalController@listGalleries')->name('hospitals.listGalleries');
 
-    Route::resource('consultants', 'HospitalConsultant')->names([
+    Route::resource('hospitals/consultants', 'HospitalConsultant')->names([
         'index' => 'hospitals.consultants.index',
         'create' => 'hospitals.consultants.create',
         'store' => 'hospitals.consultants.store',
         'edit' => 'hospitals.consultants.edit',
         'update' => 'hospitals.consultants.update',
     ]);
-    Route::post('consultants/check-email-address', 'HospitalConsultant@checkAddress')->name('hospitals.consultants.checkEmail');
-    Route::get('consultants/update/status/{userId}/{statusCode}', 'HospitalConsultant@updateStatus')->name('hospitals.consultants.updateStatus');
+    Route::post('hospitals/consultants/check-email-address', 'HospitalConsultant@checkAddress')->name('hospitals.consultants.checkEmail');
+    Route::get('hospitals/consultants/update/status/{userId}/{statusCode}', 'HospitalConsultant@updateStatus')->name('hospitals.consultants.updateStatus');
 
-});
+    Route::resource('hospitals/galleries', 'HospitalGallery')->names([
+        'index' => 'hospitals.galleries.index',
+        'create' => 'hospitals.galleries.create',
+        'store' => 'hospitals.galleries.store',
+        'edit' => 'hospitals.galleries.edit',
+        'update' => 'hospitals.galleries.update',
+    ]);
+    Route::get('hospitals/galleries/update/status/{userId}/{statusCode}', 'HospitalGallery@updateStatus')->name('hospitals.galleries.updateStatus');
+
 
 Route::group(['prefix' => 'users'],function()
 {

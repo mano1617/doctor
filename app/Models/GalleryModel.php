@@ -36,6 +36,4 @@ class GalleryModel extends Model
     {
         return $query->where('status','!=','2')->orderBy('sorting')->get();
     }
-
-
 }

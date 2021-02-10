@@ -170,6 +170,43 @@
                 
         });
 
+        $("body").on("click", ".removeGalleryRow", function(e)
+            {
+                var clinicId = $(this).data('clinic');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2eb85c',
+                    cancelButtonColor: '#e55353',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.value) {
+                            
+                        $.get($(this).data("rowurl"), function(result)
+                                    {
+                                        Swal.fire(
+                        'Success!',
+                        '',
+                        'success'
+                        ).then(()=>{
+
+                            if(clinicId)
+                            {
+                                $('body #viewGallery_btn_'+clinicId).trigger('click');
+                            }else{
+                                window.location.reload();
+                            }
+                        })
+                                    },'JSON');
+                                            
+                    }
+            });
+                
+        });
+
     });
 </script>
 

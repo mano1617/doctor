@@ -10,13 +10,9 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>Hospital Lists</strong>
+                    <strong>Pharmacy Lists</strong>
                     <div class="float-right">
-                    <a href="{{ route('admin.hospitals.create') }}" class="btn btn-outline-success"><i class="fa fa-fw fa-plus"></i>CREATE</a>
-                    @if(request()->physician)
-                    <a href="{{ route('admin.physician.index') }}" class="btn btn-danger">
-                    <i class="fa fa-fw fa-arrow-left"></i>GO BACK</a>
-                    @endif
+                    <a href="{{ route('admin.homeopathic-pharmacy.create') }}" class="btn btn-outline-success"><i class="fa fa-fw fa-plus"></i>CREATE</a>
                     </div>
                 </div><!--card-header-->
                 <div class="card-body">
@@ -458,13 +454,13 @@ $(function() {
         {
             if($(this).is(':checked'))
             {
-                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='') 
+                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='')
                 {
                     $("#cli_"+cday+"_mst_"+row).val($("#cli_"+dday+"_mst_"+(row-1)).val());
                     $("#cli_"+cday+"_med_"+row).val($("#cli_"+dday+"_med_"+(row-1)).val());
                 }
 
-                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='') 
+                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='')
                 {
                     $("#cli_"+cday+"_nst_"+row).val($("#cli_"+dday+"_nst_"+(row-1)).val());
                     $("#cli_"+cday+"_ned_"+row).val($("#cli_"+dday+"_ned_"+(row-1)).val());
@@ -483,13 +479,13 @@ $(function() {
         {
             if($(this).is(':checked'))
             {
-                if($.trim($("#ecli_"+cday+"_mst_"+row).val())=='' && $.trim($("#ecli_"+cday+"_med_"+row).val())=='') 
+                if($.trim($("#ecli_"+cday+"_mst_"+row).val())=='' && $.trim($("#ecli_"+cday+"_med_"+row).val())=='')
                 {
                     $("#ecli_"+cday+"_mst_"+row).val($("#ecli_"+dday+"_mst_"+(row-1)).val());
                     $("#ecli_"+cday+"_med_"+row).val($("#ecli_"+dday+"_med_"+(row-1)).val());
                 }
 
-                if($.trim($("#ecli_"+cday+"_nst_"+row).val())=='' && $.trim($("#ecli_"+cday+"_ned_"+row).val())=='') 
+                if($.trim($("#ecli_"+cday+"_nst_"+row).val())=='' && $.trim($("#ecli_"+cday+"_ned_"+row).val())=='')
                 {
                     $("#ecli_"+cday+"_nst_"+row).val($("#ecli_"+dday+"_nst_"+(row-1)).val());
                     $("#ecli_"+cday+"_ned_"+row).val($("#ecli_"+dday+"_ned_"+(row-1)).val());
@@ -507,7 +503,7 @@ $(function() {
     $('#userTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('admin.hospitals.index') }}",
+        ajax: "{{ route('admin.homeopathic-pharmacy.index') }}",
         columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'name', name: 'name' },
@@ -562,11 +558,11 @@ $(function() {
     $("body").on('click', '.editGalRow', function(e)
     {
         $("#erow").val($(this).data('row'));
-        $("#editGallery").attr('action',"{{ route('admin.hospitals.galleries.index') }}/"+$(this).data('row'));
+        $("#editGallery").attr('action',"{{ route('admin.homeopathic-pharmacy.galleries.index') }}/"+$(this).data('row'));
 
         $.ajax({
             method : 'get',
-            url : "{{ route('admin.hospitals.galleries.index') }}/"+$(this).data('row'),
+            url : "{{ route('admin.homeopathic-pharmacy.galleries.index') }}/"+$(this).data('row'),
             data : {id : $(this).data('row')},
             dataType:'json',
             success:function(result)
@@ -638,7 +634,7 @@ $(function() {
         $("input[name='clinic_id']").val($(this).data('rowid'));
         $.ajax({
             type : 'post',
-            url : "{{ route('admin.hospitals.listGalleries') }}",
+            url : "{{ route('admin.homeopathic-pharmacy.listGalleries') }}",
             data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}',hospital:1},
             dataType:'json',
             beforeSend : function()
@@ -717,7 +713,7 @@ $(function() {
 
             $.ajax({
                 method : 'post',
-                url : "{{ route('admin.hospitals.galleries.index') }}/"+$("#erow").val(),
+                url : "{{ route('admin.homeopathic-pharmacy.galleries.index') }}/"+$("#erow").val(),
                 data : formData,
                 dataType:'json',
                 cache: false,
@@ -761,7 +757,7 @@ $(function() {
             var formData = new FormData($(form)[0]);
             $.ajax({
                 method : 'post',
-                url : "{{ route('admin.hospitals.galleries.store') }}",
+                url : "{{ route('admin.homeopathic-pharmacy.galleries.store') }}",
                 data : formData,
                 dataType:'json',
                 cache: false,

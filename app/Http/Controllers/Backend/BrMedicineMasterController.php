@@ -76,7 +76,7 @@ class BrMedicineMasterController extends Controller
             return response()->json([
                 'status' => 1,
                 'data' => MedicineMasterModel::select(['id','name'])->activeOnly(),
-                'message' => 'Successfully data has been created.'
+                'message' => 'Branch of Medicine is created successfully.'
             ]);
         }
 

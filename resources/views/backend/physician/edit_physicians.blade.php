@@ -480,7 +480,7 @@ $cYear = date('Y');
                                 </div>
                                 <div class="form-group">&nbsp;&nbsp;&nbsp;
                                     <label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;
-                                    <input type="text"value="{{ $description['since'] }}" required name="prof_since_{{$ppk+1}}" class="form-control monthYear">
+                                    <input type="text" placeholder="dd-mm-yyyy" value="{{ $description['since'] }}" required name="prof_since_{{$ppk+1}}" class="form-control since">
                                 </div>
                             </div>
 
@@ -551,7 +551,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">Since<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="prof_since_1" class="form-control monthYear">
+                                        <input type="text" required name="prof_since_1" class="form-control since">
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
@@ -606,7 +606,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <select name="exp_fryr_{{$pexk+1}}" class="form-control">
+                                        <select name="exp_fryr_{{$pexk+1}}" data-ex="{{ $pexk+1 }}" class="form-control expFr">
                                             @for($i=0;$i<=60;$i++)
                                             <option @if($pExpYear[0]==($cYear-$i)) selected @endif value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
                                             @endfor
@@ -616,7 +616,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <select name="exp_toyr_{{$pexk+1}}" class="form-control">
+                                        <select name="exp_toyr_{{$pexk+1}}" data-ex="{{ $pexk+1 }}" class="form-control expEd">
                                             @for($i=0;$i<=60;$i++)
                                             <option @if($pExpYear[1]==($cYear-$i)) selected @endif value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
                                             @endfor
@@ -672,7 +672,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <select name="exp_fryr_1" class="form-control">
+                                        <select name="exp_fryr_1" data-ex="1" class="form-control expFr">
                                             @for($i=0;$i<=60;$i++)
                                             <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
                                             @endfor
@@ -682,7 +682,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <select name="exp_toyr_1"  class="form-control">
+                                        <select name="exp_toyr_1" data-ex="1" class="form-control expEd">
                                             @for($i=0;$i<=60;$i++)
                                             <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
                                             @endfor
@@ -856,6 +856,24 @@ function Validate(event) {
     }
 $(function()
 {
+    $("body").on("change", ".expFr", function(e)
+    {
+        var rowIndex = $(this).data('ex');
+        if($(this).val() > $("select[name='exp_toyr_"+rowIndex+"']").val())
+        {
+            $("select[name='exp_toyr_"+rowIndex+"']").val($("select[name='exp_toyr_"+rowIndex+"'] option:first").val());
+        }
+    });
+
+    $("body").on("change", ".expEd", function(e)
+    {
+        var rowIndex = $(this).data('ex');
+        if($("select[name='exp_fryr_"+rowIndex+"']").val() > $(this).val())
+        {
+            $("select[name='exp_toyr_"+rowIndex+"']").val($("select[name='exp_toyr_"+rowIndex+"'] option:first").val());
+        }
+    });
+
     $("#state").on("change", function(e)
     {
         var content = '<option value="">--select--</option>';
@@ -1114,16 +1132,14 @@ var createForm = $("#add_desg").validate({
             content+= '<div class="form-inline"><div class="form-group">&nbsp;&nbsp;<label for="prof_desig">Designation<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<select name="prof_desig_'+row+'" required class="form-control">'+desigOptions+'</select>';
             content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_org">At<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text"  required name="prof_org_'+row+'" class="form-control">';
             content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_palce">Place<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" required name="prof_palce_'+row+'" class="form-control">';
-            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" required name="prof_since_'+row+'" class="form-control monthYear">';
+            content+= '</div><div class="form-group">&nbsp;&nbsp;&nbsp;<label for="prof_since">Since<sup class="text-danger">*</sup></label>&nbsp;&nbsp;&nbsp;<input type="text" placeholder="dd-mm-yyyy" required name="prof_since_'+row+'" class="form-control">';
             content+= '</div></div><div class="row"><div class="col-sm-3"><a style="margin-top:30px;" data-container="#prof_row_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
 
         $("input[name='prof_rows']").val(row);
         $("#profDiv").append(content);
 
         $("input[name='prof_since_"+row+"']").datepicker({
-            format: "mm-yyyy",
-            viewMode: "months",
-            minViewMode: "months",
+            format : 'dd-mm-yyyy',
             autoclose : true,
             endDate: '+0d',
         });
@@ -1137,10 +1153,10 @@ var createForm = $("#add_desg").validate({
             content +='<input type="text" required name="exp_desig_'+row+'" class="form-control"></div></div><div class="col-sm-6"><div class="form-group">';
             content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" placeholder="Name of Institution/ Clinic/ Hospital/ etc." required name="exp_wrkat_'+row+'" class="form-control">';
             content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
-            content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-2"><div class="form-group">';
-            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><select name="exp_fryr_'+row+'" class="form-control">'+yrs+'</select>';
-            content +='</div></div><div class="col-sm-2"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
-            content +='<select name="exp_toyr_'+row+'" class="form-control">'+yrs+'</select></div></div></div>';
+            content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-3"><div class="form-group">';
+            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><select name="exp_fryr_'+row+'" data-ex="'+row+'" class="form-control expFr">'+yrs+'</select>';
+            content +='</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
+            content +='<select name="exp_toyr_'+row+'" data-ex="'+row+'" class="form-control expEd">'+yrs+'</select></div></div></div>';
             content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Mention<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required placeholder="Mention in years" name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';

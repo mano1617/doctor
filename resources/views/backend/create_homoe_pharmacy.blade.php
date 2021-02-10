@@ -3,20 +3,7 @@
 @section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
 
 @push('after-styles')
-<link rel="stylesheet" href="{{ asset('assets/backend/jquery.steps/jquery.steps.css') }}">
-<style>
-/* .wizard>.content{display:block;min-height:35em;overflow-y: auto;position:relative} */
 
-.wizard .content {
-    min-height: 100px;
-}
-.wizard .content > .body {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-    position: relative;
-}
-</style>
 @endpush
 
 @section('content')
@@ -24,23 +11,27 @@
     <div class="col">
         <div class="card">
             <div class="card-header">
-                <strong>Create New Hospital</strong>
-                <a href="{{ route('admin.hospitals.index') }}" class="btn btn-danger float-right">
-                    <i class="fa fa-fw fa-arrow-left"></i>GO BACK
+                <strong>Create New Pharmacy</strong>
+                <a 
+                @if(request()->has('pharmacy') && !empty(request()->pharmacy))
+                 href="{{ route('admin.homeopathic-pharmacy.viewBranchs',request()->pharmacy) }}"
+                 @else
+                 href="{{ route('admin.homeopathic-pharmacy.index') }}"
+                 @endif
+                  class="btn btn-danger float-right">
+                    <i class="fa fa-fw fa-close"></i>Cancel
                 </a>
             </div>
+            <form id="createPhysician" class="form-horizontal" enctype="multipart/form-data" method="post" action="{{ route('admin.homeopathic-pharmacy.store') }}">
             <div class="card-body">
-            <br>
-                <form id="createPhysician" class="form-horizontal" enctype="multipart/form-data" method="post" action="{{ route('admin.hospitals.store') }}">
                 {{csrf_field()}}
-                    <div>
-                        <h3>Profile</h3>
-                        <section>
-                        <br>
-                        <div class="row">
+                @if(request()->has('pharmacy') && !empty(request()->pharmacy))
+                    <input type="hidden" name="parent_id" value="{{ request()->pharmacy }}">
+                @endif
+                <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="">Name of Hospital<sup class="text-danger">*</sup></label>
+                            <label for="">Name of Pharmacy<sup class="text-danger">*</sup></label>
                             <input type="text" name="name" required class="form-control">
                         </div>
                     </div>
@@ -111,13 +102,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
                             <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cli_mobile_no" class="form-control">
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="cli_email">Landline</label>
+                            <input type="email" onkeypress="return Validate(event);" name="cli_landline" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label for="cli_email">Email Id<sup class="text-danger">*</sup></label>
                             <input type="email" required name="cli_email" class="form-control">
@@ -144,30 +141,23 @@
                             <textarea name="cli_about_us" class="form-control" ></textarea>
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="sector">Have Branches<sup class="text-danger">*</sup></label>
+                                        <div class="col-form-label">
+                                            <div class="form-check form-check-inline mr-1">
+                                                <input class="form-check-input" checked name="clinic_br_detail" id="inline_br_radio11" type="radio" value="1">
+                                                <label class="form-check-label" for="inline_br_radio11">Yes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline mr-1">
+                                                <input class="form-check-input" name="clinic_br_detail" id="inline_br_radio22" type="radio" value="0" >
+                                                <label class="form-check-label" for="inline_br_radio22">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                 </div>
-                <h6>Contact Numbers:</h6>
-                <div class="row">
-                    <div class="col-sm-5">
-                        <div class="form-group">
-                            <label for="landno">Name/Designation<sup class="text-danger">*</sup></label>
-                            <input type="text" required name="cnt_name_1" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="form-group">
-                            <label for="landno">Mobile Number<sup class="text-danger">*</sup></label>
-                            <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cnt_number_1" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <input type="hidden" name="rows" value="1">
-                            <a href="javascript:void(0);" id="addRow" class="btn btn-sm btn-success" style="margin-top:30px;"><i class="fa fa-fw fa-plus"></i>ADD</a>
-                        </div>
-                    </div>
-                </div>
-                <div id="cnt_divs"></div>
-
+                
                         <hr />
                         <h6>Working Days and Time schedule:</h6>
                         <h6 class="text-danger">Note:</h6>
@@ -244,87 +234,27 @@
                                 </div>
                             </div>
                         </div>
-                        </section>
-                        <h3>Achievements</h3>
-                        <section>
-                        <br>
-                        <input type="hidden" name="ach_rows" value="1">
-                        <div id="achDiv">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <textarea name="ach_1" placeholder="About Achievements" cols="30" rows="5" class="form-control"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                <a style="margin-top:30px;" id="addAchiev" class="btn btn-success btn-sm"><i class="fa fa-fw fa-plus"></i>ADD</a>
-                            </div>
-                            </div>
-                        </div>
-                        </section>
-
-                        <h3>Branches</h3>
-                        <section>
-                        <br />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="sector">Have Branches<sup class="text-danger">*</sup></label>
-                                        <div class="col-form-label">
-                                            <div class="form-check form-check-inline mr-1">
-                                                <input class="form-check-input" checked name="clinic_br_detail" id="inline_br_radio11" type="radio" value="1">
-                                                <label class="form-check-label" for="inline_br_radio11">Yes</label>
-                                            </div>
-                                            <div class="form-check form-check-inline mr-1">
-                                                <input class="form-check-input" name="clinic_br_detail" id="inline_br_radio22" type="radio" value="0" >
-                                                <label class="form-check-label" for="inline_br_radio22">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </form>
             </div>
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-success"><i class="fa fa-fw fa-check"></i>Submit</button>
+                <a 
+                @if(request()->has('pharmacy') && !empty(request()->pharmacy))
+                 href="{{ route('admin.homeopathic-pharmacy.viewBranchs',request()->pharmacy) }}"
+                 @else
+                 href="{{ route('admin.homeopathic-pharmacy.index') }}"
+                 @endif
+                 class="btn btn-danger"><i class="fa fa-fw fa-close"></i>Cancel</a>
+            </div>
+                </form>
+
         </div><!--card-->
     </div><!--col-->
 </div><!--row-->
 @endsection
 @push('after-scripts')
-    <script src="{{ asset('assets/backend/jquery.steps/jquery.steps.min.js') }}"></script>
 <script>
 $(function()
 {
-    $("#addAchiev").on("click", function(e)
-    {
-        var row = parseInt($("input[name='ach_rows']").val());
-        row++;
-        var content = '<div id="ach_row_'+row+'"><div class="row"><div class="col-sm-6"><div class="form-group">';
-            content+= '<textarea name="ach_'+row+'" placeholder="About Achievements / Designations" cols="30" rows="5" class="form-control"></textarea></div></div>';
-            content+= '<div class="col-sm-3"><a style="margin-top:30px;" data-container="#ach_row_'+row+'" class="btn btn-sm removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div></div><hr></div>';
-        $("input[name='ach_rows']").val(row);
-        $("#achDiv").append(content);
-
-    });
-
-    $("#addRow").on("click", function(e)
-    {
-        var row = parseInt($("input[name='rows']").val());
-        row++;
-        var content = '<div id="cnt_row_'+row+'"><div class="row"><div class="col-sm-5"><div class="form-group"><label for="name_desig_'+row+'">Name/Designation</label><sup class="text-danger">*</sup>';
-            content+= '<input type="text" required name="cnt_name_'+row+'" class="form-control"></div></div>';
-            content+= '<div class="col-sm-5"><div class="form-group"><label for="mob_no_'+row+'">Mobile Number</label><sup class="text-danger">*</sup>';
-            content+= '<input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cnt_number_'+row+'" class="form-control"></div></div>';
-            content+= '<div class="col-sm-2"><a style="margin-top:30px;" data-container="#cnt_row_'+row+'" class="btn removeContainer btn-danger btn-sm"><i class="fa fa-fw fa-minus"></i></a></div></div></div>';
-        $("input[name='rows']").val(row);
-        $("#cnt_divs").append(content);
-    });
-
-    $("body").on("click", ".removeContainer", function(e)
-    {
-        $("body "+$(this).data('container')).remove();
-    });
 
     $(".wrk_day").on("change", function(e)
     {
@@ -336,13 +266,13 @@ $(function()
         {
             if($(this).is(':checked'))
             {
-                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='') 
+                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='')
                 {
                     $("#cli_"+cday+"_mst_"+row).val($("#cli_"+dday+"_mst_"+(row-1)).val());
                     $("#cli_"+cday+"_med_"+row).val($("#cli_"+dday+"_med_"+(row-1)).val());
                 }
 
-                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='') 
+                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='')
                 {
                     $("#cli_"+cday+"_nst_"+row).val($("#cli_"+dday+"_nst_"+(row-1)).val());
                     $("#cli_"+cday+"_ned_"+row).val($("#cli_"+dday+"_ned_"+(row-1)).val());
@@ -369,10 +299,7 @@ $(function()
                 {
                     $(result['data']).each(function(ind,vals)
                     {
-                        // if(vals.id==18)
-                        // {
                             content+='<option value="'+vals.id+'">'+vals.name+'</option>';
-                        //}
                     });
                 }
 
@@ -472,48 +399,6 @@ $.validator.addMethod(
         "Please check your input."
 );
 
-    var form = $("#createPhysician");
-    form.validate({
-        errorPlacement: function errorPlacement(error, element) { element.before(error); },
-        errorElement: "span",
-        errorPlacement: function(error, element) {
-            error.addClass("error invalid-feedback");
-            //error.parent("div.form-group").addClass("has-error");
-            element.parent("div.form-group").append(error);
-            element.addClass('is-invalid');
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass("is-invalid");
-        },
-    });
-
-    form.children("div").steps({
-        startIndex: 0,
-        headerTag: "h3",
-        bodyTag: "section",
-        transitionEffect: "slideLeft",
-        // showFinishButtonAlways : true,
-        enableAllSteps: true,
-        enablePagination: true,
-        onStepChanging: function (event, currentIndex, newIndex)
-        {
-            form.validate().settings.ignore = ":disabled,:hidden";
-            return form.valid();
-            // return true;//form.valid();
-        },
-        onFinishing: function (event, currentIndex)
-        {
-            form.validate().settings.ignore = ":disabled";
-            return form.valid();
-        },
-        onFinished: function (event, currentIndex)
-        {
-            form.submit();
-        }
-    });
 </script>
 
 @endpush

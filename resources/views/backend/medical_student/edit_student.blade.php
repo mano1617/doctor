@@ -137,7 +137,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <select required name="district" class="form-control">
+                                        <select required name="district" id="district" class="form-control">
                                             @foreach($cities as $ck)
                                             <option @if($userData->physicianProfile->district==$ck->id) selected @endif value="{{ $ck->id }}">{{ $ck->name }}</option>
                                             @endforeach
@@ -451,6 +451,34 @@ $(function()
                 }
 
                 $("#state").html(content);
+
+            },'JSON');
+        }
+    });
+
+    $("#state").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>';
+
+        if($.trim($(this).val())=='')
+        {
+            $("#district").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/districts') }}",{stateId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        // if(vals.id==18)
+                        // {
+                            content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                        //}
+                    });
+                }
+
+                $("#district").html(content);
 
             },'JSON');
         }

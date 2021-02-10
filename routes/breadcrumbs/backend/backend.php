@@ -52,6 +52,10 @@ Breadcrumbs::for('admin.physician.branches.edit', function ($trail) {
     $trail->push('Update Branch', '');
 });
 
+Breadcrumbs::for('admin.physician.gallery.index', function ($trail) {
+    $trail->push('Clinics', route('admin.physician.clinics.index'));
+    $trail->push('Gallery');
+});
 
 Breadcrumbs::for('admin.physician.consultants.index', function ($trail) {
     if (request()->has('clinic')) {
@@ -94,7 +98,7 @@ Breadcrumbs::for('admin.mstr.membership.index', function ($trail) {
 
 Breadcrumbs::for('admin.mstr.branch_medicine.index', function ($trail) {
     $trail->push('Master Pages', '');
-    $trail->push('Professional Qualification', '');
+    $trail->push('Branch of Medicine', '');
 });
 
 Breadcrumbs::for('admin.hospitals.index', function ($trail) {
@@ -108,8 +112,14 @@ Breadcrumbs::for('admin.hospitals.create', function ($trail) {
 
 Breadcrumbs::for('admin.hospitals.edit', function ($trail) {
     $trail->push('Hospitals', '');
-    $trail->push('Edit Hospital', '');
+    $trail->push('Update Hospital', '');
 });
+
+Breadcrumbs::for('admin.mstr.pro_qualify.index', function ($trail) {
+    $trail->push('Master Pages', '');
+    $trail->push('Professional Qualification', '');
+});
+
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/log-viewer.php';

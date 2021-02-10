@@ -419,7 +419,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">From Year<sup class="text-danger">*</sup></label>
-                                        <select name="exp_fryr_1"  class="form-control">
+                                        <select name="exp_fryr_1" data-ex="1" class="form-control expFr">
                                             @for($i=0;$i<=60;$i++)
                                             <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
                                             @endfor
@@ -429,7 +429,7 @@ $cYear = date('Y');
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="prof_since">End Year<sup class="text-danger">*</sup></label>
-                                        <select name="exp_toyr_1"  class="form-control">
+                                        <select name="exp_toyr_1" data-ex="1"  class="form-control expEd">
                                             @for($i=0;$i<=60;$i++)
                                             <option value="{{ $cYear-$i }}">{{ $cYear-$i }}</option>
                                             @endfor
@@ -540,6 +540,37 @@ function Validate(event) {
     }
 $(function()
 {
+
+    $(".wrk_day").on("change", function(e)
+    {
+        var dayKey = $(this).val();
+        if($(this).data('ex')!=1)
+        {
+            if($.trim($("#cli_"+dayKey+"_mst_"+$(this).data('ex')).val())=='' || $.trim($("#cli_"+dayKey+"_med_"+$(this).data('ex')).val())=='')
+            {
+                alert(day)
+            }
+        }
+    });
+
+    $("body").on("change", ".expFr", function(e)
+    {
+        var rowIndex = $(this).data('ex');
+        if($(this).val() > $("select[name='exp_toyr_"+rowIndex+"']").val())
+        {
+            $("select[name='exp_toyr_"+rowIndex+"']").val($("select[name='exp_toyr_"+rowIndex+"'] option:first").val());
+        }
+    });
+
+    $("body").on("change", ".expEd", function(e)
+    {
+        var rowIndex = $(this).data('ex');
+        if($("select[name='exp_fryr_"+rowIndex+"']").val() > $(this).val())
+        {
+            $("select[name='exp_toyr_"+rowIndex+"']").val($("select[name='exp_toyr_"+rowIndex+"'] option:first").val());
+        }
+    });
+
     $("#addMainRow").on("click", function(e)
     {
         var row = parseInt($("input[name='main_row']").val());
@@ -725,9 +756,9 @@ $(function()
             content +='<label for="prof_desig">Worked At<sup class="text-danger">*</sup></label><input type="text" placeholder="Name of Institution/ Clinic/ Hospital/ etc." required name="exp_wrkat_'+row+'" class="form-control">';
             content +='</div></div></div><div class="row"><div class="col-sm-6"><div class="form-group"><label for="prof_palce">Place<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required name="exp_place_'+row+'" class="form-control"></div></div><div class="col-sm-3"><div class="form-group">';
-            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><select name="exp_fryr_'+row+'" class="form-control">'+yrs+'</select>';
+            content +='<label for="prof_since">From Year<sup class="text-danger">*</sup></label><select name="exp_fryr_'+row+'" data-ex="'+row+'" class="form-control expFr">'+yrs+'</select>';
             content +='</div></div><div class="col-sm-3"><div class="form-group"><label for="prof_since">End Year<sup class="text-danger">*</sup></label>';
-            content +='<select name="exp_toyr_'+row+'" class="form-control">'+yrs+'</select></div></div></div>';
+            content +='<select name="exp_toyr_'+row+'" data-ex="'+row+'" class="form-control expEd">'+yrs+'</select></div></div></div>';
             content +='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="sector">Mention<sup class="text-danger">*</sup></label>';
             content +='<input type="text" required placeholder="Mention in years" name="exp_homoeo_'+row+'" class="form-control"></div></div><div class="col-sm-2">';
             content +='<a style="margin-top:30px;" data-container="#exp_row_'+row+'" class="btn removeContainer btn-danger" data-action="experience"><i class="fa fa-fw fa-minus"></i></a></div></div>';

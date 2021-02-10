@@ -80,22 +80,27 @@
                                     </div>
                                 </div>
                             </div>
-                             <p>Consulting On:</p>
-                             <h6 class="text-danger">Note:</h6>
+                             @php
+                                $clRow = 1;
+                                $kdays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+                            @endphp
                             <p>If no day selection, leave as blank all inputs.</p>
                             @foreach($days as $kday => $day)
+                                @php
+                                    $kd = ($clRow-2);
+                                @endphp
                             <div class="row">
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label style="margin-top:17px;">
-                                        <input type="checkbox"  value="{{ $kday }}" name="cons_day_{{ $kday }}" id="cons_day_{{ $kday }}" class="cons_day removeCheck"> {{$day}}
+                                        <input type="checkbox" data-ex="{{ $clRow }}" data-day="{{ $kdays[$kd] ?? '' }}" value="{{ $kday }}" name="cons_day_{{ $kday }}" id="cons_day_{{ $kday }}" class="cons_day ewrk_day removeCheck"> {{$day}}
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_mst"></label>
-                                        <select name="cli_cons_{{ $kday }}_mst" id="cli_cons_{{ $kday }}_mst" class="form-control removeSel">
+                                        <select name="cli_cons_{{ $kday }}_mst" id="ecli_{{ $kday }}_mst_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=0;$i<=11;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -106,7 +111,7 @@
                                 <div class="col-sm-2" style="border-right: 1px solid #000;">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_med"></label>
-                                        <select name="cli_cons_{{ $kday }}_med" id="cli_cons_{{ $kday }}_med" class="form-control removeSel">
+                                        <select name="cli_cons_{{ $kday }}_med" id="ecli_{{ $kday }}_med_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=1;$i<=12;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -117,7 +122,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_nst"></label>
-                                        <select name="cli_cons_{{ $kday }}_nst" id="cli_cons_{{ $kday }}_nst" class="form-control removeSel">
+                                        <select name="cli_cons_{{ $kday }}_nst" id="ecli_{{ $kday }}_nst_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=12;$i<=23;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -128,7 +133,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="landno"></label>
-                                        <select name="cli_cons_{{ $kday }}_ned" id="cli_cons_{{ $kday }}_ned" class="form-control removeSel">
+                                        <select name="cli_cons_{{ $kday }}_ned" id="ecli_{{ $kday }}_ned_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=13;$i<=24;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -137,6 +142,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @php
+                                $clRow++;
+                            @endphp
                             @endforeach
                             <div class="row">
                                 <div class="col-sm-12">
@@ -206,18 +214,25 @@
                             </div>
                              <p>Consulting On:</p>
                              <h6 class="text-danger">Note:</h6>
+                            @php
+                                $clRow = 1;
+                            @endphp
                             <p>If no day selection, leave as blank all inputs.</p>
                             @foreach($days as $kday => $day)
+                                @php
+                                    $kd = ($clRow-2);
+                                @endphp
                             <div class="row">
                                 <div class="col-sm-2">
                                     <div class="form-group">
-                                        <label style="margin-top:17px;"> <input type="checkbox"  value="{{ $kday }}" name="cons_day_{{ $kday }}" class="cons_day"> {{$day}}</label>
+                                        <label style="margin-top:17px;">
+                                        <input type="checkbox" data-ex="{{ $clRow }}" data-day="{{ $kdays[$kd] ?? '' }}" value="{{ $kday }}" name="cons_day_{{ $kday }}" class="cons_day wrk_day"> {{$day}}</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_mst"></label>
-                                        <select name="cli_cons_{{ $kday }}_mst" class="form-control">
+                                        <select name="cli_cons_{{ $kday }}_mst" id="cli_{{ $kday }}_mst_{{ $clRow }}" class="form-control">
                                             <option value="">--select--</option>
                                             @for($i=0;$i<=11;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -228,7 +243,7 @@
                                 <div class="col-sm-2" style="border-right: 1px solid #000;">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_med"></label>
-                                        <select name="cli_cons_{{ $kday }}_med" class="form-control">
+                                        <select name="cli_cons_{{ $kday }}_med" id="cli_{{ $kday }}_med_{{ $clRow }}" class="form-control">
                                             <option value="">--select--</option>
                                             @for($i=1;$i<=12;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -239,7 +254,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_cons_{{ $kday }}_nst"></label>
-                                        <select name="cli_cons_{{ $kday }}_nst" class="form-control">
+                                        <select name="cli_cons_{{ $kday }}_nst" id="cli_{{ $kday }}_nst_{{ $clRow }}" class="form-control">
                                             <option value="">--select--</option>
                                             @for($i=12;$i<=23;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -250,7 +265,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="landno"></label>
-                                        <select name="cli_cons_{{ $kday }}_ned" class="form-control">
+                                        <select name="cli_cons_{{ $kday }}_ned" id="cli_{{ $kday }}_ned_{{ $clRow }}" class="form-control">
                                             <option value="">--select--</option>
                                             @for($i=13;$i<=24;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -259,6 +274,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @php
+                                $clRow++;
+                            @endphp
                             @endforeach
                             <div class="row">
                                 <div class="col-sm-12">
@@ -291,6 +309,58 @@
 @push('after-scripts')
 <script>
 $(function() {
+
+    $(".wrk_day").on("change", function(e)
+    {
+        var row = parseInt($(this).data('ex'));
+        var cday = $(this).val();
+        var dday = $(this).data('day');
+
+        if(row!=1)
+        {
+            if($(this).is(':checked'))
+            {
+                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_mst_"+row).val($("#cli_"+dday+"_mst_"+(row-1)).val());
+                    $("#cli_"+cday+"_med_"+row).val($("#cli_"+dday+"_med_"+(row-1)).val());
+                }
+
+                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_nst_"+row).val($("#cli_"+dday+"_nst_"+(row-1)).val());
+                    $("#cli_"+cday+"_ned_"+row).val($("#cli_"+dday+"_ned_"+(row-1)).val());
+                }
+            }
+        }
+    });
+
+    $(".ewrk_day").on("change", function(e)
+    {
+        var row = parseInt($(this).data('ex'));
+        var cday = $(this).val();
+        var dday = $(this).data('day');
+
+        if(row!=1)
+        {
+            if($(this).is(':checked'))
+            {
+                if($.trim($("#ecli_"+cday+"_mst_"+row).val())=='' && $.trim($("#ecli_"+cday+"_med_"+row).val())=='') 
+                {
+                    $("#ecli_"+cday+"_mst_"+row).val($("#ecli_"+dday+"_mst_"+(row-1)).val());
+                    $("#ecli_"+cday+"_med_"+row).val($("#ecli_"+dday+"_med_"+(row-1)).val());
+                }
+
+                if($.trim($("#ecli_"+cday+"_nst_"+row).val())=='' && $.trim($("#ecli_"+cday+"_ned_"+row).val())=='') 
+                {
+                    $("#ecli_"+cday+"_nst_"+row).val($("#ecli_"+dday+"_nst_"+(row-1)).val());
+                    $("#ecli_"+cday+"_ned_"+row).val($("#ecli_"+dday+"_ned_"+(row-1)).val());
+                }
+            }
+        }
+
+    });
+
     $('#userTable').DataTable({
         processing: true,
         serverSide: true,

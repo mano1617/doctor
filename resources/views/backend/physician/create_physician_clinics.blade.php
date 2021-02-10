@@ -145,17 +145,25 @@
                             <h6>Working Days and Time schedule:</h6>
                             <h6 class="text-danger">Note:</h6>
                             <p>If no day selection, leave as blank all inputs.</p>
+                            @php
+                                $clRow = 1;
+                                $kdays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+                            @endphp
                             @foreach($days as $kday => $day)
+                                @php
+                                    $kd = ($clRow-2);
+                                @endphp
                             <div class="row">
                                 <div class="col-sm-2">
                                     <div class="form-group">
-                                        <label style="margin-top:17px;"> <input type="checkbox" value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}</label>
+                                        <label style="margin-top:17px;"> 
+                                        <input type="checkbox" data-ex="{{ $clRow }}" data-day="{{ $kdays[$kd] ?? '' }}" value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_mst"></label>
-                                        <select name="cli_{{ $kday }}_mst" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_mst" id="cli_{{ $kday }}_mst_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=0;$i<=11;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -166,7 +174,7 @@
                                 <div class="col-sm-2" style="border-right:1px solid #000;">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_med"></label>
-                                        <select name="cli_{{ $kday }}_med" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_med" id="cli_{{ $kday }}_med_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=1;$i<=12;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -177,7 +185,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_nst"></label>
-                                        <select name="cli_{{ $kday }}_nst" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_nst" id="cli_{{ $kday }}_nst_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=12;$i<=23;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -188,7 +196,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_ned"></label>
-                                        <select name="cli_{{ $kday }}_ned" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_ned" id="cli_{{ $kday }}_ned_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=13;$i<=24;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -197,6 +205,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @php
+                                $clRow++;
+                            @endphp
                             @endforeach
                             <div class="row">
                                 <div class="col-sm-12">
@@ -222,20 +233,29 @@
 <script>
 $(function()
 {
-    // $('.timeFormats').mask('99:99');
-
     $(".wrk_day").on("change", function(e)
     {
-        if($(this).is(':checked'))
-        {
-            //$("input[name='cli_"+$(this).val()+"_mst'], input[name='cli_"+$(this).val()+"_med'], input[name='cli_"+$(this).val()+"_nst'], input[name='cli_"+$(this).val()+"_ned']").attr("required","required");
-        }else{
-            //$("input[name='cli_"+$(this).val()+"_mst'], input[name='cli_"+$(this).val()+"_med'], input[name='cli_"+$(this).val()+"_nst'], input[name='cli_"+$(this).val()+"_ned']").removeAttr("required");
-        }
+        var row = parseInt($(this).data('ex'));
+        var cday = $(this).val();
+        var dday = $(this).data('day');
 
-        form.resetForm();
-        //$("span.error").hide();
-        //$(".error").removeClass("error");
+        if(row!=1)
+        {
+            if($(this).is(':checked'))
+            {
+                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_mst_"+row).val($("#cli_"+dday+"_mst_"+(row-1)).val());
+                    $("#cli_"+cday+"_med_"+row).val($("#cli_"+dday+"_med_"+(row-1)).val());
+                }
+
+                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_nst_"+row).val($("#cli_"+dday+"_nst_"+(row-1)).val());
+                    $("#cli_"+cday+"_ned_"+row).val($("#cli_"+dday+"_ned_"+(row-1)).val());
+                }
+            }
+        }
     });
 
     $("#cli_state").on("change", function(e)

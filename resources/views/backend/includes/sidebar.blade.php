@@ -106,6 +106,33 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link {{
+                        active_class(Route::is('admin/homeopathic-pharmacy'))
+                    }}" href="{{ route('admin.homeopathic-pharmacy.index') }}">
+                        <i class="nav-icon fas fa-h-square"></i>
+                            Homoeopathic Pharmacy
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{
+                        active_class(Route::is('admin/homeopathic-associate'))
+                    }}" href="{{ route('admin.homeopathic-associate.index') }}">
+                        <i class="nav-icon fas fa-h-square"></i>
+                            Homoeopathic Association
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{
+                        active_class(Route::is('admin/diagnostic-center'))
+                    }}" href="{{ route('admin.diagnostic-center.index') }}">
+                        <i class="nav-icon fas fa-h-square"></i>
+                            Diagnostic Center
+                    </a>
+                </li>
+
                 <li class="nav-item nav-dropdown {{
                     active_class(Route::is('admin/physicians*'), 'open')
                 }}">

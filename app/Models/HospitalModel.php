@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Physician\PhysicianClinicTimesModel;
 use App\Models\Physician\PhysicianMembershipModel;
 use App\Models\Backend\HospitalConsultantModel;
+use App\Models\Backend\HospitalGalleryModel;
 
 class HospitalModel extends Model
 {
@@ -36,6 +37,13 @@ class HospitalModel extends Model
     public function consultants()
     {
         return $this->hasMany(HospitalConsultantModel::class,'hospital_id')->where([
+            ['status','!=','2']
+        ]);
+    }
+
+    public function galleries()
+    {
+        return $this->hasMany(HospitalGalleryModel::class,'hospital_id')->where([
             ['status','!=','2']
         ]);
     }

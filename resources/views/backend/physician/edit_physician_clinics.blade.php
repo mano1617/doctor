@@ -40,7 +40,7 @@
                                     @if(request()->physician)
                                     <input type="hidden" value="{{ request()->physician }}" name="mainChoice">
                                     <input type="hidden" value="{{ request()->physician }}" name="user">
-                                    
+
                                     @endif
                                 </div>
                                 <div class="row">
@@ -55,9 +55,9 @@
                                         <label for="landmark">Land Mark</label>
                                         <textarea name="cli_landmark" class="form-control" >{{$data->landmark}}</textarea>
                                     </div>
-                                </div> 
-                                    
-                                                             
+                                </div>
+
+
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -82,7 +82,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>    
+                                </div>
                                 <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="district">District<sup class="text-danger">*</sup></label>
@@ -94,14 +94,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                
+
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="pincode">PIN code<sup class="text-danger">*</sup></label>
                                         <input type="text" value="{{$data->pincode}}" required data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" name="cli_pincode" class="form-control">
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -116,7 +116,7 @@
                                         <input type="text" onkeypress="return Validate(event);" required placeholder="+91 XXXXXXXXXX" data-rule-minlength="10" data-rule-maxlength="14" value="{{$data->mobile_no}}" name="cli_mobile_no" class="form-control">
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Email Id<sup class="text-danger">*</sup></label>
@@ -129,10 +129,10 @@
                                         <input type="text" data-rule-url="true"  name="cli_website" value="{{$data->website}}" class="form-control">
                                     </div>
                                 </div>
-                                                                                    
+
                             </div>
                             <div class="row">
-                                
+
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -148,9 +148,13 @@
                             <p>If no day selection, leave as blank all inputs.</p>
                             @php
                                 $clWorkingDays = $data->workingDays()->get();
+                                $clRow = 1;
+                                $kdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
                             @endphp
                             @foreach($days as $kday => $day)
-                                @php
+                             @php
+                                    $kd = ($clRow-2);
+                                
                                     $keyDay='';
                                     $clWorkingDay = $clWorkingDays->where('day_name',$kday);
                                     if(count($clWorkingDay)>0)
@@ -165,7 +169,7 @@
                                         {
                                             $mornTime = explode('-',trim($clWorkingDay[$keys[0]]['morning_session_time']));
                                         }
-                                        
+
                                         if(trim($clWorkingDay[$keys[0]]['evening_session_time'])!='')
                                         {
                                             $evenTime = explode('-',trim($clWorkingDay[$keys[0]]['evening_session_time']));
@@ -176,14 +180,14 @@
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label style="margin-top:17px;">
-                                                <input type="checkbox" @if(count($clWorkingDay)>0 && $keyDay==$kday) checked @endif value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}
+                                                <input type="checkbox" @if(count($clWorkingDay)>0 && $keyDay==$kday) checked @endif value="{{ $kday }}" class="wrk_day" data-ex="{{ $clRow }}" data-day="{{ $kdays[$kd] ?? '' }}" name="wrk_day_{{ $kday }}"> {{$day}}
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_mst"></label>
-                                            <select name="cli_{{ $kday }}_mst" class="form-control removeSel">
+                                            <select name="cli_{{ $kday }}_mst" id="cli_{{ $kday }}_mst_{{ $clRow }}" class="form-control removeSel">
                                                 <option value="">--select--</option>
                                                 @for($i=0;$i<=11;$i++)
                                                 <option @if(count($clWorkingDay)>0 && $mornTime[0]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -194,7 +198,7 @@
                                     <div class="col-sm-2" style="border-right:1px solid #000;">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_med"></label>
-                                            <select name="cli_{{ $kday }}_med" class="form-control removeSel">
+                                            <select name="cli_{{ $kday }}_med" id="cli_{{ $kday }}_med_{{ $clRow }}" class="form-control removeSel">
                                                 <option value="">--select--</option>
                                                 @for($i=1;$i<=12;$i++)
                                                 <option @if(count($clWorkingDay)>0 && $mornTime[1]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -205,7 +209,7 @@
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_nst"></label>
-                                            <select name="cli_{{ $kday }}_nst" class="form-control removeSel">
+                                            <select name="cli_{{ $kday }}_nst" id="cli_{{ $kday }}_nst_{{ $clRow }}" class="form-control removeSel">
                                                 <option value="">--select--</option>
                                                 @for($i=12;$i<=23;$i++)
                                                 <option @if(count($clWorkingDay)>0 && $evenTime[0]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -216,7 +220,7 @@
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="cli_{{ $kday }}_ned"></label>
-                                            <select name="cli_{{ $kday }}_ned" class="form-control removeSel">
+                                            <select name="cli_{{ $kday }}_ned" id="cli_{{ $kday }}_ned_{{ $clRow }}" class="form-control removeSel">
                                                 <option value="">--select--</option>
                                                 @for($i=13;$i<=24;$i++)
                                                 <option @if(count($clWorkingDay)>0 && $evenTime[1]==\Carbon\Carbon::parse($i.':00')->format('H:i:s')) selected @endif value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -225,6 +229,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @php
+                                    $clRow++;
+                                @endphp
                             @endforeach
                             @php
                                 $clWorkingDaysOthrs = $data->workingDays()->where('day_name','others')->get();
@@ -232,7 +239,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label> 
+                                        <label>
                                         <input type="checkbox" @if(trim($data->other_description)!='') checked @endif name="wrk_times_others" value="1"> Others</label>
                                         <textarea class="form-control" name="cli_wrk_others" cols="30" rows="5">{{trim($data->other_description)}}</textarea>
                                     </div>
@@ -255,7 +262,33 @@
 $(function()
 {
 
-$("#cli_state").on("change", function(e)
+    $(".wrk_day").on("change", function(e)
+    {
+        var row = parseInt($(this).data('ex'));
+        var cday = $(this).val();
+        var dday = $(this).data('day');
+
+        if(row!=1)
+        {
+            if($(this).is(':checked'))
+            {
+                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_mst_"+row).val($("#cli_"+dday+"_mst_"+(row-1)).val());
+                    $("#cli_"+cday+"_med_"+row).val($("#cli_"+dday+"_med_"+(row-1)).val());
+                }
+
+                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_nst_"+row).val($("#cli_"+dday+"_nst_"+(row-1)).val());
+                    $("#cli_"+cday+"_ned_"+row).val($("#cli_"+dday+"_ned_"+(row-1)).val());
+                }
+            }
+        }
+    });
+
+
+    $("#cli_state").on("change", function(e)
     {
         var content = '<option value="">--select--</option>';
 

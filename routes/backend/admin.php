@@ -10,6 +10,37 @@ Route::get('list/districts', [DashboardController::class, 'listDistricts'])->nam
 
 require __DIR__ . '/physician.php';
 
+//Homoepathic Pharmacy
+Route::resource('homeopathic-pharmacy', 'HomeoPharmacyController');
+Route::get('homeopathic-pharmacy/update/status/{userId}/{statusCode}', 'HomeoPharmacyController@updateStatus')->name('homeopathic-pharmacy.updateStatus');
+Route::post('homeopathic-pharmacy/list-galleries', 'HomeoPharmacyController@listGalleries')->name('homeopathic-pharmacy.listGalleries');
+Route::resource('homeopathic-pharmacy/galleries', 'PharmacyGalleryController')->names([
+    'index' => 'homeopathic-pharmacy.galleries.index',
+    'create' => 'homeopathic-pharmacy.galleries.create',
+    'store' => 'homeopathic-pharmacy.galleries.store',
+    'edit' => 'homeopathic-pharmacy.galleries.edit',
+    'update' => 'homeopathic-pharmacy.galleries.update',
+]);
+Route::get('homeopathic-pharmacy/galleries/update/status/{userId}/{statusCode}', 'PharmacyGalleryController@updateStatus')->name('homeopathic-pharmacy.galleries.updateStatus');
+Route::get('homeopathic-pharmacy/branches/{parentId}', 'HomeoPharmacyController@viewBranchs')->name('homeopathic-pharmacy.viewBranchs');
+
+//Diagnostic Center
+Route::resource('diagnostic-center', 'DiagnosCenterController');
+Route::get('diagnostic-center/update/status/{userId}/{statusCode}', 'DiagnosCenterController@updateStatus')->name('diagnostic-center.updateStatus');
+Route::post('diagnostic-center/list-galleries', 'DiagnosCenterController@listGalleries')->name('diagnostic-center.listGalleries');
+Route::resource('diagnostic-center/galleries', 'DiagnosGalleryController')->names([
+    'index' => 'diagnostic-center.galleries.index',
+    'create' => 'diagnostic-center.galleries.create',
+    'store' => 'diagnostic-center.galleries.store',
+    'edit' => 'diagnostic-center.galleries.edit',
+    'update' => 'diagnostic-center.galleries.update',
+]);
+Route::get('diagnostic-center/galleries/update/status/{userId}/{statusCode}', 'DiagnosGalleryController@updateStatus')->name('diagnostic-center.galleries.updateStatus');
+
+//Homoeo Asscociate
+Route::resource('homeopathic-associate', 'HomoAssociateController');
+Route::get('homeopathic-associate/update/status/{userId}/{statusCode}', 'HomoAssociateController@updateStatus')->name('homeopathic-associate.updateStatus');
+
 //Medical Student
 Route::group(['prefix' => 'users'], function () {
     Route::resource('medical-student', 'MedicalStudentController');
