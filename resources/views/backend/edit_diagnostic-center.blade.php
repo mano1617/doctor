@@ -102,7 +102,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="cli_email">Landline</label>
-                            <input type="email" value="{{ $data->landline }}" onkeypress="return Validate(event);" name="cli_landline" class="form-control">
+                            <input type="text" value="{{ $data->landline }}" onkeypress="return Validate(event);" name="cli_landline" class="form-control">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -135,21 +135,23 @@
                             <textarea name="cli_about_us" class="form-control" >{{ $data->description }}</textarea>
                         </div>
                     </div>
+                    @if($data->parent_id==0)
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="sector">Have Branches<sup class="text-danger">*</sup></label>
                             <div class="col-form-label">
                                 <div class="form-check form-check-inline mr-1">
-                                    <input class="form-check-input" @if($data->is_branch==1) checked @endif name="clinic_br_detail" id="inline_br_radio11" type="radio" value="1">
+                                    <input class="form-check-input" @if($data->have_branch=='1') checked @endif name="clinic_br_detail" id="inline_br_radio11" type="radio" value="1">
                                     <label class="form-check-label" for="inline_br_radio11">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline mr-1">
-                                    <input class="form-check-input" @if($data->is_branch==0) checked @endif name="clinic_br_detail" id="inline_br_radio22" type="radio" value="0" >
+                                    <input class="form-check-input" @if($data->have_branch=='0') checked @endif name="clinic_br_detail" id="inline_br_radio22" type="radio" value="0" >
                                     <label class="form-check-label" for="inline_br_radio22">No</label>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
                         <hr />
                         <h6>Working Days and Time schedule:</h6>

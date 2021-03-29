@@ -18,6 +18,9 @@
             </div>
             <form id="createPhysician" class="form-horizontal" enctype="multipart/form-data" method="post" action="{{ route('admin.diagnostic-center.store') }}">
             <div class="card-body">
+                @if(request()->has('parent'))
+                <input type="hidden" name="parent" value="{{ request()->parent }}">
+                @endif
                 {{csrf_field()}}
                 <div class="row">
                     <div class="col-sm-6">
@@ -132,6 +135,7 @@
                             <textarea name="cli_about_us" class="form-control" ></textarea>
                         </div>
                     </div>
+                    @if(!request()->has('parent'))
                     <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="sector">Have Branches<sup class="text-danger">*</sup></label>
@@ -147,6 +151,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                 </div>
 
                         <hr />

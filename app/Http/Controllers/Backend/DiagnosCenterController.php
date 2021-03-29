@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Backend\DiagnosCenterModel;
-use App\Models\Auth\User;
+use App\Models\Backend\WorkTimesModel;
 use App\Models\CountryModel;
 use App\Models\DistrictModel;
-use App\Models\Backend\WorkTimesModel;
 use App\Models\StateModel;
-use DataTables;
-use Illuminate\Database\Eloquent\Builder;
-use Storage;
 use Auth;
+use DataTables;
+use Illuminate\Http\Request;
+use Storage;
 
 class DiagnosCenterController extends Controller
 {
@@ -41,13 +39,13 @@ class DiagnosCenterController extends Controller
     {
         if ($request->ajax()) {
             $clinics = DiagnosCenterModel::select([
-                'id', 'name', 'address', 'mobile_no', 'profile_image', 'email_address', 'district', 'state', 'country', 'pincode', 'landmark', 'website', 'status',
-            ])->latest()->bothInActive()->get();
+                'id', 'name', 'address', 'have_branch', 'mobile_no', 'profile_image', 'email_address', 'district', 'state', 'country', 'pincode', 'landmark', 'website', 'status',
+            ])->latest()->bothInActive()->where('parent_id', 0)->get();
 
             return Datatables::of($clinics)
                 ->addIndexColumn()
                 ->addColumn('contact', function ($row) {
-                    $contact = '<p>'.$row->address.'</p>';
+                    $contact = '<p>' . $row->address . '</p>';
                     $contact .= '<i class="fa fa-envelope fa-fw"></i>' . $row->email_address;
                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>' . $row->mobile_no;
                     if (!empty($row->landline)) {
@@ -56,10 +54,9 @@ class DiagnosCenterController extends Controller
                     return $contact;
                 })
                 ->addColumn('photo', function ($row) {
-                    if(!empty($row->profile_image))
-                    {
-                        return '<a href="'.url('storage/app/avatars/'.$row->profile_image).'" target="new"><img class="" src="'.url('storage/app/avatars/'.$row->profile_image).'" width="65" height="65">';
-                    }else{
+                    if (!empty($row->profile_image)) {
+                        return '<a href="' . url('storage/app/avatars/' . $row->profile_image) . '" target="new"><img class="" src="' . url('storage/app/avatars/' . $row->profile_image) . '" width="65" height="65">';
+                    } else {
                         return '';
                     }
                 })
@@ -73,7 +70,11 @@ class DiagnosCenterController extends Controller
                     }
 
                     $actions .= '<a href="' . route('admin.diagnostic-center.edit', $row->id) . '"  class="btn btn-outline-info"><i class="fa fa-fw fa-pencil"></i></a> ';
-                    // $actions .= '<a href="javascript:void(0);" id="viewConsult_btn_' . $row->id . '" data-rowId ="' . $row->id . '" title="View Consultants" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-users"></i></a>';
+
+                    if ($row->have_branch == '1') {
+                        $actions .= '<a href="javascript:void(0);" id="viewConsult_btn_' . $row->id . '" data-rowId ="' . $row->id . '" title="View Branches" class="btn btn-outline-info viewConsultant"><i class="fa fa-fw fa-bank"></i></a>';
+                    }
+
                     $actions .= ' <a title="View Gallery" href="javascript:void(0);" id="viewGallery_btn_' . $row->id . '" data-rowId ="' . $row->id . '"class="btn btn-outline-dark viewGallery"><i class="fa fa-fw fa-photo"></i></a>';
                     $actions .= ' <a href="javascript:void(0);" data-rowurl="' . route('admin.diagnostic-center.updateStatus', [$row->id, 2]) . '" data-row="' . $row->id . '" class="btn removeRow btn-outline-danger"><i class="fa fa-fw fa-trash"></i></a>';
 
@@ -95,7 +96,7 @@ class DiagnosCenterController extends Controller
     public function create()
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
+        $pageData['countries'] = CountryModel::where('id', 101)->activeOnly();
         $pageData['cities'] = DistrictModel::where('state_id', 18)->activeOnly();
         $pageData['states'] = CountryModel::find(101);
         $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
@@ -124,6 +125,7 @@ class DiagnosCenterController extends Controller
         //Clinic creation
         $createClinic = DiagnosCenterModel::create([
             'user_id' => Auth::id(),
+            'parent_id' => $request->has('parent') ? $request->parent : 0,
             'name' => trim($request->name),
             'since' => trim($request->since),
             'address' => trim($request->cli_address),
@@ -139,7 +141,7 @@ class DiagnosCenterController extends Controller
             'landline' => trim($request->cli_landline),
             'other_description' => trim($desc),
             'profile_image' => $photo,
-            'have_branch' => $request->clinic_br_detail
+            'have_branch' => $request->has('clinic_br_detail') ? $request->clinic_br_detail : '0',
         ]);
 
         $this->flashData = [
@@ -147,10 +149,9 @@ class DiagnosCenterController extends Controller
             'message' => 'Successfully diagnostic center has been created.',
         ];
 
-
         foreach ($this->weekDays as $dayKey => $day) {
             $cliWorkDay = [
-                'user_id' =>  Auth::id(),
+                'user_id' => Auth::id(),
                 'parent_type' => 'diagnostic',
                 'parent_id' => $createClinic->id,
                 'day_name' => $dayKey,
@@ -196,7 +197,7 @@ class DiagnosCenterController extends Controller
     public function edit($id)
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
+        $pageData['countries'] = CountryModel::where('id', 101)->activeOnly();
         $pageData['data'] = DiagnosCenterModel::find($id);
         $pageData['states'] = StateModel::where('country_id', $pageData['data']->country)->activeOnly();
         $pageData['cities'] = DistrictModel::where('state_id', $pageData['data']->state)->activeOnly();
@@ -225,7 +226,7 @@ class DiagnosCenterController extends Controller
         $desc = isset($request->wrk_times_others) ? trim($request->cli_wrk_others) : '';
 
         //Clinic creation
-        DiagnosCenterModel::where('id',$id)->update([
+        DiagnosCenterModel::where('id', $id)->update([
             'name' => trim($request->name),
             'since' => trim($request->since),
             'address' => trim($request->cli_address),
@@ -241,7 +242,7 @@ class DiagnosCenterController extends Controller
             'landline' => trim($request->cli_landline),
             'other_description' => trim($desc),
             'profile_image' => $photo,
-            'have_branch' => $request->clinic_br_detail
+            'have_branch' => $request->clinic_br_detail,
         ]);
 
         $this->flashData = [
@@ -250,13 +251,13 @@ class DiagnosCenterController extends Controller
         ];
 
         WorkTimesModel::where([
-            ['parent_type','=','pharmacy'],
-            ['parent_id','=',$id],
+            ['parent_type', '=', 'pharmacy'],
+            ['parent_id', '=', $id],
         ])->delete();
 
         foreach ($this->weekDays as $dayKey => $day) {
             $cliWorkDay = [
-                'user_id' =>  Auth::id(),
+                'user_id' => Auth::id(),
                 'parent_type' => 'pharmacy',
                 'parent_id' => $id,
                 'day_name' => $dayKey,
@@ -290,7 +291,7 @@ class DiagnosCenterController extends Controller
      */
     public function destroy($id)
     {
-        
+
     }
 
     public function updateStatus(Request $request, $userId, $statusCode)
@@ -328,7 +329,29 @@ class DiagnosCenterController extends Controller
             'html' => view('backend.physician.list_hospital_galleries', [
                 'data' => $clinicData,
                 'consultants' => $clinicData->galleries()->latest()->get(),
-                'route_name' => 'diagnostic-center'
+                'route_name' => 'diagnostic-center',
+            ])->render(),
+        ]);
+    }
+
+    public function listConsultants(Request $request)
+    {
+
+        $clinicData = DiagnosCenterModel::find($request->clinicId);
+
+        return response()->json([
+            'clinicData' => [
+                'id' => $clinicData->user_id,
+                'name' => trim($clinicData->name),
+                'mobile' => $clinicData->mobile_no,
+                'email' => $clinicData->email_address,
+            ],
+            'html' => view('backend.physician.list_diag_branches', [
+                'data' => $clinicData,
+                'branches' => DiagnosCenterModel::where([
+                    ['parent_id', '=', $request->clinicId],
+                    ['status', '!=', '2'],
+                ])->get(),
             ])->render(),
         ]);
     }

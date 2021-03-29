@@ -36,6 +36,7 @@ Route::resource('diagnostic-center/galleries', 'DiagnosGalleryController')->name
     'update' => 'diagnostic-center.galleries.update',
 ]);
 Route::get('diagnostic-center/galleries/update/status/{userId}/{statusCode}', 'DiagnosGalleryController@updateStatus')->name('diagnostic-center.galleries.updateStatus');
+Route::post('diagnostic-center/list-branches', 'DiagnosCenterController@listConsultants')->name('diagnostic-center.listConsultants');
 
 //Homoeo Asscociate
 Route::resource('homeopathic-associate', 'HomoAssociateController');

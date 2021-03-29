@@ -8,7 +8,7 @@ class DiagnosCenterModel extends Model
 {
     protected $table = "lmr_diagnos_centers";
     protected $fillable = [
-        "user_id", "name", "since", "address", "state", "district", "country", "pincode", "landmark", "mobile_no", "email_address",
+        "user_id", "name", "parent_id", "since", "address", "state", "district", "country", "pincode", "landmark", "mobile_no", "email_address",
         "landline", "website", "map_image", "profile_image", "description", "have_branch", "status",
     ];
 

@@ -304,137 +304,7 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="add_consults" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Create new Consultant</h4>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        </div>
-                        <form id="createConsultant" enctype="multipart/form-data" method="post" action="{{ route('admin.hospitals.consultants.store') }}">
-                    {{csrf_field()}}
-                        <div class="modal-body">
-                            <input type="hidden" name="clinic">
-                            <input type="hidden" name="clinic_user">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Name<sup class="text-danger">*</sup></label>
-                                        <select name="add_self_reg" id="add_self_reg" class="form-control"></select>
-                                        <input type="text" style="display:none;" name="cli_cons_doc_name" id="add_cli_cons_doc_name" class="form-control">
-                                        <a style="display:none;" href="javascript:void(0);" title="Clear" id="clearPhyData" class="text-danger"><i class="fa fa-arrow-left"></i>Go Back</a>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Speciality</label>
-                                        <input type="text" name="cli_cons_doc_spec" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Mobile<sup class="text-danger">*</sup></label>
-                                        <input type="text" required onkeypress="return Validate(event);" data-rule-minlength="10" data-rule-maxlength="14" name="cli_cons_doc_mobile" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Email ID<sup class="text-danger">*</sup></label>
-                                        <input type="email" required data-rule-email="true" name="cli_cons_doc_email" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                             <p>Consulting On:</p>
-                             <h6 class="text-danger">Note:</h6>
-                            @php
-                                $clRow = 1;
-                            @endphp
-                            <p>If no day selection, leave as blank all inputs.</p>
-                            @foreach($days as $kday => $day)
-                                @php
-                                    $kd = ($clRow-2);
-                                @endphp
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label style="margin-top:17px;">
-                                        <input type="checkbox" data-ex="{{ $clRow }}" data-day="{{ $kdays[$kd] ?? '' }}" value="{{ $kday }}" name="cons_day_{{ $kday }}" class="cons_day wrk_day"> {{$day}}</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label for="cli_cons_{{ $kday }}_mst"></label>
-                                        <select name="cli_cons_{{ $kday }}_mst" id="cli_{{ $kday }}_mst_{{ $clRow }}" class="form-control">
-                                            <option value="">--select--</option>
-                                            @for($i=0;$i<=11;$i++)
-                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2" style="border-right: 1px solid #000;">
-                                    <div class="form-group">
-                                        <label for="cli_cons_{{ $kday }}_med"></label>
-                                        <select name="cli_cons_{{ $kday }}_med" id="cli_{{ $kday }}_med_{{ $clRow }}" class="form-control">
-                                            <option value="">--select--</option>
-                                            @for($i=1;$i<=12;$i++)
-                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label for="cli_cons_{{ $kday }}_nst"></label>
-                                        <select name="cli_cons_{{ $kday }}_nst" id="cli_{{ $kday }}_nst_{{ $clRow }}" class="form-control">
-                                            <option value="">--select--</option>
-                                            @for($i=12;$i<=23;$i++)
-                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label for="landno"></label>
-                                        <select name="cli_cons_{{ $kday }}_ned" id="cli_{{ $kday }}_ned_{{ $clRow }}" class="form-control">
-                                            <option value="">--select--</option>
-                                            @for($i=13;$i<=24;$i++)
-                                            <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            @php
-                                $clRow++;
-                            @endphp
-                            @endforeach
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>Monthy Visit</label>
-                                        <textarea class="form-control" name="cli_cons_month_visit" cols="30" rows="5"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>Others</label>
-                                        <textarea class="form-control" name="cli_cons_wrk_others" cols="30" rows="5"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success submit">Submit</button>
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-            </div>
+            
 
         </div><!--col-->
     </div><!--row-->
@@ -545,11 +415,6 @@ $(function() {
 
     });
 
-    $("body").on('click', '#addConsults', function(e)
-    {
-        $("#add_consults").modal("show");
-    });
-
     $("body").on('click', '#addGallery', function(e)
     {
         $("#add_gallery").modal("show");
@@ -654,7 +519,7 @@ $(function() {
         $("input[name='clinic']").val($(this).data('rowid'));
         $.ajax({
             type : 'post',
-            url : "{{ route('admin.hospitals.listConsultants') }}",
+            url : "{{ route('admin.diagnostic-center.listConsultants') }}",
             data : {clinicId : $(this).data('rowid'), _token:'{{ csrf_token() }}',hospital:1},
             dataType:'json',
             beforeSend : function()
@@ -776,87 +641,6 @@ $(function() {
         }
     });
 
-    var editConsultantJS = $("#editConsultant").validate({
-        errorPlacement: function errorPlacement(error, element) { element.before(error); },
-        errorElement: "span",
-        errorPlacement: function(error, element) {
-            $(".submit").attr("disabled", false);
-            error.addClass("error invalid-feedback");
-            //error.parent("div.form-group").addClass("has-error");
-            element.parent("div.form-group").append(error);
-            element.addClass('is-invalid');
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass("is-invalid");
-            $(".submit").attr("disabled", false);
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass("is-invalid");
-            $(".submit").attr("disabled", false);
-        },
-        submitHandler: function(form) {
-
-            $(".submit").attr("disabled", true);
-            var clinicId = $("#addConsults").data('clinic');
-
-            $.ajax({
-                method : 'post',
-                url : $(form).attr('action'),
-                data : $(form).serialize(),
-                dataType:'json',
-                success:function(result)
-                {
-                    Swal.fire('Success!',result.message,'success').then(()=>{
-                        editConsultantJS.resetForm();
-                        $(form)[0].reset();
-                        $("#edit_consults").modal("hide");
-                        $('body #viewConsult_btn_'+clinicId).trigger('click');
-                    });
-                },
-            });
-        }
-    });
-
-    var createConsultantJS = $("#createConsultant").validate({
-        errorPlacement: function errorPlacement(error, element) { element.before(error); },
-        errorElement: "span",
-        errorPlacement: function(error, element) {
-            $(".submit").attr("disabled", false);
-            error.addClass("error invalid-feedback");
-            //error.parent("div.form-group").addClass("has-error");
-            element.parent("div.form-group").append(error);
-            element.addClass('is-invalid');
-        },
-        highlight: function(element, errorClass, validClass) {
-            $(element).addClass("is-invalid");
-            $(".submit").attr("disabled", false);
-        },
-        unhighlight: function(element, errorClass, validClass) {
-            $(element).removeClass("is-invalid");
-            $(".submit").attr("disabled", false);
-        },
-        submitHandler: function(form) {
-
-            $(".submit").attr("disabled", true);
-            var clinicId = $("#addConsults").data('clinic');
-
-            $.ajax({
-                method : 'post',
-                url : "{{ route('admin.hospitals.consultants.store') }}",
-                data : $(form).serialize(),
-                dataType:'json',
-                success:function(result)
-                {
-                    Swal.fire('Success!',result.message,'success').then(()=>{
-                        createConsultantJS.resetForm();
-                        $(form)[0].reset();
-                        $("#add_consults").modal("hide");
-                        $('body #viewConsult_btn_'+clinicId).trigger('click');
-                    });
-                },
-            });
-        }
-    });
 });
 </script>
 @endpush
