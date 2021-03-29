@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" type="submit">Submit</button>
+                        <button class="btn btn-success" id="add_desg_btn" type="submit">Submit</button>
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -202,12 +202,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="dob">Date Of Birth<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="dob" autocomplete="off" class="form-control">
-                                    </div>
-                                </div> -->
                                 
                             </div>
                             
@@ -333,13 +327,6 @@
                                     </div>
                                 </div>
 
-                                    <!-- <div class="row">
-                                        <div class="col-sm-12">
-                                            <hr>
-                                            <a id="addMainRow" class="btn btn-success float-right"><i class="fa fa-fw fa-plus"></i></a>
-                                        </div>
-                                    </div>
-                                <br> -->
                             </div>
                             <div id="mainRowCnt"></div>
                             </section>
@@ -366,66 +353,8 @@ function Validate(event) {
 $(function()
 {
 
-    $("select[name='country']").val(101);
-
-    $("#addMainRow").on("click", function(e)
-    {
-        var row = parseInt($("input[name='main_row']").val());
-        row++;
-
-        var yearOptions = '<option value="">--select--</option>';
-        @foreach($eduYears as $eYear)
-            yearOptions +='<option value="{{$eYear['id']}}">{{$eYear['name']}}</option>';
-        @endforeach
-
-        var joinYearOptions ='<option value="">--select--</option>';
-        @foreach(range(\Carbon\Carbon::now()->format('Y'),\Carbon\Carbon::parse('-60 years')->format('Y')) as $year)
-            joinYearOptions +='<option value="{{$year}}">{{$year}}</option>';
-        @endforeach
-
-        var memOptions ='<option value="">--select--</option>';
-        @foreach($memberships as $member)
-            memOptions +='<option value="{{$member->id}}">{{$member->name}}</option>';
-        @endforeach
-
-
-        var content = '<br><div style="border:2px solid #A5846A;padding:10px;" id="dyMainRow_'+row+'">';
-
-            content += '<div class="row"><div class="col-sm-12"><hr><a style="float:right;" data-container="#dyMainRow_'+row+'" class="btn removeContainer btn-danger"><i class="fa fa-fw fa-minus"></i></a></div>';
-            content += '</div>';
-
-            content += '<div class="row"><div class="col-sm-6"><div class="form-group"><label for="edu_branch_of_medicine_'+row+'">Branch of Medicine<sup class="text-danger">*</sup></label>';
-            content += '<select required name="edu_branch_of_medicine_'+row+'" class="form-control"><option value="homoeopathy">Homoeopathy</option><option value="allopathy">Allopathy</option>';
-            content += '<option value="ayurveda">Ayurveda</option></select></div></div>';
-
-            content += '<div class="col-sm-6"><div class="form-group"><label for="edu_college_'+row+'">Name of College<sup class="text-danger">*</sup></label><input type="text" required name="edu_college_'+row+'" class="form-control">';
-            content += '</div></div></div>';
-
-            content += '<div class="row"><div class="col-sm-6"><div class="form-group"><label for="edu_place_'+row+'">Place<sup class="text-danger">*</sup></label><input type="text" required name="edu_place_'+row+'" class="form-control">';
-            content += '</div></div>';
-
-            content += '<div class="col-sm-3"><div class="form-group"><label for="edu_joinyear_'+row+'">Year of Admission<sup class="text-danger">*</sup></label><select name="edu_joinyear_'+row+'" required class="form-control">';
-            content +=  joinYearOptions+'</select></div></div>';
-
-            content += '<div class="col-sm-3"><div class="form-group"><label for="edu_year_1'+row+'">Year<sup class="text-danger">*</sup></label>';
-            content += '<select name="edu_year_1'+row+'" required class="form-control">'+yearOptions+'</select></div>';
-
-
-            content += '</div></div>';
-
-            content +='<div class="row"><div class="col-sm-6"><input type="hidden" name="edu_mem_rows_'+row+'" value="1">';
-            content +='<div id="edu_memDiv_'+row+'"><div class="row"><div class="col-sm-10"><div class="form-group"><label for="edu_mem_'+row+'_1">Membership</label>';
-            content +='<select name="edu_mem_'+row+'_1" class="form-control">'+memOptions+'</select></div></div><div class="col-sm-2">';
-            content +='<a style="margin-top:30px;" data-edu="'+row+'" class="btn btn-success addMembership"><i class="fa fa-fw fa-plus"></i></a></div></div>';
-            content +='</div></div><div class="col-sm-6"><input type="hidden" name="edu_ach_rows_'+row+'" value="1"><div id="edu_achDiv_'+row+'"><div class="row">';
-            content +='<div class="col-sm-10"><div class="form-group"><label for="edu_ach_'+row+'_1">Achievements / Designations</label><textarea placeholder="About Achievements / Designations" name="edu_ach_'+row+'_1" cols="30" rows="5" class="form-control"></textarea>';
-            content +='</div></div><div class="col-sm-2"><a style="margin-top:30px;" data-edu="'+row+'" class="btn btn-success eduAddAchiev"><i class="fa fa-fw fa-plus"></i></a></div></div></div></div></div>';
-
-            
-            content += '<input type="hidden" name="edu_rows_'+row+'" value="1"></div><br>';
-
-        $("input[name='main_row']").val(row);
-        $("#mainRowCnt").append(content);
+$('#addDynamicBranch').on('hidden.bs.modal', function () {
+        $("#add_desg_btn").prop('disabled',false);
     });
 
     $("#country").on("change", function(e)
@@ -451,26 +380,6 @@ $(function()
 
             },'JSON');
         }
-    });
-
-    $("input[name='dob']").datepicker({
-        format : 'dd-mm-yyyy',
-        autoclose : true,
-        endDate: '-18y'
-    });
-
-    $(".since").datepicker({
-        format : 'dd-mm-yyyy',
-        autoclose : true,
-        endDate: '+0d',
-    });
-
-    $(".monthYear").datepicker( {
-        format: "mm-yyyy",
-        viewMode: "months",
-        minViewMode: "months",
-        autoclose : true,
-        endDate: '+0d',
     });
 
     $("#addAchiev").on("click", function(e)
@@ -539,10 +448,7 @@ $(function()
                 {
                     $(result['data']).each(function(ind,vals)
                     {
-                        // if(vals.id==18)
-                        // {
-                            content+='<option value="'+vals.id+'">'+vals.name+'</option>';
-                        //}
+                        content+='<option value="'+vals.id+'">'+vals.name+'</option>';
                     });
                 }
 
@@ -620,12 +526,15 @@ var createForm = $("#add_desg").validate({
             //error.parent("div.form-group").addClass("has-error");
             element.parent("div.form-group").append(error);
             element.addClass('is-invalid');
+            $("#add_desg_btn").prop('disabled',false);
         },
         highlight: function(element, errorClass, validClass) {
             $(element).addClass("is-invalid");
+            $("#add_desg_btn").prop('disabled',false);
         },
         unhighlight: function(element, errorClass, validClass) {
             $(element).removeClass("is-invalid");
+            $("#add_desg_btn").prop('disabled',false);
         },
         submitHandler: function(form) {
 

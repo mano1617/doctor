@@ -10,6 +10,7 @@ use App\Models\Physician\PhysicianClinicTimesModel;
 use App\Models\StateModel;
 use DataTables;
 use Illuminate\Http\Request;
+use App\Models\DistrictModel;
 use Storage;
 
 class PhyBranchesController extends Controller
@@ -113,7 +114,11 @@ class PhyBranchesController extends Controller
         }
 
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
+        $pageData['cities'] = DistrictModel::where('state_id', 18)->activeOnly();
+        $pageData['states'] = CountryModel::find(101);
+        $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
+
         return view('backend.physician.create_physician_branches', $pageData);
     }
 
@@ -223,10 +228,12 @@ class PhyBranchesController extends Controller
         }
 
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['physicians'] = User::select(['id', 'first_name', 'last_name'])->role('physician')->orderBy('first_name')->get();
         $pageData['data'] = PhysicianClinicModel::find($id);
         $pageData['states'] = StateModel::where('country_id', $pageData['data']->country)->activeOnly();
+        $pageData['cities'] = DistrictModel::where('state_id', $pageData['data']->state)->activeOnly();
+
         return view('backend.physician.edit_physician_branches', $pageData);
     }
 
@@ -305,7 +312,7 @@ class PhyBranchesController extends Controller
 
         $this->flashData = [
             'status' => 1,
-            'message' => 'Successfully clinic detail has been updated.',
+            'message' => 'Successfully branch detail has been updated.',
         ];
 
         $request->session()->flash('flashData', $this->flashData);

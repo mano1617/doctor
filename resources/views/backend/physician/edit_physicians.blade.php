@@ -1227,7 +1227,7 @@ form.children("div").steps({
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
-    // showFinishButtonAlways : true,
+    showFinishButtonAlways : true,
     enableAllSteps: true,
     enablePagination: true,
     onStepChanging: function (event, currentIndex, newIndex)

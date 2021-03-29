@@ -5,17 +5,20 @@ Breadcrumbs::for('admin.dashboard', function ($trail) {
 });
 
 Breadcrumbs::for('admin.physician.index', function ($trail) {
+    $trail->push('Users');
     $trail->push('Physicians', route('admin.physician.index'));
 });
 
 Breadcrumbs::for('admin.physician.create', function ($trail) {
+    $trail->push('Users');
     $trail->push('Physicians', route('admin.physician.index'));
     $trail->push('Create New Physician', route('admin.physician.index'));
 });
 
 Breadcrumbs::for('admin.physician.edit', function ($trail) {
+    $trail->push('Users');
     $trail->push('Physicians', route('admin.physician.index'));
-    $trail->push('Update Physician', route('admin.physician.index'));
+    $trail->push('Edit Physician', route('admin.physician.index'));
 });
 
 Breadcrumbs::for('admin.physician.clinics.index', function ($trail) {
@@ -118,6 +121,100 @@ Breadcrumbs::for('admin.hospitals.edit', function ($trail) {
 Breadcrumbs::for('admin.mstr.pro_qualify.index', function ($trail) {
     $trail->push('Master Pages', '');
     $trail->push('Professional Qualification', '');
+});
+
+
+Breadcrumbs::for('admin.medical-student.index', function ($trail) {
+    $trail->push('Users', '');
+    $trail->push('Medical Student');
+});
+
+Breadcrumbs::for('admin.medical-student.create', function ($trail) {
+    $trail->push('Users', '');
+    $trail->push('Medical Student', route('admin.medical-student.index'));
+    $trail->push('Create New Student', '');
+});
+
+Breadcrumbs::for('admin.medical-student.edit', function ($trail) {
+    $trail->push('Users', '');
+    $trail->push('Medical Student', route('admin.medical-student.index'));
+    $trail->push('Update Student', '');
+});
+
+Breadcrumbs::for('admin.homeopathic-pharmacy.index', function ($trail) {
+    $trail->push('Homeopathic', '');
+    $trail->push('Pharmacy');
+});
+
+Breadcrumbs::for('admin.homeopathic-pharmacy.create', function ($trail) {
+    $trail->push('Homeopathic', '');
+    $trail->push('Pharmacy', route('admin.homeopathic-pharmacy.index'));
+    $trail->push('Create New Pharmacy', '');
+});
+
+Breadcrumbs::for('admin.homeopathic-pharmacy.edit', function ($trail) {
+    $trail->push('homeopathic', '');
+    $trail->push('Pharmacy', route('admin.homeopathic-pharmacy.index'));
+    $trail->push('Update Pharmacy', '');
+});
+
+Breadcrumbs::for('admin.homeopathic-associate.index', function ($trail) {
+    $trail->push('homeopathic', '');
+    $trail->push('Association');
+});
+
+Breadcrumbs::for('admin.homeopathic-associate.create', function ($trail) {
+    $trail->push('homeopathic', '');
+    $trail->push('Association', route('admin.homeopathic-associate.index'));
+    $trail->push('Create New Association', '');
+});
+
+Breadcrumbs::for('admin.homeopathic-associate.edit', function ($trail) {
+    $trail->push('homeopathic', '');
+    $trail->push('Association', route('admin.homeopathic-associate.index'));
+    $trail->push('Update Association', '');
+});
+
+Breadcrumbs::for('admin.diagnostic-center.index', function ($trail) {
+    $trail->push('Diagnostic Center', '');
+    $trail->push('Association');
+});
+
+Breadcrumbs::for('admin.diagnostic-center.create', function ($trail) {
+    $trail->push('Diagnostic Center', route('admin.diagnostic-center.index'));
+    $trail->push('Create New Diagnostic Center', '');
+});
+
+Breadcrumbs::for('admin.diagnostic-center.edit', function ($trail) {
+    $trail->push('Diagnostic Center', route('admin.diagnostic-center.index'));
+    $trail->push('Update Diagnostic Center', '');
+});
+
+Breadcrumbs::for('admin.mstr.department.index', function ($trail) {
+    $trail->push('Master Pages', '');
+    $trail->push('Departments');
+});
+
+Breadcrumbs::for('admin.mstr.course.index', function ($trail) {
+    $trail->push('Master Pages', '');
+    $trail->push('Courses');
+});
+
+Breadcrumbs::for('admin.homeopathic-institution.index', function ($trail) {
+    $trail->push('Homeopathic', '');
+    $trail->push('Institutions');
+});
+
+Breadcrumbs::for('admin.homeopathic-institution.create', function ($trail) {
+    $trail->push('Homeopathic', '');
+    $trail->push('Institutions', route('admin.homeopathic-institution.index'));
+    $trail->push('Create New Institution', '');
+});
+
+Breadcrumbs::for('admin.homeopathic-institution.edit', function ($trail) {
+    $trail->push('Homeopathic', '');
+    $trail->push('Institutions', route('admin.homeopathic-institution.index'));
+    $trail->push('Update Institution', '');
 });
 
 

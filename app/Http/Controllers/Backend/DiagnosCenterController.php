@@ -95,7 +95,7 @@ class DiagnosCenterController extends Controller
     public function create()
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['cities'] = DistrictModel::where('state_id', 18)->activeOnly();
         $pageData['states'] = CountryModel::find(101);
         $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
@@ -196,7 +196,7 @@ class DiagnosCenterController extends Controller
     public function edit($id)
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['data'] = DiagnosCenterModel::find($id);
         $pageData['states'] = StateModel::where('country_id', $pageData['data']->country)->activeOnly();
         $pageData['cities'] = DistrictModel::where('state_id', $pageData['data']->state)->activeOnly();

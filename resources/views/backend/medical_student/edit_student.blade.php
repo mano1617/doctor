@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" type="submit">Submit</button>
+                        <button class="btn btn-success" id="add_desg_btn" type="submit">Submit</button>
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -203,7 +203,9 @@
                                         <label for="image">Profile Photo</label><br>
                                         <input type="file" name="image">
                                     </div>
+                                    @if(!empty($userData->physicianProfile->avatar))
                                     <img src="{{ url('storage/app/avatars/' . $userData->physicianProfile->avatar) }}" width="65" height="65" alt="">
+                                    @endif
                                 </div>
                             </div>
                         </section>
@@ -431,6 +433,11 @@ function Validate(event) {
     }
 $(function()
 {
+
+    $('#addDynamicBranch').on('hidden.bs.modal', function () {
+        $("#add_desg_btn").prop('disabled',false);
+    });
+
     $("#country").on("change", function(e)
     {
         var content = '<option value="">--select--</option>';
@@ -488,6 +495,7 @@ $(function()
         errorPlacement: function errorPlacement(error, element) { element.before(error); },
         rules: {
             memb_name : {
+                minlength:1,
                 required : true,
                 remote: {
                     url: "{{ route('admin.mstr.branch_medicine.checkDuplicate') }}",
@@ -509,12 +517,15 @@ $(function()
             //error.parent("div.form-group").addClass("has-error");
             element.parent("div.form-group").append(error);
             element.addClass('is-invalid');
+            $("#add_desg_btn").prop('disabled',false);
         },
         highlight: function(element, errorClass, validClass) {
             $(element).addClass("is-invalid");
+            $("#add_desg_btn").prop('disabled',false);
         },
         unhighlight: function(element, errorClass, validClass) {
             $(element).removeClass("is-invalid");
+            $("#add_desg_btn").prop('disabled',false);
         },
         submitHandler: function(form) {
 
@@ -630,7 +641,7 @@ form.children("div").steps({
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
-    // showFinishButtonAlways : true,
+    showFinishButtonAlways : true,
     enableAllSteps: true,
     enablePagination: true,
     onStepChanging: function (event, currentIndex, newIndex)

@@ -26,10 +26,10 @@
                                 <thead>
                                     <tr>
                                         <th width="5%">#</th>
-                                        <th width="20%">NAME</th>
-                                        <th width="30%">ADDRESS</th>
-                                        <th>CONTACT</th>
-                                        <th>ACTIONS</th>
+                                        <th width="20%">PHYSICIAN NAME</th>
+                                        <th width="20%">CLINIC NAME</th>
+                                        <th >ADDRESS</th>
+                                        <th width="25%">ACTIONS</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -367,8 +367,8 @@ $(function() {
         ajax: "{{ route('admin.physician.clinics.index',['physician' => request()->physician]) }}",
         columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                { data: 'phyname', name: 'phyname' },
                 { data: 'name', name: 'name' },
-                { data: 'address', name: 'address' },
                 { data: 'contact', name: 'contact' },
                 { data: 'actions', name: 'actions' }
             ]

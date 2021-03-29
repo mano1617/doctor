@@ -97,31 +97,45 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {{
-                        active_class(Route::is('admin/hospitals'))
-                    }}" href="{{ route('admin.hospitals.index') }}">
-                        <i class="nav-icon fas fa-h-square"></i>
-                            Hospitals
+                <li class="nav-item nav-dropdown {{
+                    active_class(Route::is(['admin/homeopathic-*','admin/homeopathic-institution*']), 'open')
+                }}">
+                        <a class="nav-link nav-dropdown-toggle {{
+                            active_class(Route::is('admin/homeopathic-*'))
+                        }}" href="#">
+                        <i class="nav-icon fas fa-h-square"></i>Homoeopathic
                     </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {{
-                        active_class(Route::is('admin/homeopathic-pharmacy'))
-                    }}" href="{{ route('admin.homeopathic-pharmacy.index') }}">
-                        <i class="nav-icon fas fa-h-square"></i>
-                            Homoeopathic Pharmacy
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{
-                        active_class(Route::is('admin/homeopathic-associate'))
-                    }}" href="{{ route('admin.homeopathic-associate.index') }}">
-                        <i class="nav-icon fas fa-h-square"></i>
-                            Homoeopathic Association
-                    </a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/hospitals'))
+                        }}" href="{{ route('admin.hospitals.index') }}">
+                                Hospitals
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/homeopathic-pharmacy'))
+                        }}" href="{{ route('admin.homeopathic-pharmacy.index') }}">
+                                Pharmacies
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/homeopathic-associate'))
+                        }}" href="{{ route('admin.homeopathic-associate.index') }}">
+                                Associations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/homeopathic-institution*'))
+                        }}" href="{{ route('admin.homeopathic-institution.index') }}">
+                                Institutions
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
@@ -186,9 +200,23 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{
+                            active_class(Route::is('admin/master/courses'))
+                        }}" href="{{ route('admin.mstr.course.index') }}">
+                                Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
                             active_class(Route::is('admin/master/designations'))
                         }}" href="{{ route('admin.mstr.designation.index') }}">
                                 Designations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{
+                            active_class(Route::is('admin/master/departments'))
+                        }}" href="{{ route('admin.mstr.department.index') }}">
+                                Departments
                             </a>
                         </li>
                         <li class="nav-item">

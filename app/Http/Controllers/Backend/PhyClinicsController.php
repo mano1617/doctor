@@ -43,7 +43,7 @@ class PhyClinicsController extends Controller
         if ($request->ajax()) {
             $physicianId = $request->has('physician') ? trim($request->physician) : false;
             $clinics = PhysicianClinicModel::select([
-                'id', 'name', 'address', 'mobile_no', 'email_address', 'district', 'state', 'country', 'pincode', 'landmark', 'website', 'status',
+                'id', 'name', 'user_id', 'address', 'mobile_no', 'email_address', 'district', 'state', 'country', 'pincode', 'landmark', 'website', 'status',
             ])
                 ->Where(function ($query) use ($physicianId) {
                     if ($physicianId != false) {
@@ -58,20 +58,16 @@ class PhyClinicsController extends Controller
             return Datatables::of($clinics)
                 ->addIndexColumn()
                 ->addColumn('contact', function ($row) {
-                    $contact = '<i class="fa fa-envelope fa-fw"></i>' . $row->email_address;
+                    $contact = $row->address;
+                    $contact .= '<br><i class="fa fa-envelope fa-fw"></i>' . $row->email_address;
                     $contact .= '<br><i class="fa fa-mobile fa-fw"></i>' . $row->mobile_no;
                     if (!empty($row->landline)) {
                         $contact .= '<br><i class="fa fa-phone fa-fw"></i>' . $row->landline;
                     }
                     return $contact;
                 })
-                ->addColumn('photo', function ($row) {
-                    // if(!empty($row->physicianProfile->avatar))
-                    // {
-                    //     return '<a href="'.url('storage/app/avatars/'.$row->physicianProfile->avatar).'" target="new"><img class="" src="'.url('storage/app/avatars/'.$row->physicianProfile->avatar).'" width="65" height="65">';
-                    // }else{
-                    return '';
-                    // }
+                ->addColumn('phyname', function ($row) {
+                    return $row->user->name;
                 })
                 ->addColumn('actions', function ($row) use ($physicianId) {
                     if ($row->status == '1') {
@@ -106,7 +102,7 @@ class PhyClinicsController extends Controller
     public function create()
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['physicians'] = User::select(['id', 'first_name', 'last_name'])->role('physician')
             ->with('physicianProfession')
             ->whereHas('physicianProfession', function (Builder $query) {
@@ -214,7 +210,7 @@ class PhyClinicsController extends Controller
     public function edit($id)
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['physicians'] = User::select(['id', 'first_name', 'last_name'])->role('physician')->orderBy('first_name')->get();
         $pageData['data'] = PhysicianClinicModel::find($id);
         $pageData['states'] = StateModel::where('country_id', $pageData['data']->country)->activeOnly();

@@ -41,6 +41,11 @@ Route::get('diagnostic-center/galleries/update/status/{userId}/{statusCode}', 'D
 Route::resource('homeopathic-associate', 'HomoAssociateController');
 Route::get('homeopathic-associate/update/status/{userId}/{statusCode}', 'HomoAssociateController@updateStatus')->name('homeopathic-associate.updateStatus');
 
+//Institution
+Route::resource('homeopathic-institution', 'InstitutionsController');
+Route::get('homeopathic-institution/update/status/{userId}/{statusCode}', 'InstitutionsController@updateStatus')->name('homeopathic-institution.updateStatus');
+
+
 //Medical Student
 Route::group(['prefix' => 'users'], function () {
     Route::resource('medical-student', 'MedicalStudentController');
@@ -58,6 +63,24 @@ Route::group(['prefix' => 'master'], function () {
     ]);
     Route::get('designations/update/status/{userId}/{statusCode}', 'DesigMasterController@updateStatus')->name('mstr.designation.updateStatus');
     Route::post('designations/check-duplicate', 'DesigMasterController@checkDuplicate')->name('mstr.designation.checkDuplicate');
+
+    Route::resource('courses', 'CourseMasterController')->names([
+        'index' => 'mstr.course.index',
+        'store' => 'mstr.course.store',
+        'edit' => 'mstr.course.edit',
+        'update' => 'mstr.course.update',
+    ]);
+    Route::get('courses/update/status/{userId}/{statusCode}', 'CourseMasterController@updateStatus')->name('mstr.course.updateStatus');
+    Route::post('courses/check-duplicate', 'CourseMasterController@checkDuplicate')->name('mstr.course.checkDuplicate');
+
+    Route::resource('departments', 'DepartmentMasterController')->names([
+        'index' => 'mstr.department.index',
+        'store' => 'mstr.department.store',
+        'edit' => 'mstr.department.edit',
+        'update' => 'mstr.department.update',
+    ]);
+    Route::get('departments/update/status/{userId}/{statusCode}', 'DepartmentMasterController@updateStatus')->name('mstr.department.updateStatus');
+    Route::post('departments/check-duplicate', 'DepartmentMasterController@checkDuplicate')->name('mstr.department.checkDuplicate');
 
     Route::resource('memberships', 'MembershipMasterController')->names([
         'index' => 'mstr.membership.index',

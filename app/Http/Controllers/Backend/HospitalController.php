@@ -107,7 +107,7 @@ class HospitalController extends Controller
     public function create()
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['physicians'] = User::select(['id', 'first_name', 'last_name'])->role('physician')
             ->with('physicianProfession')
             ->whereHas('physicianProfession', function (Builder $query) {
@@ -244,7 +244,7 @@ class HospitalController extends Controller
     public function edit($id)
     {
         $pageData['days'] = $this->weekDays;
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['physicians'] = User::select(['id', 'first_name', 'last_name'])->role('physician')->orderBy('first_name')->get();
         $pageData['data'] = HospitalModel::find($id);
         $pageData['states'] = StateModel::where('country_id', $pageData['data']->country)->activeOnly();

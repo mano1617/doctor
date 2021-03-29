@@ -123,7 +123,7 @@ class MedicalStudentController extends Controller
     public function create()
     {
         $pageData['memberships'] = PhysicianMembershipMasterModel::activeOnly();
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['states'] = CountryModel::find(101);
         $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
         $pageData['branchOfMedicine'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
@@ -257,7 +257,7 @@ class MedicalStudentController extends Controller
         $pageData['branchOfMedicine'] = MedicineMasterModel::select(['id', 'name'])->activeOnly();
 
         $pageData['userData'] = User::find($id);
-        $pageData['countries'] = CountryModel::activeOnly();
+        $pageData['countries'] = CountryModel::where('id',101)->activeOnly();
         $pageData['states'] = CountryModel::find($pageData['userData']->physicianProfile->country);
         $pageData['states'] = $pageData['states'] ? $pageData['states']->states : [];
         $pageData['cities'] = DistrictModel::activeOnly();

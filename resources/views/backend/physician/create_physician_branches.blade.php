@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
+@section('title', app_name() . ' | Users | Physicians | Branches | Create New Branch')
 
 @push('after-styles')
 @endpush
@@ -33,7 +33,67 @@
                                         </div>
                                     </div>                                 
                                 </div>
-                                 <div class="row">
+
+                                <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="address">Address<sup class="text-danger">*</sup></label>
+                                        <textarea name="cli_address" required class="form-control" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="landmark">Landmark</label>
+                                        <textarea name="cli_landmark" class="form-control" ></textarea>
+                                    </div>
+                                </div> 
+                            </div>
+
+                            
+                                <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="country">Country<sup class="text-danger">*</sup></label>
+                                        <select required name="cli_country" id="cli_country" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($countries as $ck => $country)
+                                            <option selected value="{{ $country->id }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="state">State<sup class="text-danger">*</sup></label>
+                                        <select required name="cli_state" id="cli_state" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($states as $sk => $state)
+                                            <option @if($state->id==18) selected @endif value="{{ $state->id }}">{{ $state->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="district">District<sup class="text-danger">*</sup></label>
+                                        <select required name="cli_district" id="district" class="form-control">
+                                            <option value="">--select--</option>
+                                            @foreach($cities as $ck)
+                                            <option value="{{ $ck->id }}">{{ $ck->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
+                                        <input type="text" required data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" name="cli_pincode" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                               <div class="row">
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="mobile_no">Mobile Number<sup class="text-danger">*</sup></label>
@@ -53,71 +113,30 @@
                                     </div>
                                 </div>                                                
                             </div>
-                                <div class="row">
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="country">Country<sup class="text-danger">*</sup></label>
-                                        <select required name="cli_country" id="cli_country" class="form-control">
-                                            <option value="">--select--</option>
-                                            @foreach($countries as $ck => $country)
-                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="state">State<sup class="text-danger">*</sup></label>
-                                        <select required name="cli_state" id="cli_state" class="form-control">
-                                            <option value="">--select--</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="district">District<sup class="text-danger">*</sup></label>
-                                        <input type="text" required name="cli_district" class="form-control">
-                                    </div>
-                                </div>
-                                
-                                
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label for="pincode">Pincode<sup class="text-danger">*</sup></label>
-                                        <input type="text" required data-rule-digits="true" data-rule-minlength="5" data-rule-maxlength="7" name="cli_pincode" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                               
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="address">Address<sup class="text-danger">*</sup></label>
-                                        <textarea name="cli_address" required class="form-control" ></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="landmark">Landmark</label>
-                                        <textarea name="cli_landmark" class="form-control" ></textarea>
-                                    </div>
-                                </div> 
-                            </div>
+                            
                             <hr />
                             <h6>Working Days and Time schedule:</h6>
                             <h6 class="text-danger">Note:</h6>
                             <p>If no day selection, leave as blank all inputs.</p>
+                            @php
+                                $clRow = 1;
+                                $kdays = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+                            @endphp
                             @foreach($days as $kday => $day)
+                            @php
+                                    $kd = ($clRow-2);
+                                @endphp
                             <div class="row">
                                 <div class="col-sm-2">
                                     <div class="form-group">
-                                        <label style="margin-top:17px;"> <input type="checkbox" value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}</label>
+                                        <label style="margin-top:17px;">
+                                        <input type="checkbox" data-ex="{{ $clRow }}" data-day="{{ $kdays[$kd] ?? '' }}" value="{{ $kday }}" class="wrk_day" name="wrk_day_{{ $kday }}"> {{$day}}</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_mst"></label>
-                                        <select name="cli_{{ $kday }}_mst" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_mst" id="cli_{{ $kday }}_mst_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=0;$i<=11;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -128,7 +147,7 @@
                                 <div class="col-sm-2" style="border-right: 1px solid #000;">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_med"></label>
-                                        <select name="cli_{{ $kday }}_med" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_med" id="cli_{{ $kday }}_med_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=1;$i<=12;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -139,7 +158,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_nst"></label>
-                                        <select name="cli_{{ $kday }}_nst" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_nst" id="cli_{{ $kday }}_nst_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=12;$i<=23;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -150,7 +169,7 @@
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="cli_{{ $kday }}_ned"></label>
-                                        <select name="cli_{{ $kday }}_ned" class="form-control removeSel">
+                                        <select name="cli_{{ $kday }}_ned" id="cli_{{ $kday }}_ned_{{ $clRow }}" class="form-control removeSel">
                                             <option value="">--select--</option>
                                             @for($i=13;$i<=24;$i++)
                                             <option value="{{ \Carbon\Carbon::parse($i.':00')->format('H:i:s') }}">{{ \Carbon\Carbon::parse($i.':00')->format('h:i A') }}</option>
@@ -159,6 +178,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @php
+                                $clRow++;
+                            @endphp
                             @endforeach
                             <div class="row">
                                 <div class="col-sm-12">
@@ -181,12 +203,33 @@
     </div><!--row-->
 @endsection
 @push('after-scripts')
-    <!-- <script src="{{ asset('assets/backend/jquery.maskedinput/jquery.maskedinput.js') }}"></script> -->
-
 <script>
 $(function()
 {
-    // $('.timeFormats').mask('99:99');
+     $(".wrk_day").on("change", function(e)
+    {
+        var row = parseInt($(this).data('ex'));
+        var cday = $(this).val();
+        var dday = $(this).data('day');
+
+        if(row!=1)
+        {
+            if($(this).is(':checked'))
+            {
+                if($.trim($("#cli_"+cday+"_mst_"+row).val())=='' && $.trim($("#cli_"+cday+"_med_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_mst_"+row).val($("#cli_"+dday+"_mst_"+(row-1)).val());
+                    $("#cli_"+cday+"_med_"+row).val($("#cli_"+dday+"_med_"+(row-1)).val());
+                }
+
+                if($.trim($("#cli_"+cday+"_nst_"+row).val())=='' && $.trim($("#cli_"+cday+"_ned_"+row).val())=='') 
+                {
+                    $("#cli_"+cday+"_nst_"+row).val($("#cli_"+dday+"_nst_"+(row-1)).val());
+                    $("#cli_"+cday+"_ned_"+row).val($("#cli_"+dday+"_ned_"+(row-1)).val());
+                }
+            }
+        }
+    });
     
     $("#cli_country").on("change", function(e)
     {
@@ -208,6 +251,34 @@ $(function()
                 }
 
                 $("#cli_state").html(content);
+
+            },'JSON');
+        }
+    });
+
+    $("#cli_state").on("change", function(e)
+    {
+        var content = '<option value="">--select--</option>';
+
+        if($.trim($(this).val())=='')
+        {
+            $("#district").html(content);
+
+        }else{
+            $.get("{{ url('admin/list/districts') }}",{stateId:$(this).val()},function(result)
+            {
+                if(result['data'].length>0)
+                {
+                    $(result['data']).each(function(ind,vals)
+                    {
+                        // if(vals.id==18)
+                        // {
+                            content+='<option value="'+vals.id+'">'+vals.name+'</option>';
+                        //}
+                    });
+                }
+
+                $("#district").html(content);
 
             },'JSON');
         }
